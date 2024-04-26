@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/26 13:54:44 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/26 20:10:07 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ enum State
 {
     STATE_GENERAL,
     STATE_DQUOTE,
-    STATE_SQUOTE
+    STATE_SQUOTE,
+    STATE_DOLLAR,
 };
 
 enum TokenType
