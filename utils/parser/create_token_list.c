@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/26 16:55:49 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/26 20:05:38 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@
             c = get_char(stringa[i]); // prendo il CharType del carattere
             if (state == STATE_GENERAL)
             {
-                if (c == WHITESPACE || c == PIPELINE || c == REDIR_INPUT //se non incontro un REG_CHAR posso creare un token
-                || c == REDIR_OUTPUT || c == SQUOTES || c == DQUOTES)
+                if (c == REDIR_OUTPUT || c == PIPELINE || c == REDIR_INPUT //se non incontro un REG_CHAR posso creare un token
+                || c ==  WHITESPACE|| c == SQUOTES || c == DQUOTES)
                 {
                     if (i > start)  
                     {
@@ -105,8 +105,10 @@
         (void)shell;
         // Print token values
         token = head;
+        int fd = open("./utils/parser/tokenization_output.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
         while (token != NULL) {
-            printf("%s\n", token->value);
+            ft_putstr_fd(token->value, fd);
+            ft_putstr_fd("\n", fd);
 /*             printf("%d\n", token->type); */
             token = token->next;
         }
