@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/26 22:39:53 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/27 11:24:06 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@
 						token_add_back(&head, token);
 						start = i + 1; //sposto start alla fine del token
 					}
-					if (c == REDIR_OUTPUT || c == REDIR_INPUT || c == PIPELINE) //incotro un carattere speciale e me lo prendo
+					if (c == REDIR_OUTPUT || c == REDIR_INPUT || c == PIPELINE || c == WHITESPACE) //incotro un carattere speciale e me lo prendo
 					{
 						token = token_new(NULL);
 						info = (t_token_info){WORD_TOKEN, stringa, i, i + 1};
@@ -101,15 +101,18 @@
 			/**penso che qui devo distinguere in base ai vari casi, ovvero posso fare start piu uno solo se incontro lo spazio
 			 * altrimenti devo prendere la stringa fino a i, e non spostare start 
 			*/
-			else if (state == STATE_DOLLAR && (c == DOLLAR_CHAR || c == WHITESPACE || c == DQUOTES || c == SQUOTES || c == REDIR_INPUT || c == REDIR_OUTPUT))
+			else if (state == STATE_DOLLAR && (c == DOLLAR_CHAR || c == WHITESPACE || c == DQUOTES || c == SQUOTES || c == REDIR_INPUT || c == REDIR_OUTPUT || c == PIPELINE))
 			{
-				token = token_new(NULL);
-				info = (t_token_info){DOLLAR_CHAR, stringa, start, i};
-				set_token_values(token, &info);
-				token_add_back(&head, token);
-				start = i /* + 1 */;
+				if (i > start)
+				{
+					token = token_new(NULL);
+					info = (t_token_info){DOLLAR_CHAR, stringa, start, i}; 
+					set_token_values(token, &info);
+					token_add_back(&head, token);
+					start = i; //sposto start alla fine del token
+					i--;
+				}
 				state = STATE_GENERAL;
-				 
 			}
 			if (stringa[i + 1] == '\0' && i > start)  //prendo l ultimo token
 			{
@@ -123,9 +126,9 @@
 		(void)shell;
 		// Print token values
 		token = head;
-		while (token != NULL) {
+		while (token != NULL) 
+		{
 			printf("%s\n", token->value);
-/*             printf("%d\n", token->type); */
 			token = token->next;
 		}
 	return (0);

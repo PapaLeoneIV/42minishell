@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/26 20:10:07 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/27 11:19:32 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ enum CharType
     DQUOTES,           // 6
     ESCAPE_CHAR,       // 7
     DOLLAR_CHAR,       // 8
+    F_SLASH,           // 9
     
     
     

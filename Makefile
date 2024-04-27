@@ -6,7 +6,7 @@
 #    By: rileone <rileone@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/04/24 17:57:31 by rileone          ###   ########.fr        #
+#    Updated: 2024/04/27 11:11:22 by rileone          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,5 +60,3 @@ gdb: all
 re: fclean all
 
 .PHONY: all clean fclean re
-
-

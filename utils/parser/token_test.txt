@@ -4,5 +4,61 @@ cat"|"infile
 cat|"infile"
 cat$USER
 cat>USER
+
+-----------------------------
+PIPE AND QUOTES 
+---------------------------
+
+"cat"|"ls"|"grep foo"
+cat "file | name" | grep 'name'
+"echo"|"hello world" > "new file"
+echo "split|pipe" | "awk '{print $1}'"
+grep "word" file | "wc -l"
+
+-----------------------------
+ENV && REDIRECTIONS
+---------------------------
+
+cat $HOME/testfile > $USER/output
+echo $PWD | wc >$USER/result
+mkdir $HOME/"new dir"
+touch $OLDPWD/$USER_file
+$PATH > "path contents.txt"
+
+-----------------------------
+DOLLAR SIGN TEST
+---------------------------
+
 cat$x"x>s"
+cat$x"x>s" > output.txt
 $PWD $USERUSER $OLDPWD>$USER
+$USER"cat>$USER"
+$OLDPWD>$?
+echo "$USER"cat"$USER" > output.txt
+echo "$USER" cat            "$USER" > output.txt
+echo $PWD $USER$USER $OLDPWD >"$USER"
+cat $USER"x" > "dollar_test"
+echo "$PWD/$USERdata" > file
+echo $USER-$PWD-$OLDPWD > environment
+"$USER"echo "complex$user" > out
+$USER'echo'>file
+
+-----------------------------
+Special Characters and Edge Cases
+---------------------------
+
+echo "This is a test" | grep "test" >$HOME/test_results
+cat > outfile <<< "Here is some text"
+echo $USER > "user info" | cat "user info"
+cat "end of line" >
+"echo" "space test" > "spaced file"
+
+-----------------------------
+COMPLEX CASES (MIX)
+---------------------------
+echo "value:$VALUE" | grep "$KEY" > results
+"mkdir -p" $HOME/'new folder'
+cat "a file" > $PWD/file
+echo "Nested > quote" | cat > "newfile"
+cat $HOME'/'config | grep "setting=" > $USER/config_backup
+
