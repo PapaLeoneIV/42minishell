@@ -9,7 +9,7 @@ cat>USER
 PIPE AND QUOTES 
 ---------------------------
 
-"cat"|"ls"|"grep foo"
+"cat"|"ls"|"            grep foo"
 cat "file | name" | grep 'name'
 "echo"|"hello world" > "new file"
 echo "split|pipe" | "awk '{print $1}'"
@@ -42,7 +42,8 @@ echo "$PWD/$USERdata" > file
 echo $USER-$PWD-$OLDPWD > environment
 "$USER"echo "complex$user" > out
 $USER'echo'>file
-
+echo "2213"$USER-$PWD-$OLDPWD > environment
+echo "2213"$1$USER-$PWD-$OLDPWD > environment
 -----------------------------
 Special Characters and Edge Cases
 ---------------------------

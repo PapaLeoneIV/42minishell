@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/27 11:19:32 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/28 19:36:16 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ typedef struct s_token
     struct s_token  *next;
 }               t_token;
 
+typedef struct parser
+{
+    int         state;
+    int         char_type;
+    int         count;
+    int         start;
+    t_token     *head;
+    t_token     *token;
+    t_token_info info;
+}               t_parser;
+
 enum State
 {
     STATE_GENERAL,
@@ -46,32 +57,86 @@ enum TokenType
 {
 	WORD_TOKEN,        // 0
 	PIPE_TOKEN,        // 1
-	LF_TOKEN,          // 2
 	GREATER_TOKEN,     // 3 
 	DGREATER_TOKEN,    // 4 
 	LESSER_TOKEN,      // 5
 	DLESSER_TOKEN,     // 6
-	NULL_TOKEN,        // 7
-    SING_QUOTES,       // 8
-    DOUBLE_QUOTES,     // 9
+    SING_QUOTES_TOKEN,       
+    DOUBLE_QUOTES_TOKEN,   
+    DOLLAR_TOKEN,
+    WHITESPACE_TOKEN,
+    
 };
 
 enum CharType
 {
-    WHITESPACE,        // 0
-    PIPELINE,          // 1
-    REDIR_INPUT,       // 2
-    REDIR_OUTPUT,      // 3
-    REG_CHAR,          // 4
-    SQUOTES,           // 5
-    DQUOTES,           // 6
-    ESCAPE_CHAR,       // 7
-    DOLLAR_CHAR,       // 8
-    F_SLASH,           // 9
-    
+    WHITESPACE_CHAR,    // 0
+    PIPELINE_CHAR,      // 1
+    REDIR_INPUT_CHAR,   // 2
+    REDIR_OUTPUT_CHAR,  // 3
+    REG_CHAR,           // 4
+    SQUOTES_CHAR,       // 5
+    DQUOTES_CHAR,       // 6
+    DOLLAR_CHAR,        // 7
+    DOLLAR_SPECIAL_CHAR,// 8
+    DIGIT_CHAR,         // 9
+    QUESTION_MARK_CHAR, // 10
     
     
 };
+/*TOKENIZER HELPERS*/
+
+/**
+ * @brief Determines the type of a character.
+ *
+ * This function takes a character as input and returns an integer representing its type.
+ *
+ * @param carattere The character to determine the type of.
+ * @return An integer representing the type of the character.
+ */
+int get_char_type(char carattere);
+
+/**
+ * @brief Slices a single character token from a string.
+ *
+ * This function takes a string and a parser structure as input, and slices a single character token from the string.
+ *
+ * @param stringa The string to slice the token from.
+ * @param pars The parser structure to store the sliced token.
+ */
+void slice_single_char_token(char *stringa, t_parser *pars);
+
+/**
+ * @brief Slices a token string from a string.
+ *
+ * This function takes a string and a parser structure as input, and slices a token string from the string.
+ *
+ * @param stringa The string to slice the token from.
+ * @param pars The parser structure to store the sliced token.
+ */
+void slice_token_string(char *stringa, t_parser *pars);
+
+/**
+ * @brief Slices the end token from a string.
+ *
+ * This function takes a string and a parser structure as input, and slices the end token from the string.
+ *
+ * @param stringa The string to slice the token from.
+ * @param pars The parser structure to store the sliced token.
+ */
+void slice_end_token(char *stringa, t_parser *pars);
+
+/**
+ * @brief Checks and changes the status based on a character.
+ *
+ * This function takes a state, a character, and a parser structure as input, and checks and changes the status based on the character.
+ *
+ * @param state A pointer to the state variable.
+ * @param c The character to check.
+ * @param pars The parser structure to update the status.
+ */
+void check_and_change_status(int *state, int c, t_parser *pars);
+
 
 
 /**
@@ -122,12 +187,6 @@ int token_size(t_token *head);
  */
 void token_clear(t_token **head);
 
-/**
- * Frees the memory allocated for the token list.
- *
- * @param head The head of the token list.
- */
-void token_free(t_token *head);
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:02:26 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/26 15:03:19 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/28 19:15:57 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,4 @@ void token_clear(t_token **head)
     }
     
     *head = NULL;
-}
-void token_free(t_token *head)
-{
-    t_token *current;
-    t_token *temp;
-    
-    current = head;
-    while (current)
-    {
-        temp = current;
-        current = current->next;
-        free(temp);
-    }
 }

@@ -6,130 +6,102 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/27 11:24:06 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/28 19:38:11 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-#include "lexer.h"
 
+/*TODO :
+	- devo controllare che tutti i token vengono assegnati correttamente es :WHITESPACE not handle atm
+	- devo finire di parsere: devo trovare un modo di capire quando vanno incollati insieme due > > &&  < <
+	- devo capire quando devo incollare insieme i dollar sign con le stringhe precedenti e posteriori (mi sembra di doverle attaccare solo quando non c e il whitespace)
+	- devo finire di espandere le variabili quando necessario
+*/
+void quoted_token_handler(char *stringa, t_parser *pars)
+{
+	int Mquotes_arr[2] = {DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN};
+	pars->token = token_new(NULL);
+	pars->info = (t_token_info){Mquotes_arr[pars->char_type == SQUOTES_CHAR], stringa, pars->start, pars->count + 1};
+	set_token_values(pars->token, &pars->info);
+	token_add_back(&pars->head, pars->token);
+	pars->start = pars->count + 1;
+	pars->state = STATE_GENERAL;
+}
 
-
-
-	int get_char(char carattere)
+void dollar_state_handler(char *stringa, t_parser *pars)
+{
+	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
+	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
 	{
-		if (carattere == ' ')
-			return (WHITESPACE);
-		else if (carattere == '|')
-			return (PIPELINE);
-		else if (carattere == '<')
-			return (REDIR_INPUT);
-		else if (carattere == '>')
-			return (REDIR_OUTPUT);
-		else if (carattere == '\'')
-			return (SQUOTES);
-		else if (carattere == '\"')
-			return (DQUOTES);
-		else if (carattere == '$')
-			return (DOLLAR_CHAR);
-		return (REG_CHAR);
+		pars->token = token_new(NULL);
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
+		set_token_values(pars->token, &pars->info);
+		token_add_back(&pars->head, pars->token);
+		pars->start = pars->count + 1;
 	}
-
-	int create_token_list(char *stringa, t_shell *shell)
+	if (pars->count > pars->start)
 	{
-		int state = STATE_GENERAL;
-		t_token *head;
-		t_token *token;
-		t_token_info info;
-		int c;
-		int i;
-		int start = 0;
+		pars->token = token_new(NULL);
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count}; 
+		set_token_values(pars->token, &pars->info);
+		token_add_back(&pars->head, pars->token);
+		pars->start = pars->count; //sposto pars->start alla fine del token
+		pars->count--;
+	}
+	pars->state = STATE_GENERAL;
+}
 
-		head = NULL;
-		i = 0;
-		if (stringa == NULL || shell == NULL)
-			return (-1);
-		while (stringa[i] != '\0')
-		{
-			c = get_char(stringa[i]); // prendo il CharType del carattere
-			if (state == STATE_GENERAL)
-			{
-				if (c == REDIR_OUTPUT || c == PIPELINE || c == REDIR_INPUT //se non incontro un REG_CHAR posso creare un token
-				|| c ==  WHITESPACE|| c == SQUOTES || c == DQUOTES || c == DOLLAR_CHAR)
-				{
-					if (i > start)  //se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
-					{
-						token = token_new(NULL);
+void general_state_handler(char *stringa, t_parser *pars)
+{
+	if (pars->char_type == WHITESPACE_CHAR
+	|| pars->char_type == PIPELINE_CHAR 
+	|| pars->char_type == REDIR_INPUT_CHAR 
+	|| pars->char_type ==  REDIR_OUTPUT_CHAR 
+	|| pars->char_type == SQUOTES_CHAR
+	|| pars->char_type == DQUOTES_CHAR 
+	|| pars->char_type == DOLLAR_CHAR)
+	{
+		if (pars->count > pars->start)  //se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
+			slice_token_string(stringa, pars);
+		if (pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR 
+		|| pars->char_type == PIPELINE_CHAR || pars->char_type == WHITESPACE_CHAR) //incotro un carattere speciale e me lo prendo
+			slice_single_char_token(stringa, pars);
+		if (pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR  || pars->char_type == DOLLAR_CHAR)   //cambio lo state machine per gestire le virgolette
+			check_and_change_status(&pars->state, pars->char_type, pars);
+	}
+}
 
-						info = (t_token_info){WORD_TOKEN, stringa, start, i}; 
-						set_token_values(token, &info);
-						token_add_back(&head, token);
-						start = i + 1; //sposto start alla fine del token
-					}
-					if (c == REDIR_OUTPUT || c == REDIR_INPUT || c == PIPELINE || c == WHITESPACE) //incotro un carattere speciale e me lo prendo
-					{
-						token = token_new(NULL);
-						info = (t_token_info){WORD_TOKEN, stringa, i, i + 1};
-						set_token_values(token, &info);
-						token_add_back(&head, token);
-						start = i + 1; //sposto start alla fine del token
-					}
-					if (c == SQUOTES || c == DQUOTES  || c == DOLLAR_CHAR)   //cambio lo state machine per gestire le virgolette
-					{
-						if (c == SQUOTES)
-							state = STATE_SQUOTE;
-						else if (c == DQUOTES)
-							state = STATE_DQUOTE;
-						else if (c == DOLLAR_CHAR)
-							state = STATE_DOLLAR;
-						start = i;    
-					}
-					
-				}
-			}
-			else if ((c == SQUOTES && state == STATE_SQUOTE) || (c == DQUOTES && state == STATE_DQUOTE)) //VIRGOLETTE STATE: qui vengono le virgolette                                                                                                           
-			{
-				int Mquotes_arr[2] = {DOUBLE_QUOTES, SING_QUOTES};
-
-				token = token_new(NULL);
-				info = (t_token_info){Mquotes_arr[c == SQUOTES], stringa, start, i + 1};
-				set_token_values(token, &info);
-				token_add_back(&head, token);
-				start = i + 1;
-				state = STATE_GENERAL;   //resetto lo state machine
-			}
-			/**penso che qui devo distinguere in base ai vari casi, ovvero posso fare start piu uno solo se incontro lo spazio
-			 * altrimenti devo prendere la stringa fino a i, e non spostare start 
-			*/
-			else if (state == STATE_DOLLAR && (c == DOLLAR_CHAR || c == WHITESPACE || c == DQUOTES || c == SQUOTES || c == REDIR_INPUT || c == REDIR_OUTPUT || c == PIPELINE))
-			{
-				if (i > start)
-				{
-					token = token_new(NULL);
-					info = (t_token_info){DOLLAR_CHAR, stringa, start, i}; 
-					set_token_values(token, &info);
-					token_add_back(&head, token);
-					start = i; //sposto start alla fine del token
-					i--;
-				}
-				state = STATE_GENERAL;
-			}
-			if (stringa[i + 1] == '\0' && i > start)  //prendo l ultimo token
-			{
-				token = token_new(NULL);
-				info = (t_token_info){WORD_TOKEN, stringa, start, i + 1};
-				set_token_values(token, &info);
-				token_add_back(&head, token);
-			}
-			i++;
-		}
-		(void)shell;
-		// Print token values
-		token = head;
-		while (token != NULL) 
-		{
-			printf("%s\n", token->value);
-			token = token->next;
-		}
+int create_token_list(char *stringa, t_shell *shell)
+{
+	t_parser pars;
+	
+	pars = (t_parser){0};
+	pars.state = STATE_GENERAL;
+	if (stringa == NULL || shell == NULL)
+		return (-1);
+	while (stringa[pars.count] != '\0')
+	{
+		pars.char_type = get_char_type(stringa[pars.count]); 										// GET CHAR TYPE of the current char
+		if (pars.state == STATE_GENERAL)
+			general_state_handler(stringa, &pars);  												//GENERAL STATE		
+		else if ((pars.state == STATE_SQUOTE && pars.char_type == SQUOTES_CHAR) 
+		|| (pars.state == STATE_DQUOTE && pars.char_type == DQUOTES_CHAR)) 							//QUOTE STATE                                                                                                        
+			quoted_token_handler(stringa, &pars);
+		else if (pars.state == STATE_DOLLAR && pars.char_type != REG_CHAR)
+			dollar_state_handler(stringa, &pars);													//DOLLAR STATE
+		if (stringa[pars.count + 1] == '\0')  														
+			slice_end_token(stringa, &pars);														//SLICE END TOKEN						
+		pars.count++;
+	}
+	(void)shell;
+	// Print token values
+	pars.token = pars.head;
+	while (pars.token != NULL) 
+	{
+		printf("%s ------> tokenTYPE ==== ", pars.token->value);
+		printf("%i\n", pars.token->type);
+		pars.token = pars.token->next;
+	}
 	return (0);
-	}
+}
