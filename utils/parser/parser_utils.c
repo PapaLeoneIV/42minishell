@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:02:26 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/28 19:15:57 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:25:28 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void set_token_values(t_token *token, t_token_info *info)
 
     tmp_not_trimmed = ft_substr(info->string, info->start, len);
     token->value = ft_strtrim(tmp_not_trimmed, " ");
-    if (token->value == NULL)
-        return;
 }
 
 t_token *token_new(char *data)

@@ -6,19 +6,27 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/28 19:38:11 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/30 18:46:10 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
 /*TODO :
-	- devo controllare che tutti i token vengono assegnati correttamente es :WHITESPACE not handle atm
-	- devo finire di parsere: devo trovare un modo di capire quando vanno incollati insieme due > > &&  < <
+	- devo controllare che tutti i token vengono assegnati correttamente es :WHITESPACE not handle atm FATTO_
+	- devo finire di parsere: devo trovare un modo di capire quando vanno incollati insieme due > > &&  < < (devo basarmi sugli spazi )
 	- devo capire quando devo incollare insieme i dollar sign con le stringhe precedenti e posteriori (mi sembra di doverle attaccare solo quando non c e il whitespace)
 	- devo finire di espandere le variabili quando necessario
 */
-void quoted_token_handler(char *stringa, t_parser *pars)
+/**per distinguere fra comandi e parole random/argomenti posso passare il token attraverso la 
+ * funzione access(), per controllare che sia effettivamente un comando
+ * -----------------------
+ * se voglio invece distinguere fra doppio e singolo >, devo controllare se difronte al primo 
+ * 
+ * 
+*/
+
+void quoted_state_handler(char *stringa, t_parser *pars)
 {
 	int Mquotes_arr[2] = {DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN};
 	pars->token = token_new(NULL);
@@ -28,6 +36,20 @@ void quoted_token_handler(char *stringa, t_parser *pars)
 	pars->start = pars->count + 1;
 	pars->state = STATE_GENERAL;
 }
+
+void slice_redir_tokens(char *stringa, t_parser *pars)
+{
+	pars->token = token_new(NULL);
+	if (stringa[pars->count + 1] == '<')
+		pars->info = (t_token_info){HEREDOC_TOKEN, stringa, pars->count,pars->count + 2};
+	else
+		pars->info = (t_token_info){REDIR_OUT_TOKEN, stringa, pars->count,pars->count + 2};
+	set_token_values(pars->token, &pars->info);
+	token_add_back(&pars->head, pars->token);
+	pars->start = pars->count + 2;
+	pars->count++;	
+}
+
 
 void dollar_state_handler(char *stringa, t_parser *pars)
 {
@@ -46,24 +68,34 @@ void dollar_state_handler(char *stringa, t_parser *pars)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count}; 
 		set_token_values(pars->token, &pars->info);
 		token_add_back(&pars->head, pars->token);
-		pars->start = pars->count; //sposto pars->start alla fine del token
+		pars->start = pars->count;
 		pars->count--;
 	}
 	pars->state = STATE_GENERAL;
 }
 
+int look_next_char(char *stringa, t_parser *pars)
+{
+	if (stringa[pars->count + 1] == '>')
+		return (REDIR_OUTPUT_CHAR);
+	else if (stringa[pars->count + 1] == '<')
+		return (REDIR_INPUT_CHAR);
+	else
+		return (0);
+}
+
 void general_state_handler(char *stringa, t_parser *pars)
 {
-	if (pars->char_type == WHITESPACE_CHAR
-	|| pars->char_type == PIPELINE_CHAR 
-	|| pars->char_type == REDIR_INPUT_CHAR 
-	|| pars->char_type ==  REDIR_OUTPUT_CHAR 
-	|| pars->char_type == SQUOTES_CHAR
-	|| pars->char_type == DQUOTES_CHAR 
+	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == PIPELINE_CHAR || pars->char_type == REDIR_INPUT_CHAR 
+	|| pars->char_type ==  REDIR_OUTPUT_CHAR || pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR 
 	|| pars->char_type == DOLLAR_CHAR)
 	{
+		
 		if (pars->count > pars->start)  //se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
+		if ((pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR) 
+		&& (look_next_char(stringa, pars) == REDIR_OUTPUT_CHAR || look_next_char(stringa, pars) == REDIR_INPUT_CHAR))
+			return (slice_redir_tokens(stringa, pars));
 		if (pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR 
 		|| pars->char_type == PIPELINE_CHAR || pars->char_type == WHITESPACE_CHAR) //incotro un carattere speciale e me lo prendo
 			slice_single_char_token(stringa, pars);
@@ -71,6 +103,7 @@ void general_state_handler(char *stringa, t_parser *pars)
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}
 }
+
 
 int create_token_list(char *stringa, t_shell *shell)
 {
@@ -82,12 +115,12 @@ int create_token_list(char *stringa, t_shell *shell)
 		return (-1);
 	while (stringa[pars.count] != '\0')
 	{
-		pars.char_type = get_char_type(stringa[pars.count]); 										// GET CHAR TYPE of the current char
+		pars.char_type = get_char_type(stringa, &pars); 											// GET CHAR TYPE of the current char													
 		if (pars.state == STATE_GENERAL)
 			general_state_handler(stringa, &pars);  												//GENERAL STATE		
 		else if ((pars.state == STATE_SQUOTE && pars.char_type == SQUOTES_CHAR) 
 		|| (pars.state == STATE_DQUOTE && pars.char_type == DQUOTES_CHAR)) 							//QUOTE STATE                                                                                                        
-			quoted_token_handler(stringa, &pars);
+			quoted_state_handler(stringa, &pars);
 		else if (pars.state == STATE_DOLLAR && pars.char_type != REG_CHAR)
 			dollar_state_handler(stringa, &pars);													//DOLLAR STATE
 		if (stringa[pars.count + 1] == '\0')  														
@@ -99,8 +132,7 @@ int create_token_list(char *stringa, t_shell *shell)
 	pars.token = pars.head;
 	while (pars.token != NULL) 
 	{
-		printf("%s ------> tokenTYPE ==== ", pars.token->value);
-		printf("%i\n", pars.token->type);
+		printf("token type %i, value : %s  \n",pars.token->type, pars.token->value);
 		pars.token = pars.token->next;
 	}
 	return (0);

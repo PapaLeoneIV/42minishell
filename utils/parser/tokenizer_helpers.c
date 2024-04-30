@@ -6,33 +6,33 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/28 19:21:22 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/30 17:44:16 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
-int get_char_type(char carattere)
+int get_char_type(char *str, t_parser *pars)
 {
-	if (carattere == ' ')
+	if (str[pars->count] == ' ')
 		return (WHITESPACE_CHAR);
-	else if (carattere == '|')
+	else if (str[pars->count] == '|')
 		return (PIPELINE_CHAR);
-	else if (carattere == '<')
+	else if (str[pars->count] == '<')
 		return (REDIR_INPUT_CHAR);
-	else if (carattere == '>')
+	else if (str[pars->count] == '>')
 		return (REDIR_OUTPUT_CHAR);
-	else if (carattere == '\'')
+	else if (str[pars->count] == '\'')
 		return (SQUOTES_CHAR);
-	else if (carattere == '\"')
+	else if (str[pars->count] == '\"')
 		return (DQUOTES_CHAR);
-	else if (carattere == '$')
+	else if (str[pars->count] == '$')
 		return (DOLLAR_CHAR);
-	else if (carattere == '?')
+	else if (str[pars->count] == '?')
 		return (QUESTION_MARK_CHAR);
-	else if (ft_isalpha(carattere))
+	else if (ft_isalpha(str[pars->count]))
 		return (REG_CHAR);
-	else if (ft_isdigit(carattere))
+	else if (ft_isdigit(str[pars->count]))
 		return (DIGIT_CHAR);
 	return (DOLLAR_SPECIAL_CHAR);
 }
@@ -47,7 +47,7 @@ void slice_single_char_token(char *stringa, t_parser *pars)
 	else if (pars->char_type == REDIR_OUTPUT_CHAR)
 		pars->info = (t_token_info){GREATER_TOKEN, stringa, pars->count, pars->count + 1};
 	else if (pars->char_type == WHITESPACE_CHAR)
-		pars->info = (t_token_info){WHITESPACE_CHAR, stringa, pars->count, pars->count + 1};
+		pars->info = (t_token_info){WHITESPACE_TOKEN, stringa, pars->count, pars->count + 1};
 	set_token_values(pars->token, &pars->info);
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
@@ -62,7 +62,6 @@ void slice_token_string(char *stringa, t_parser *pars)
 	pars->start = pars->count + 1;
 
 }
-
 
 void slice_end_token(char *stringa, t_parser *pars)
 {
