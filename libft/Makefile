@@ -28,7 +28,7 @@ SRC =		$(addprefix ${ERROR_DIR}/, error_fn.c) \
 			$(addprefix ${TO_DIR}/, ft_atoi.c ft_itoa.c)  \
 			$(addprefix ${DATE_DIR}/, get_time_msec.c custom_sleep.c)  \
 			$(addprefix ${IS_DIR}/, ft_isnumber.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c)  \
-			$(addprefix ${STRING_DIR}/, ft_toupper.c ft_split.c /ft_strchr.c ft_strdup.c ft_striteri.c ft_strjoin.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c) \
+			$(addprefix ${STRING_DIR}/, ft_strjoinchar.c ft_toupper.c ft_split.c /ft_strchr.c ft_strdup.c ft_striteri.c ft_strjoin.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c) \
 			$(addprefix ${PUT_DIR}/, ft_putchar_fd.c ft_putchr.c ft_putstr.c ft_putendl_fd.c ft_putnbr.c ft_putnbr_fd.c ft_putstr_fd.c ft_print_arri.c) \
 			$(addprefix ${MEM_DIR}/, ft_calloc.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c ft_bzero.c ft_clear_mtx.c) \
 			$(addprefix ${HASH_DIR}/, ft_create_hash_map.c ft_free_hash_map.c ft_get_frequency.c ft_hash_fn.c ft_insert_in_hash_map.c ft_check_for_dupl.c) \

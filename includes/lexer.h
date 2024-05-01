@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/30 18:30:25 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:21:43 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 #define LEXER_H
 
 #include "./minishell.h"
-#include "../libft/libft.h"
-#include "../libft/gnl/get_next_line_bonus.h"
-#include "../libft/printf/ft_printf.h"
+
 
 typedef struct s_token_info
 {
@@ -54,16 +52,17 @@ enum State
 
 enum TokenType
 {
-    WORD_TOKEN,     // 0
-    PIPE_TOKEN,     // 1
-    GREATER_TOKEN,  // 3
-    REDIR_OUT_TOKEN, // 4
-    LESSER_TOKEN,   // 5
-    HEREDOC_TOKEN,  // 6
-    SING_QUOTES_TOKEN,
-    DOUBLE_QUOTES_TOKEN,
-    DOLLAR_TOKEN,
-    WHITESPACE_TOKEN,
+    CMD_TOKEN,             //1 
+    WORD_TOKEN,            //2
+    PIPE_TOKEN,            //3
+    GREATER_TOKEN,         //4
+    REDIR_OUT_TOKEN,       //5
+    LESSER_TOKEN,          //6
+    HEREDOC_TOKEN,         //7
+    SING_QUOTES_TOKEN,     //8
+    DOUBLE_QUOTES_TOKEN,   //9
+    DOLLAR_TOKEN,          //10
+    WHITESPACE_TOKEN,      //11
 
 };
 
@@ -96,6 +95,10 @@ int get_char_type(char *str, t_parser *pars);
  * @param pars The parser structure to store the sliced token.
  */
 void slice_single_char_token(char *stringa, t_parser *pars);
+
+
+void slice_redirect_token(char *stringa, t_parser *pars);
+
 
 /**
  * @brief Slices a token string from a string.

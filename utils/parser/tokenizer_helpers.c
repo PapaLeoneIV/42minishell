@@ -6,11 +6,37 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/30 17:44:16 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:15:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
+int ft_charchar(char s, int c)
+{
+	size_t	i;
+
+	i = 0;
+	if (s == (unsigned char)c)
+		return (1);
+	return (0);
+}
+int valid_regchar(char *str, t_parser *pars)
+{
+	char *valid_char;
+	int len;
+	int i;
+
+	i = 0;
+	valid_char = "?.,{}*~_-+=";
+	len = ft_strlen(valid_char);
+	while(i < len)
+	{
+		if(ft_charchar(str[pars->count], valid_char[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int get_char_type(char *str, t_parser *pars)
 {
@@ -30,45 +56,11 @@ int get_char_type(char *str, t_parser *pars)
 		return (DOLLAR_CHAR);
 	else if (str[pars->count] == '?')
 		return (QUESTION_MARK_CHAR);
-	else if (ft_isalpha(str[pars->count]))
+	else if (ft_isalpha(str[pars->count]) || valid_regchar(str, pars))
 		return (REG_CHAR);
 	else if (ft_isdigit(str[pars->count]))
 		return (DIGIT_CHAR);
 	return (DOLLAR_SPECIAL_CHAR);
-}
-
-void slice_single_char_token(char *stringa, t_parser *pars)
-{
-	pars->token = token_new(NULL);
-	if (pars->char_type == PIPELINE_CHAR)
-		pars->info = (t_token_info){PIPE_TOKEN, stringa, pars->count,pars->count + 1};
-	else if (pars->char_type == REDIR_INPUT_CHAR)
-		pars->info = (t_token_info){LESSER_TOKEN, stringa, pars->count, pars->count + 1};
-	else if (pars->char_type == REDIR_OUTPUT_CHAR)
-		pars->info = (t_token_info){GREATER_TOKEN, stringa, pars->count, pars->count + 1};
-	else if (pars->char_type == WHITESPACE_CHAR)
-		pars->info = (t_token_info){WHITESPACE_TOKEN, stringa, pars->count, pars->count + 1};
-	set_token_values(pars->token, &pars->info);
-	token_add_back(&pars->head, pars->token);
-	pars->start = pars->count + 1;
-}
-
-void slice_token_string(char *stringa, t_parser *pars)
-{
-	pars->token = token_new(NULL);
-	pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start, pars->count};
-	set_token_values(pars->token, &pars->info);
-	token_add_back(&pars->head, pars->token);
-	pars->start = pars->count + 1;
-
-}
-
-void slice_end_token(char *stringa, t_parser *pars)
-{
-	pars->token = token_new(NULL);
-	pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start, pars->count + 1};
-	set_token_values(pars->token, &pars->info);
-	token_add_back(&pars->head, pars->token);
 }
 
 void check_and_change_status(int *state, int c, t_parser *pars)

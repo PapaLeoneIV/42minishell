@@ -6,7 +6,7 @@
 #    By: rileone <rileone@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/04/30 18:06:01 by rileone          ###   ########.fr        #
+#    Updated: 2024/05/01 19:14:24 by rileone          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ ARCHIVE = ar rcs
 
 SRC =	$(addprefix $(UTILS_ENV)/, set_env.c) \
 		$(addprefix $(READ_SDTIN)/, read_input.c) \
-		$(addprefix $(PARSER)/, create_token_list.c parser_utils.c tokenizer_helpers.c) \
+		$(addprefix $(PARSER)/, create_token_list.c parser_utils.c tokenizer_helpers.c slice_token_helpers.c) 
 
 
 all: $(NAME)

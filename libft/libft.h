@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/25 12:13:35 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:18:22 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef enum e_state
 }	t_state;
 
 
+char *ft_strjoinchar(char *str, char c);
 
 /**
  * Creates a new dictionary with the specified size.

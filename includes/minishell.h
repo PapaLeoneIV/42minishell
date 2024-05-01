@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/24 16:54:12 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/01 15:27:22 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 typedef struct s_shell
 {
     char        *line;
-    struct s_list      *envp;
+    char        **envp;
     
 }   t_shell;
 

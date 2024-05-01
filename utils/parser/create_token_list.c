@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/30 18:46:10 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:18:00 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 /*TODO :
 	- devo controllare che tutti i token vengono assegnati correttamente es :WHITESPACE not handle atm FATTO_
-	- devo finire di parsere: devo trovare un modo di capire quando vanno incollati insieme due > > &&  < < (devo basarmi sugli spazi )
-	- devo capire quando devo incollare insieme i dollar sign con le stringhe precedenti e posteriori (mi sembra di doverle attaccare solo quando non c e il whitespace)
+	- devo finire di parsere: devo trovare un modo di capire quando vanno incollati insieme due > > &&  < < FATTO
+	- devo capire quando devo incollare insieme i dollar sign con le stringhe 
+	precedenti e posteriori (mi sembra di doverle attaccare solo quando non c e il whitespace)
 	- devo finire di espandere le variabili quando necessario
 */
 /**per distinguere fra comandi e parole random/argomenti posso passare il token attraverso la 
- * funzione access(), per controllare che sia effettivamente un comando
+ * funzione access(), per controllare che sia effettivamente un comando FATTO
  * -----------------------
- * se voglio invece distinguere fra doppio e singolo >, devo controllare se difronte al primo 
- * 
  * 
 */
 
@@ -37,18 +36,7 @@ void quoted_state_handler(char *stringa, t_parser *pars)
 	pars->state = STATE_GENERAL;
 }
 
-void slice_redir_tokens(char *stringa, t_parser *pars)
-{
-	pars->token = token_new(NULL);
-	if (stringa[pars->count + 1] == '<')
-		pars->info = (t_token_info){HEREDOC_TOKEN, stringa, pars->count,pars->count + 2};
-	else
-		pars->info = (t_token_info){REDIR_OUT_TOKEN, stringa, pars->count,pars->count + 2};
-	set_token_values(pars->token, &pars->info);
-	token_add_back(&pars->head, pars->token);
-	pars->start = pars->count + 2;
-	pars->count++;	
-}
+
 
 
 void dollar_state_handler(char *stringa, t_parser *pars)
@@ -74,7 +62,7 @@ void dollar_state_handler(char *stringa, t_parser *pars)
 	pars->state = STATE_GENERAL;
 }
 
-int look_next_char(char *stringa, t_parser *pars)
+int look_for_another_redirect(char *stringa, t_parser *pars)
 {
 	if (stringa[pars->count + 1] == '>')
 		return (REDIR_OUTPUT_CHAR);
@@ -93,9 +81,9 @@ void general_state_handler(char *stringa, t_parser *pars)
 		
 		if (pars->count > pars->start)  //se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
-		if ((pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR) 
-		&& (look_next_char(stringa, pars) == REDIR_OUTPUT_CHAR || look_next_char(stringa, pars) == REDIR_INPUT_CHAR))
-			return (slice_redir_tokens(stringa, pars));
+		if ((pars->char_type == REDIR_OUTPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_OUTPUT_CHAR ) 
+		|| ( pars->char_type == REDIR_INPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_INPUT_CHAR))
+			return (slice_redirect_token(stringa, pars));
 		if (pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR 
 		|| pars->char_type == PIPELINE_CHAR || pars->char_type == WHITESPACE_CHAR) //incotro un carattere speciale e me lo prendo
 			slice_single_char_token(stringa, pars);
@@ -104,6 +92,67 @@ void general_state_handler(char *stringa, t_parser *pars)
 	}
 }
 
+char *path_string(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->envp[i])
+	{
+		if (ft_strncmp(shell->envp[i], "PATH=", 5) == 0)
+			return (shell->envp[i] + 5);
+		i++;
+	}
+	return (NULL);
+}
+
+
+
+char **return_path_string(t_token **head, t_shell *shell)
+{
+	char 	*tmpcmd;
+	char	**tmpmtx;
+	int		i;
+	(void)head;
+	i = 0;
+	tmpcmd = path_string(shell);
+	if (!tmpcmd)
+		return NULL;
+	tmpmtx = ft_split(tmpcmd, ':');
+	while(tmpmtx && tmpmtx[i])
+	{
+		tmpmtx[i] = ft_strjoinchar(tmpmtx[i], '/');
+		i++;
+	}
+	return (tmpmtx);
+}
+
+void transform_genwords_to_cmds(t_token **head, t_shell *shell)
+{
+	t_token *ptr;
+	int 	i;
+	char 	**pathmtx;
+	char *str;
+	ptr = *head;
+	i = 0;
+	pathmtx = return_path_string(head, shell);
+	while(ptr)
+	{
+		if (ptr->type == WORD_TOKEN)
+		{
+			i = 0;
+			while(pathmtx && pathmtx[i])
+			{
+				str = ft_strjoin(pathmtx[i], ptr->value);		
+				if (access(str, F_OK) == 0)
+					ptr->type = CMD_TOKEN;
+				i++;
+				free(str);
+			}	
+		}
+		ptr = ptr->next;
+	}
+}
 
 int create_token_list(char *stringa, t_shell *shell)
 {
@@ -127,6 +176,14 @@ int create_token_list(char *stringa, t_shell *shell)
 			slice_end_token(stringa, &pars);														//SLICE END TOKEN						
 		pars.count++;
 	}
+	transform_genwords_to_cmds(&pars.head, shell);
+	
+
+
+
+
+
+	
 	(void)shell;
 	// Print token values
 	pars.token = pars.head;
