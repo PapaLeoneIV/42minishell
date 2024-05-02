@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/01 19:21:43 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/02 19:53:37 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define LEXER_H
 
 #include "./minishell.h"
+typedef struct s_shell t_shell;
 
 
 typedef struct s_token_info
@@ -26,9 +27,10 @@ typedef struct s_token_info
 
 typedef struct s_token
 {
-    char *value; //
-    int type;    //
+    char    *value; //
+    int     type;    //
     struct s_token *next;
+    struct s_token *prev;
 } t_token;
 
 typedef struct parser
@@ -52,17 +54,17 @@ enum State
 
 enum TokenType
 {
-    CMD_TOKEN,             //1 
-    WORD_TOKEN,            //2
-    PIPE_TOKEN,            //3
-    GREATER_TOKEN,         //4
-    REDIR_OUT_TOKEN,       //5
-    LESSER_TOKEN,          //6
-    HEREDOC_TOKEN,         //7
-    SING_QUOTES_TOKEN,     //8
-    DOUBLE_QUOTES_TOKEN,   //9
-    DOLLAR_TOKEN,          //10
-    WHITESPACE_TOKEN,      //11
+    CMD_TOKEN,             //0
+    WORD_TOKEN,            //1
+    PIPE_TOKEN,            //2
+    GREATER_TOKEN,         //3
+    REDIR_OUT_TOKEN,       //4
+    LESSER_TOKEN,          //5
+    HEREDOC_TOKEN,         //6
+    SING_QUOTES_TOKEN,     //7
+    DOUBLE_QUOTES_TOKEN,   //8
+    DOLLAR_TOKEN,          //9
+    WHITESPACE_TOKEN,      //10
 
 };
 
@@ -83,8 +85,18 @@ enum CharType
 };
 /*TOKENIZER HELPERS*/
 
-
+int look_for_another_redirect(char *stringa, t_parser *pars);
+int valid_regchar(char *str, t_parser *pars);
 int get_char_type(char *str, t_parser *pars);
+
+
+/*STATE HANDLERS*/
+void general_state_handler(char *stringa, t_parser *pars);
+void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell);
+void quoted_state_handler(char *stringa, t_parser *pars);
+
+
+
 
 /**
  * @brief Slices a single character token from a string.
@@ -122,9 +134,7 @@ void slice_end_token(char *stringa, t_parser *pars);
 
 /**
  * @brief Checks and changes the status based on a character.
- *
  * This function takes a state, a character, and a parser structure as input, and checks and changes the status based on the character.
- *
  * @param state A pointer to the state variable.
  * @param c The character to check.
  * @param pars The parser structure to update the status.
@@ -133,7 +143,6 @@ void check_and_change_status(int *state, int c, t_parser *pars);
 
 /**
  * Creates a token list from the given string.
- *
  * @param stringa The input string.
  * @param shell   The shell structure.
  * @return        0 if successful, -1 otherwise.
@@ -164,13 +173,8 @@ t_token *token_new(char *data);
  */
 void token_add_back(t_token **head, t_token *new_token);
 
-/**
- * Returns the size of the token list.
- *
- * @param head The head of the token list.
- * @return     The size of the token list.
- */
-int token_size(t_token *head);
+void token_print(t_token *head);
+
 
 /**
  * Clears the token list, freeing all allocated memory.

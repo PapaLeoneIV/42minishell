@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/01 19:18:22 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:23:59 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ typedef enum e_state
 	FAILURE,
 	CONTINUE,
 }	t_state;
+
+
+
+int ft_charchar(char s, int c);
 
 
 char *ft_strjoinchar(char *str, char c);

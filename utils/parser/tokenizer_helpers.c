@@ -6,20 +6,12 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/01 19:15:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:24:25 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-int ft_charchar(char s, int c)
-{
-	size_t	i;
 
-	i = 0;
-	if (s == (unsigned char)c)
-		return (1);
-	return (0);
-}
 int valid_regchar(char *str, t_parser *pars)
 {
 	char *valid_char;
@@ -27,7 +19,7 @@ int valid_regchar(char *str, t_parser *pars)
 	int i;
 
 	i = 0;
-	valid_char = "?.,{}*~_-+=";
+	valid_char = "_";
 	len = ft_strlen(valid_char);
 	while(i < len)
 	{
@@ -37,6 +29,17 @@ int valid_regchar(char *str, t_parser *pars)
 	}
 	return (0);
 }
+
+int look_for_another_redirect(char *stringa, t_parser *pars)
+{
+	if (stringa[pars->count + 1] == '>')
+		return (REDIR_OUTPUT_CHAR);
+	else if (stringa[pars->count + 1] == '<')
+		return (REDIR_INPUT_CHAR);
+	else
+		return (0);
+}
+
 
 int get_char_type(char *str, t_parser *pars)
 {
