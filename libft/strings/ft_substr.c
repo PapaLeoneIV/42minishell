@@ -6,11 +6,12 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/25 12:13:48 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/01 14:13:09 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
 
 static char	*ft_strnull(void)
 {

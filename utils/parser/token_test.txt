@@ -1,4 +1,0 @@
-cat | infile
-cat"|"infile
-"cat"|infile
-cat|"infile"

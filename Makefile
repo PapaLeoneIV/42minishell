@@ -6,7 +6,7 @@
 #    By: rileone <rileone@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/04/24 17:57:31 by rileone          ###   ########.fr        #
+#    Updated: 2024/05/05 14:56:03 by rileone          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ INCLUDES = ./includes
 UTILS_ENV = ./utils/env
 READ_SDTIN = ./utils/read_stdin
 PARSER = ./utils/parser
+VAR_EXPANS = $(PARSER)/var_expansion
 EVERY_INCLUDES=-I. -I$(LIBFT_DIR) -I$(PRINTF_DIR) -I$(GNL_DIR) -I$(INCLUDES) -I$(SRCDIR) -I$(UTILS_ENV) -I$(READ_SDTIN)
 
 
@@ -28,10 +29,10 @@ CFLAGS = -Wall -Wextra -Werror -g
 COMPILE = $(CC) $(CFLAGS)
 ARCHIVE = ar rcs
 
-SRC =	$(addprefix $(UTILS_ENV)/, set_env.c) \
+SRC =	$(addprefix $(UTILS_ENV)/, path_utils.c set_env.c) \
 		$(addprefix $(READ_SDTIN)/, read_input.c) \
-		$(addprefix $(PARSER)/, create_token_list.c parser_utils.c) \
-
+		$(addprefix $(PARSER)/, state_handlers.c create_token_list.c token_utils.c tokenizer_helpers.c slice_token_helpers.c) \
+		$(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
 
 all: $(NAME)
 
@@ -60,5 +61,3 @@ gdb: all
 re: fclean all
 
 .PHONY: all clean fclean re
-
-

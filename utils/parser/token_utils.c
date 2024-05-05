@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:02:26 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/26 15:03:19 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:36:16 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void set_token_values(t_token *token, t_token_info *info)
 
     tmp_not_trimmed = ft_substr(info->string, info->start, len);
     token->value = ft_strtrim(tmp_not_trimmed, " ");
-    if (token->value == NULL)
-        return;
 }
 
 t_token *token_new(char *data)
@@ -35,6 +33,7 @@ t_token *token_new(char *data)
         token->value = NULL;
         token->type = 0;
         token->next = NULL;
+        token->prev = NULL;
     }
     (void)data;
     return token;
@@ -56,25 +55,21 @@ void token_add_back(t_token **head, t_token *new_token)
         current = current->next;
     
     current->next = new_token;
+    new_token->prev = current;
 }
 
-int token_size(t_token *head)
+void token_print(t_token *head)
 {
-    int size;
+    t_token *ptr;
 
-
-    t_token *current;
-
-    current = head;
-    size = 0;
-    while (current)
+    ptr = head;
+    while(ptr)
     {
-        size++;
-        current = current->next;
+        printf("token type %i, value : %s  \n",ptr->type, ptr->value);
+        ptr = ptr->next;
     }
-    
-    return size;
 }
+
 void token_clear(t_token **head)
 {
     t_token *current = *head;
@@ -88,17 +83,4 @@ void token_clear(t_token **head)
     }
     
     *head = NULL;
-}
-void token_free(t_token *head)
-{
-    t_token *current;
-    t_token *temp;
-    
-    current = head;
-    while (current)
-    {
-        temp = current;
-        current = current->next;
-        free(temp);
-    }
 }
