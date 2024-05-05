@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 14:53:07 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:43:15 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,28 @@ typedef struct s_shell t_shell;
 
 typedef struct s_token_info
 {
-    int type;
-    char *string;
-    int start;
-    int end;
+    int         type;
+    char        *string;
+    int         start;
+    int         end;
 } t_token_info;
 
 typedef struct s_token
 {
-    char    *value; //
-    int     type;    //
+    char            *value; //
+    int             type;    //
     struct s_token *next;
     struct s_token *prev;
 } t_token;
 
 typedef struct parser
 {
-    int state;
-    int char_type;
-    int count;
-    int start;
-    t_token *head;
-    t_token *token;
+    int         state;
+    int         char_type;
+    int         count;
+    int         start;
+    t_token     *head;
+    t_token     *token;
     t_token_info info;
 } t_parser;
 

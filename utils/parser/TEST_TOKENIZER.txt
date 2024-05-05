@@ -31,7 +31,7 @@ Dollar Sign Test
     echo "$USER" cat "$USER" > output.txt
     echo $PWD $USER$USER $OLDPWD >"$USER"
     cat $USER"x" > "dollar_test"
-    echo "$PWD/$USERdata" > file
+    
     echo $USER-$PWD-$OLDPWD > environment
     "$USER"echo "complex$user" > out
     $USER'echo'>file

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:50:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 14:59:36 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:40:12 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char *get_key_envp(char *envp_string)
 	char *key;
 	int end;
 
-	end = ft_strchri_gnl(envp_string, '=');
+	end = ft_strchri_gnl(envp_string, '=');;
 	key = ft_substr(envp_string, 0, end);
 	return (key);
 }
