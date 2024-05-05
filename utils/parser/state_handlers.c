@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 20:41:23 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/05 14:58:49 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,42 +23,6 @@ void quoted_state_handler(char *stringa, t_parser *pars)
 	pars->start = pars->count + 1;
 	pars->state = STATE_GENERAL;
 }
-
-
-char *get_key_envp(char *envp_string)
-{
-	char *key;
-	int end;
-
-	end = ft_strchri_gnl(envp_string, '=');
-	key = ft_substr(envp_string, 0, end);
-	return (key);
-}
-
-void expand_env_var(char *token_value, t_parser *pars, t_shell *shell)
-{
-	int envp_len;
-	int i;
-	char *pathKey;
-	
-	i = 0;
-	envp_len = mtx_count_rows(shell->envp);
-	while(i < envp_len)
-	{
-		pathKey = get_key_envp(shell->envp[i]);
-		if (!strcmp(token_value + 1, pathKey))
-		{
-			return shell->envp[i] + ft_strlen(ft_substring(shell->envp[i], ft_strchri_gnl(shell->envp[i], '='), ft_strlen(shell->envp[i])));
-		}
-		i++;
-	}
-	else
-	{
-		/**devo impostare il valore della variabile a NULL se non esiste*/
-	}
-
-}
-
 
 void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
@@ -81,7 +45,7 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		pars->start = pars->count;
 		pars->count--;
 	}
-	expand_env_var(pars->token->value, pars, shell);
+	expand_env_var(&pars->token->value, shell);
 	pars->state = STATE_GENERAL;
 }
 

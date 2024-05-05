@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:02:41 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 19:46:07 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/05 15:47:29 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv , char **envp)
     t_shell shell;
     
     shell = (t_shell){0};
-    shell.envp = envp;
+    shell.envp = envp; 
     (void)argv;
     if(argc != 1)
         perror("numero di argomenti sbagliato!");

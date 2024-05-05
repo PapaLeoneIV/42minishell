@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 19:53:37 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/05 14:53:07 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ void general_state_handler(char *stringa, t_parser *pars);
 void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell);
 void quoted_state_handler(char *stringa, t_parser *pars);
 
+/**EXPANSION HELPERS*/
+char *get_key_envp(char *envp_string);
+char *set_token_value_post_expansion(char *envp_string);
+void expand_env_var(char **token_value,t_shell *shell);
 
 
 
@@ -130,7 +134,7 @@ void slice_token_string(char *stringa, t_parser *pars);
  * @param stringa The string to slice the token from.
  * @param pars The parser structure to store the sliced token.
  */
-void slice_end_token(char *stringa, t_parser *pars);
+void slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
 
 /**
  * @brief Checks and changes the status based on a character.

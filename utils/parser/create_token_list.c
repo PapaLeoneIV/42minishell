@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 19:34:37 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/05 14:52:55 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int create_token_list(char *stringa, t_shell *shell)
 		|| (pars.state == STATE_DQUOTE && pars.char_type == DQUOTES_CHAR)) 							//QUOTE STATE                                                                                                        
 			quoted_state_handler(stringa, &pars);
 		else if (pars.state == STATE_DOLLAR && pars.char_type != REG_CHAR)
-			dollar_state_handler(stringa, &pars, shell);													//DOLLAR STATE
+			dollar_state_handler(stringa, &pars, shell);											//DOLLAR STATE
 		if (stringa[pars.count + 1] == '\0')
-			slice_end_token(stringa, &pars);										//SLICE END TOKEN						
+			slice_end_token(stringa, &pars, shell);														//SLICE END TOKEN						
 		pars.count++;
 	}
 	(void)shell;
