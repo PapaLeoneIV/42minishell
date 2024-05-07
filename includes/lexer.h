@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 16:43:15 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:19:21 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_token
 
 typedef struct parser
 {
+    
     int         state;
     int         char_type;
     int         count;
@@ -44,6 +45,19 @@ typedef struct parser
     t_token_info info;
 } t_parser;
 
+
+typedef struct s_commands
+{
+	char 		**cmd;
+	int			in;
+	int			out;
+	
+	int			type_of_redirection;
+	int			first_command;
+	char*		filename;
+	struct s_commands *next;
+	
+} t_command;
 enum State
 {
     STATE_GENERAL,
@@ -114,6 +128,7 @@ void slice_single_char_token(char *stringa, t_parser *pars);
 
 
 void slice_redirect_token(char *stringa, t_parser *pars);
+int parse_input(char *input, t_shell *shell);
 
 
 /**
@@ -151,7 +166,7 @@ void check_and_change_status(int *state, int c, t_parser *pars);
  * @param shell   The shell structure.
  * @return        0 if successful, -1 otherwise.
  */
-int create_token_list(char *stringa, t_shell *shell);
+int create_token_list(char *stringa, t_shell *shell, t_parser *pars);
 
 /**
  * Sets the values of a token based on the given token info.

@@ -40,7 +40,7 @@ Dollar Sign Test
 
 Special Characters and Edge Cases
 
-    echo "This is a test" | grep "test" >$HOME/test_results
+    grep "test" >$HOME/$PWD_ird
     cat > outfile <<< "Here is some text"
     echo $USER > "user info" | cat "user info"
     cat "end of line" >
