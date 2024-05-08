@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 13:36:37 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:45:43 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		i;
 
 	i = 0;
-	if (!s1 || !s2)
-		return (0);
 	len = ft_strlen(s1) + ft_strlen(s2);
+	if (!len)
+		return (NULL);
 	out = (char *)ft_calloc((len + 1), sizeof(char));
-	if (!(out))
+	if (!out)
 		return (0);
 	len = 0;
 	while (s1 && s1[i])

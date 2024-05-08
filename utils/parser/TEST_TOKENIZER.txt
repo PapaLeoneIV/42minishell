@@ -31,7 +31,7 @@ Dollar Sign Test
     echo "$USER" cat "$USER" > output.txt
     echo $PWD $USER$USER $OLDPWD >"$USER"
     cat $USER"x" > "dollar_test"
-    echo "$PWD/$USERdata" > file
+    
     echo $USER-$PWD-$OLDPWD > environment
     "$USER"echo "complex$user" > out
     $USER'echo'>file
@@ -40,7 +40,7 @@ Dollar Sign Test
 
 Special Characters and Edge Cases
 
-    echo "This is a test" | grep "test" >$HOME/test_results
+    grep "test" >$HOME/$PWD_ird
     cat > outfile <<< "Here is some text"
     echo $USER > "user info" | cat "user info"
     cat "end of line" >

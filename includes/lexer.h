@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 14:53:07 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:19:21 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,45 @@ typedef struct s_shell t_shell;
 
 typedef struct s_token_info
 {
-    int type;
-    char *string;
-    int start;
-    int end;
+    int         type;
+    char        *string;
+    int         start;
+    int         end;
 } t_token_info;
 
 typedef struct s_token
 {
-    char    *value; //
-    int     type;    //
+    char            *value; //
+    int             type;    //
     struct s_token *next;
     struct s_token *prev;
 } t_token;
 
 typedef struct parser
 {
-    int state;
-    int char_type;
-    int count;
-    int start;
-    t_token *head;
-    t_token *token;
+    
+    int         state;
+    int         char_type;
+    int         count;
+    int         start;
+    t_token     *head;
+    t_token     *token;
     t_token_info info;
 } t_parser;
 
+
+typedef struct s_commands
+{
+	char 		**cmd;
+	int			in;
+	int			out;
+	
+	int			type_of_redirection;
+	int			first_command;
+	char*		filename;
+	struct s_commands *next;
+	
+} t_command;
 enum State
 {
     STATE_GENERAL,
@@ -114,6 +128,7 @@ void slice_single_char_token(char *stringa, t_parser *pars);
 
 
 void slice_redirect_token(char *stringa, t_parser *pars);
+int parse_input(char *input, t_shell *shell);
 
 
 /**
@@ -151,7 +166,7 @@ void check_and_change_status(int *state, int c, t_parser *pars);
  * @param shell   The shell structure.
  * @return        0 if successful, -1 otherwise.
  */
-int create_token_list(char *stringa, t_shell *shell);
+int create_token_list(char *stringa, t_shell *shell, t_parser *pars);
 
 /**
  * Sets the values of a token based on the given token info.
