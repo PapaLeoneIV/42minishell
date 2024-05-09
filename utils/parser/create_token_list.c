@@ -59,8 +59,6 @@
 }
  */
 
-
-
 int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 {
 	if (stringa == NULL || shell == NULL || pars == NULL)
@@ -115,11 +113,10 @@ void join_tokens(t_token **node, t_token **prev)
 
 void join_string(t_parser *pars, t_shell *shell)
 {
-	int i;
+
 	t_token *prev;
 	t_token *ptr;
 	(void)shell;
-	i = 0;
 	ptr = pars->head;
 	while(ptr != NULL)
 	{
@@ -135,10 +132,130 @@ void join_string(t_parser *pars, t_shell *shell)
 		ptr = ptr->next;
 	}
 }
-
-void unpack_quoted_tokens(t_parser *pars)
+int valid_regchar_quoted(char c)
 {
+	char *valid_char;
+	int len;
+	int i;
+
+	i = 0;
+	valid_char = "_";
+	len = ft_strlen(valid_char);
+	while(i < len)
+	{
+		if(ft_charchar(c, valid_char[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+int get_char_type_quoted(char c)
+{
+	if (c == ' ')
+		return (WHITESPACE_CHAR);
+	else if (c == '$')
+		return (DOLLAR_CHAR);
+	else if (c == '?')
+		return (QUESTION_MARK_CHAR);
+	else if (ft_isalpha(c) || valid_regchar_quoted(c))
+		return (REG_CHAR);
+	else if (ft_isdigit(c))
+		return (DIGIT_CHAR);
+	return (DOLLAR_SPECIAL_CHAR);
+}
+
+
+void general_state_handler_quoted(char *stringa, t_parser *pars)
+{
+	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR)
+	{
+		if (pars->count > pars->start)  																									//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
+			slice_token_string(stringa, pars);
+		if (pars->char_type == WHITESPACE_CHAR)
+			slice_single_char_token(stringa, pars);
+		if (pars->char_type == DOLLAR_CHAR)  						//cambio lo state machine per gestire le virgolette
+			check_and_change_status(&pars->state, pars->char_type, pars);
+	}
+}
+void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
+{
+	/***qui dipende se voglio gestire $1 $2 $3 ....*/
+	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
+	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
+	{
+		pars->token = token_new(NULL);
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
+		set_token_values(pars->token, &pars->info);
+		token_add_back(&pars->head, pars->token);
+		pars->start = pars->count + 1;
+	}
+	if (pars->count > pars->start)
+	{
+		pars->token = token_new(NULL);
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count}; 
+		set_token_values(pars->token, &pars->info);
+		token_add_back(&pars->head, pars->token);
+		pars->start = pars->count;
+		pars->count--;
+	}
+	expand_env_var(&pars->token->value, shell);
+	pars->state = STATE_GENERAL;
+}
+
+t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
+{	
+	t_parser *parser;
+
+	parser = ft_calloc(1, sizeof(t_parser));
+	parser->state = STATE_GENERAL;
+	parser->start = 0;
+	parser->count = 0;
+	parser->head = NULL;
+	while(node->value[parser->count])
+	{
+		parser->char_type = get_char_type_quoted(node->value[parser->count]);
+		if (parser->state == STATE_GENERAL)
+			general_state_handler_quoted(node->value, parser);
+		else if (parser->state == STATE_DOLLAR && parser->char_type  != REG_CHAR)
+			dollar_state_handler_quoted(node->value, parser, shell);												//DOLLAR STATE
+		if (node->value[parser->count + 1] == '\0')
+			slice_end_token(node->value, parser, shell);														//SLICE END TOKEN						
+		parser->count++;
+	}
+	return parser;
+}
+
+char *join_list_into_quoted_token(t_token *head)
+{
+	char *out;
 	
+	out = NULL;
+	while(head)
+	{
+		out = ft_strjoin(out, head->value);
+		head = head->next; 
+	}
+	return out;
+}
+
+void unpack_quoted_tokens(t_parser *pars, t_shell *shell)
+{
+	t_token *ptr;
+	t_parser *list;
+
+	ptr = pars->head;
+	while(ptr != NULL)
+	{
+		if (ptr->type == DOUBLE_QUOTES_TOKEN)
+		{
+  			list = tokenize_quoted_values(ptr, shell);
+			(void)list;
+ 			free(ptr->value);
+			ptr->value = join_list_into_quoted_token(list->head);		
+		}
+  		ptr = ptr->next;
+	}
+
 }
 
 int parse_input(char *input, t_shell *shell)
@@ -148,9 +265,10 @@ int parse_input(char *input, t_shell *shell)
 	pars = (t_parser){0};
 	if (create_token_list(input, shell, &pars) == 0)
 		return (0);
- 	join_string(&pars, shell);
-	unpack_quoted_tokens(&pars);
+	unpack_quoted_tokens(&pars, shell);
+	join_string(&pars, shell);
 	token_print(pars.head);
+
 	(void)shell;
     /*parse_redirections(input, shell, &pars);*/
 	return (0);

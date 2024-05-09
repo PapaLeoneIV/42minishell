@@ -74,5 +74,6 @@ void check_and_change_status(int *state, int c, t_parser *pars)
 		*state = STATE_DQUOTE;
 	else if (c == DOLLAR_CHAR)
 		*state = STATE_DOLLAR;
+	
 	pars->start = pars->count; 
 }

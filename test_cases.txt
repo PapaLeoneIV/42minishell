@@ -1,0 +1,27 @@
+input:-echo "ciao"
+expected:-echo ciao
+------------------
+input:-echo "$USER"
+expected:-echo rileone
+------------------
+input:-echo "ciao" | grep x
+expected:-echo ciao | grep x
+------------------
+input:-echo "cat $HOME/testfile > $USER/output"
+expected:-echo cat /home/rileone/testfile > rileone/output
+------------------
+input:-echo "$PATH > "path contents.txt""
+expected:-echo /home/rileone/.nvm/versions/node/v20.12.2/bin:/home/rileone/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin > path contents.txt
+------------------
+input:-echo mkdir $HOME/"new dir"
+expected:-echo mkdir /home/rileone/new dir
+------------------
+input:-echo 'x'"echo "    echo "$USER"cat"$USER""
+expected:-echo xecho  echo rileonecatrileone
+------------------
+input:-echo '"''"'
+expected:-echo ""
+------------------
+input:-echo $SDASS
+expected:-echo (null)
+------------------

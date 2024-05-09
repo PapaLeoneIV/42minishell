@@ -22,7 +22,10 @@ void set_token_values(t_token *token, t_token_info *info)
     token->type = info->type;
 
     tmp_not_trimmed = ft_substr(info->string, info->start, len);
-    token->value = ft_strtrim(tmp_not_trimmed, " ");
+    if (token->type != DOUBLE_QUOTES_TOKEN && token->type != WHITESPACE_TOKEN)
+        token->value = ft_strtrim(tmp_not_trimmed, " ");
+    else
+        token->value = tmp_not_trimmed;
 }
 
 t_token *token_new(char *data)
@@ -65,9 +68,10 @@ void token_print(t_token *head)
     ptr = head;
     while(ptr)
     {
-        printf("token type %i, value : %s  \n",ptr->type, ptr->value);
+        ft_printf("%s", ptr->value);
         ptr = ptr->next;
     }
+    ft_printf("\n");
 }
 
 void token_clear(t_token **head)

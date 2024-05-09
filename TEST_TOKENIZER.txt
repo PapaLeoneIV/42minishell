@@ -11,6 +11,7 @@ Pipe and Quotes
     "echo"|"hello world" > "new file"
     echo "split|pipe" | "awk '{print $1}'"
     grep "word" file | "wc -l"
+    echo "user $USER"
 
 Environment Variables & Redirections
 
@@ -53,3 +54,12 @@ Complex Cases (Mix)
     cat "a file" > $PWD/file
     echo "Nested > quote" | cat > "newfile"
     cat $HOME'/'config | grep "setting=" > $USER/config_backup
+
+parsing Quotes
+'"''"'
+"'"
+"'"'ciao"'" '"
+echo "'$USE'R"                                  ''R
+echo "                                          \n\n deve essere il risultato
+"
+"""'"'"""

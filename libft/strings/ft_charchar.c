@@ -14,9 +14,6 @@
 
 int ft_charchar(char s, int c)
 {
-	size_t	i;
-
-	i = 0;
 	if (s == (unsigned char)c)
 		return (1);
 	return (0);
