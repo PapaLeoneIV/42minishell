@@ -18,6 +18,8 @@ SRCDIR = ./src
 INCLUDES = ./includes
 UTILS_ENV = ./utils/env
 READ_SDTIN = ./utils/read_stdin
+TOKENIZER = tokenizer
+QUOT_TOKENIZER = quoted_tokenizer
 PARSER = ./utils/parser
 VAR_EXPANS = $(PARSER)/var_expansion
 EVERY_INCLUDES=-I. -I$(LIBFT_DIR) -I$(PRINTF_DIR) -I$(GNL_DIR) -I$(INCLUDES) -I$(SRCDIR) -I$(UTILS_ENV) -I$(READ_SDTIN)
@@ -31,7 +33,8 @@ ARCHIVE = ar rcs
 
 SRC =	$(addprefix $(UTILS_ENV)/, path_utils.c set_env.c) \
 		$(addprefix $(READ_SDTIN)/, read_input.c) \
-		$(addprefix $(PARSER)/, state_handlers.c create_token_list.c token_utils.c tokenizer_helpers.c slice_token_helpers.c) \
+		$(addprefix $(PARSER)/$(TOKENIZER)/, tokenizer_state_methods.c tokenizer.c tokenizer_utils.c tokenizer_helpers.c tokenizer_slice_methods.c) \
+		$(addprefix $(PARSER)/$(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \
 		$(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
 
 all: $(NAME)

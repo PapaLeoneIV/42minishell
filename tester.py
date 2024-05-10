@@ -8,9 +8,9 @@ def read_test_cases(filename):
             line = line.strip()
             if line.startswith('input:-'):
                 current_test['input'] = line[len('input:-'):].strip()
-            elif line.startswith('expected:-'):
-                current_test['expected'] = line[len('expected:-'):].strip()
-            elif line == '------------------':
+            elif line.startswith('expect:-'):
+                current_test['expect'] = line[len('expect:-'):].strip()
+            elif line == '-':
                 if current_test:
                     test_cases.append(current_test)
                     current_test = {}
@@ -56,11 +56,11 @@ def main():
 
     for index, test in enumerate(test_cases, 1):
         output = run_command(process, test['input'])
-        expected = test['expected']
-        result = 'PASSED' if output == expected else 'FAILED'
+        expect = test['expect']
+        result = 'PASSED' if output == expect else 'FAILED'
         color = 'green' if result == 'PASSED' else 'red'
         print(f"Test {index}: {test['input']}", flush=True)
-        print(f" Expected: '{expected}'", flush=True)
+        print(f" Expect: '{expect}'", flush=True)
         print(f" Output: '{output}'", flush=True)
         print(color_text(f" Result: {result}", color), flush=True)
         print(flush=True)  # Flush the blank line for separation

@@ -20,8 +20,8 @@ void read_from_stdin(t_shell *shell)
     while (1)
     {
         input = readline("(Minishell)$");
-        parse_input(input, shell);
-       
+        tokenize_input(input, shell);
+        
         free(input);
     }
 }
