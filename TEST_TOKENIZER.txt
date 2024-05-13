@@ -67,3 +67,4 @@ echo "'$USE'R"                                  ''R
 echo "                                          \n\n deve essere il risultato
 "
 """'"'"""
+    "mkdir -p" $HOME/'new folder'

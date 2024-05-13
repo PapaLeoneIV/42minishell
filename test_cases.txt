@@ -5,7 +5,10 @@ input:-echo "$USER"
 expect:-echo rileone
 -
 input:-echo "$USER1"
-expect:-echo rileone1
+expect:-echo 
+-
+input:-echo '"$USER"'
+expect:-echo "$USER"
 -
 input:-echo "ciao" | grep x
 expect:-echo ciao | grep x
@@ -16,7 +19,7 @@ expect:-echo grep test /home/rileone/
 input:-echo "cat $HOME/testfile > $USER/output"
 expect:-echo cat /home/rileone/testfile > rileone/output
 -
-input:-echo "$PATH > "path contents.txt""
+input:-echo "$PATH > " path contents.txt""| dsasdasda | dasdasdas| dsadsad 
 expect:-echo /home/rileone/.nvm/versions/node/v20.12.2/bin:/home/rileone/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin > path contents.txt
 -
 input:-echo mkdir $HOME/"new dir"
@@ -72,3 +75,19 @@ expect:-echo Why would "$NON_EXISTENT" even show up?
 -
 input:-echo "It's '$NOT_THERE' fault"
 expect:-echo It's '' fault
+-
+input:-echo "'    "          b          'casa'
+expect:-echo '     b casa
+-
+input:-echo$
+expect:-echo$
+-
+input:-echo$USER
+expect:-echorileone
+-
+input:-echo $ $ $
+expect:-echo $ $ $
+-
+input:-echo $PWD $ $
+expect:-echo /nfs/homes/rileone/Desktop/42/minishell $ $
+-

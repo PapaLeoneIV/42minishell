@@ -1,5 +1,4 @@
 import subprocess
-
 def read_test_cases(filename):
     test_cases = []
     with open(filename, 'r') as file:
@@ -26,7 +25,7 @@ def run_command(process, command):
         line = process.stdout.readline().strip()
         if not line and process.poll() is not None:
             break  # If line is empty and the process has ended
-        if '(Minishell)$' in line:
+        if '(MINISHELL)$' in line:
             if prompt_seen:
                 break
             else:
@@ -50,8 +49,9 @@ def main():
     test_cases = read_test_cases('test_cases.txt')
     process = subprocess.Popen(['./minishell'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=0)
     # Wait for minishell to be ready
+   
     while True:
-        if '(Minishell)$' in process.stdout.readline().strip():
+        if '(MINISHELL)$' in process.stdout.readline().strip():
             break
 
     for index, test in enumerate(test_cases, 1):

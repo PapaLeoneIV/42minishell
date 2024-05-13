@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   slice_token_helpers.c                              :+:      :+:    :+:   */
+/*   tokenizer_slice_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 14:54:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/13 16:05:05 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,15 @@ void slice_single_char_token(char *stringa, t_parser *pars)
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
 }
+void slice_token_string_doll_spec_case(char *stringa, t_parser *pars)
+{
+	pars->token = token_new(NULL);
+	pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start, pars->count + 1};
+	set_token_values(pars->token, &pars->info);
+	token_add_back(&pars->head, pars->token);
+	pars->start = pars->count + 1;
 
+}
 
 void slice_token_string(char *stringa, t_parser *pars)
 {

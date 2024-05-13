@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 14:24:25 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/13 15:56:06 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,28 @@ int look_for_another_redirect(char *stringa, t_parser *pars)
 }
 
 
-int get_char_type(char *str, t_parser *pars)
+
+int get_char_type(char *str, t_parser *pars, int count)
 {
-	if (str[pars->count] == ' ')
+	if (str[count] == ' ')
 		return (WHITESPACE_CHAR);
-	else if (str[pars->count] == '|')
+	else if (str[count] == '|')
 		return (PIPELINE_CHAR);
-	else if (str[pars->count] == '<')
+	else if (str[count] == '<')
 		return (REDIR_INPUT_CHAR);
-	else if (str[pars->count] == '>')
+	else if (str[count] == '>')
 		return (REDIR_OUTPUT_CHAR);
-	else if (str[pars->count] == '\'')
+	else if (str[count] == '\'')
 		return (SQUOTES_CHAR);
-	else if (str[pars->count] == '\"')
+	else if (str[count] == '\"')
 		return (DQUOTES_CHAR);
-	else if (str[pars->count] == '$')
+	else if (str[count] == '$')
 		return (DOLLAR_CHAR);
-	else if (str[pars->count] == '?')
+	else if (str[count] == '?')
 		return (QUESTION_MARK_CHAR);
-	else if (ft_isalpha(str[pars->count]) || valid_regchar(str, pars))
+	else if (ft_isalpha(str[count]) || valid_regchar(str, pars))
 		return (REG_CHAR);
-	else if (ft_isdigit(str[pars->count]))
+	else if (ft_isdigit(str[count]))
 		return (DIGIT_CHAR);
 	return (DOLLAR_SPECIAL_CHAR);
 }

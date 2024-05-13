@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state_handlers.c                                   :+:      :+:    :+:   */
+/*   tokenizer_state_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 14:58:49 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/13 16:04:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,19 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 
 void general_state_handler(char *stringa, t_parser *pars)
 {
+	char c;
+	
 	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == PIPELINE_CHAR || pars->char_type == REDIR_INPUT_CHAR 
 	|| pars->char_type ==  REDIR_OUTPUT_CHAR || pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR 
 	|| pars->char_type == DOLLAR_CHAR)
-	{
+	{	
+		c = get_char_type(stringa, pars, pars->count + 1);
+		if (pars->char_type == DOLLAR_CHAR && c != REG_CHAR)
+		{
+			slice_token_string_doll_spec_case(stringa, pars);
+			return ;
+		}	
+			
 		if (pars->count > pars->start)  																									//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
 		if ((pars->char_type == REDIR_OUTPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_OUTPUT_CHAR ) 

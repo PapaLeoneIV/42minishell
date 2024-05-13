@@ -47,7 +47,7 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 		parser->char_type = get_char_type_quoted(node->value[parser->count]);
 		if (parser->state == STATE_GENERAL)
 			general_state_handler_quoted(node->value, parser);
-		else if (parser->state == STATE_DOLLAR && parser->char_type  != REG_CHAR)
+		else if (parser->state == STATE_DOLLAR && (parser->char_type  != REG_CHAR && parser->char_type != DIGIT_CHAR))
 			dollar_state_handler_quoted(node->value, parser, shell);												//DOLLAR STATE
 		if (node->value[parser->count + 1] == '\0')
 			slice_end_token(node->value, parser, shell);														//SLICE END TOKEN						

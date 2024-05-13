@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/06 17:19:21 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/13 16:05:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,16 @@ enum State
 
 enum TokenType
 {
-	CMD_TOKEN,             //0
-	WORD_TOKEN,            //1
-	PIPE_TOKEN,            //2
-	GREATER_TOKEN,         //3
-	REDIR_OUT_TOKEN,       //4
-	LESSER_TOKEN,          //5
-	HEREDOC_TOKEN,         //6
-	SING_QUOTES_TOKEN,     //7
-	DOUBLE_QUOTES_TOKEN,   //8
-	DOLLAR_TOKEN,          //9
-	WHITESPACE_TOKEN,      //10
+	WORD_TOKEN,            //0
+	PIPE_TOKEN,            //1
+	GREATER_TOKEN,         //2
+	REDIR_OUT_TOKEN,       //3
+	LESSER_TOKEN,          //4
+	HEREDOC_TOKEN,         //5
+	SING_QUOTES_TOKEN,     //6
+	DOUBLE_QUOTES_TOKEN,   //7
+	DOLLAR_TOKEN,          //8
+	WHITESPACE_TOKEN,      //9
 
 };
 
@@ -105,20 +104,21 @@ void		token_print(t_token *head);
 void		token_clear(t_token **head);
 
 /*TOKENIZER MAIN FUNCTIONS*/
-int			tokenize_input(char *input, t_shell *shell);
+t_token		*tokenize_input(char *input, t_shell *shell);
 int			create_token_list(char *stringa, t_shell *shell, t_parser *pars);
 
 
 /*TOKENIZER HELPERS*/
 int			look_for_another_redirect(char *stringa, t_parser *pars);
 int			valid_regchar(char *str, t_parser *pars);
-int			get_char_type(char *str, t_parser *pars);
+int			get_char_type(char *str, t_parser *pars, int count);
 
 /*TOKENIZER HELPERS(SLICE METHODS)*/
 void		slice_single_char_token(char *stringa, t_parser *pars);
 void		slice_redirect_token(char *stringa, t_parser *pars);
 void		slice_token_string(char *stringa, t_parser *pars);
 void		slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
+void 		slice_token_string_doll_spec_case(char *stringa, t_parser *pars);
 
 /*TOKENIZER HELPERS(STATE HANDLERS)*/
 void		general_state_handler(char *stringa, t_parser *pars);
@@ -144,5 +144,13 @@ void		unpack_quoted_tokens(t_parser *pars, t_shell *shell);
 char		*get_key_envp(char *envp_string);
 char		*set_token_value_post_expansion(char *envp_string);
 void		expand_env_var(char **token_value,t_shell *shell);
+
+/*SYNTAX ANALIZER*/
+int 		syntax_error_handler(t_token *head, char *input);
+int 		handle_pipe_synt_error(char *input, int next_char, char *non_valid_char);
+int			handle_gr_less_synt_error(char *input, int next_char, char *non_valid_char, char sign);
+int			parenthesis_error_handler(t_token *head);
+int check_for_non_valid_char(char *input, char *non_valid_char);
+
 
 #endif
