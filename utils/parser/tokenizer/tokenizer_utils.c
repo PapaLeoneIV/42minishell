@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:02:26 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 15:36:16 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/13 22:14:34 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void set_token_values(t_token *token, t_token_info *info)
     if (token->type != DOUBLE_QUOTES_TOKEN && token->type != WHITESPACE_TOKEN)
         token->value = ft_strtrim(tmp_not_trimmed, " ");
     else
-        token->value = tmp_not_trimmed;
+        token->value = ft_strdup(tmp_not_trimmed);
+    free(tmp_not_trimmed);
 }
 
 t_token *token_new(char *data)

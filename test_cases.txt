@@ -14,16 +14,16 @@ input:-echo "ciao" | grep x
 expect:-echo ciao | grep x
 -
 input:-echo grep "test" $HOME/$PWD_ird
-expect:-echo grep test /home/rileone/
+expect:-echo grep test /nfs/homes/rileone/
 -
 input:-echo "cat $HOME/testfile > $USER/output"
-expect:-echo cat /home/rileone/testfile > rileone/output
+expect:-echo cat /nfs/homes/rileone/testfile > rileone/output
 -
 input:-echo "$PATH > " path contents.txt""| dsasdasda | dasdasdas| dsadsad 
-expect:-echo /home/rileone/.nvm/versions/node/v20.12.2/bin:/home/rileone/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin > path contents.txt
+expect:-echo /nfs/homes/rileone/bin:/nfs/homes/rileone/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin > path contents.txt| dsasdasda | dasdasdas| dsadsad
 -
 input:-echo mkdir $HOME/"new dir"
-expect:-echo mkdir /home/rileone/new dir
+expect:-echo mkdir /nfs/homes/rileone/new dir
 -
 input:-echo 'x'"echo "    echo "$USER"cat"$USER"
 expect:-echo xecho  echo rileonecatrileone
@@ -44,10 +44,10 @@ input:-echo "Nested > "$USE"R"'q'"uote"
 expect:-echo Nested > Rquote
 -
 input:-echo cat $HOME'/'config | grep "setting=" > $USER/config_backup
-expect:-echo cat /home/rileone/config | grep setting= > rileone/config_backup
+expect:-echo cat /nfs/homes/rileone/config | grep setting= > rileone/config_backup
 -
 input:-echo grep "test" >$HOME/$PWD_ird
-expect:-echo grep test >/home/rileone/
+expect:-echo grep test >/nfs/homes/rileone/
 -
 input:-echo "This is a line break\nNew line"
 expect:-echo This is a line break\nNew line
@@ -56,7 +56,7 @@ input:-echo "Empty var: $UNSET_VAR"
 expect:-echo Empty var:
 -
 input:-echo "Listing $HOME/*.txt"
-expect:-echo Listing /home/rileone/*.txt
+expect:-echo Listing /nfs/homes/rileone/*.txt
 -
 input:-echo 'The missing variable $MISSING_VAR is here'
 expect:-echo The missing variable $MISSING_VAR is here
@@ -90,4 +90,7 @@ expect:-echo $ $ $
 -
 input:-echo $PWD $ $
 expect:-echo /nfs/homes/rileone/Desktop/42/minishell $ $
+-
+input:echo ">|"
+expect:-echo >|
 -

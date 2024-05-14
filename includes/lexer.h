@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/13 16:05:52 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/14 11:42:14 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,10 @@ typedef struct s_commands
 	char 		**cmd;
 	int			in;
 	int			out;
-	
 	int			type_of_redirection;
 	int			first_command;
 	char*		filename;
 	struct s_commands *next;
-	
 } 			t_command;
 enum State
 {
@@ -150,7 +148,7 @@ int 		syntax_error_handler(t_token *head, char *input);
 int 		handle_pipe_synt_error(char *input, int next_char, char *non_valid_char);
 int			handle_gr_less_synt_error(char *input, int next_char, char *non_valid_char, char sign);
 int			parenthesis_error_handler(t_token *head);
-int check_for_non_valid_char(char *input, char *non_valid_char);
+int 		check_for_non_valid_char(char *input, char *non_valid_char);
 
 
 #endif

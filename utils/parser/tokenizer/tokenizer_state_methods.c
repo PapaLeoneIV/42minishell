@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/13 16:04:52 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/14 14:38:26 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,17 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count}; 
 		set_token_values(pars->token, &pars->info);
-		token_add_back(&pars->head, pars->token);
+		if (pars->token->value)
+		{
+			token_add_back(&pars->head, pars->token);
+			expand_env_var(&pars->token->value, shell);		
+		}
+		else
+			free(pars->token);
 		pars->start = pars->count;
 		pars->count--;
 	}
-	expand_env_var(&pars->token->value, shell);
+	
 	pars->state = STATE_GENERAL;
 }
 
@@ -63,9 +69,8 @@ void general_state_handler(char *stringa, t_parser *pars)
 		{
 			slice_token_string_doll_spec_case(stringa, pars);
 			return ;
-		}	
-			
-		if (pars->count > pars->start)  																									//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
+		}
+		if (pars->count > pars->start)																								//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
 		if ((pars->char_type == REDIR_OUTPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_OUTPUT_CHAR ) 
 		|| ( pars->char_type == REDIR_INPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_INPUT_CHAR))

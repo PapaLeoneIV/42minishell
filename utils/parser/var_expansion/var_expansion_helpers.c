@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:50:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/05 16:40:12 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/14 14:37:06 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char *set_token_value_post_expansion(char *envp_string)
 		return (NULL);
 	return (out);
 }
-void expand_env_var(char **token_value,t_shell *shell)
+void expand_env_var(char **token_value, t_shell *shell)
 {
 	int envp_len;
 	int i;
