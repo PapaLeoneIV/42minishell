@@ -128,7 +128,7 @@ int check_for_non_valid_char(char *input_string, char *non_valid_char)
     return (0);
 }
 
-int check_number_of_quotes(char *input_string)
+int check_for_open_quotes(char *input_string)
 {
     int count;
     int d_count;
@@ -243,10 +243,10 @@ int check_for_non_valid_char_list(t_token *ptr, char *non_valid_char)
     return (0);
 }
 
-int handle_gr_less_synt_error_tokens(t_token *ptr)
+/* int handle_gr_less_synt_error_tokens(t_token *ptr)
 {
     
-}
+} */
 
 int syntax_error_handler(t_token *head, char *input_string)
 {
@@ -256,7 +256,7 @@ int syntax_error_handler(t_token *head, char *input_string)
     (void)input_string;
     if (check_for_non_valid_char_list(ptr, "{}();\\&*") == 1)
        return 0;
-    if (check_number_of_quotes(input_string) == 0)
+    if (check_for_open_quotes(input_string) == 0)
         return (0);
     while(ptr)
     {
@@ -265,11 +265,11 @@ int syntax_error_handler(t_token *head, char *input_string)
             if (handle_pipe_synt_error_tokens(ptr) == 0)
                 return (0);
         }
-        else if (ptr->type == GREATER_TOKEN)
+/*         else if (ptr->type == GREATER_TOKEN)
         {
             if (handle_gr_less_synt_error_tokens(ptr) == 0)
                 return (0);
-        }
+        } */
        /* else if (ptr->type == LESSER_TOKEN)
         {
             

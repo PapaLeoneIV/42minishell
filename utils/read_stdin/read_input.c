@@ -47,9 +47,6 @@ void free_tokens(t_token *head)
 
 t_token *look_tokens_ahead(t_token *current)
 {
-	t_token *tmp;
-
-	tmp = current;
 	if (current->next == NULL)
 		return (NULL);
 	if (current->next->type != WORD_TOKEN && current->next->type != WHITESPACE_TOKEN)
@@ -65,9 +62,9 @@ int parse_redirections(t_token *head, t_shell *shell)
 {
 	t_token *current;
 	t_token *tmp;
-	int i;
+/* 	int i;
 
-	i = 0;
+	i = 0; */
 	current = head;
 	
 	while (current != NULL)
@@ -94,8 +91,8 @@ void read_from_stdin(t_shell *shell)
 {
 	t_token     *head;
 	char		*input;
-	char		*tmp_input; 
-	(void)shell;
+ 	char		*tmp_input; 
+ 	(void)shell;
 	while (1)
 	{
 		input = readline("(MINISHELL)$");
@@ -109,7 +106,8 @@ void read_from_stdin(t_shell *shell)
 			printf("Redirection error\n");
 		free(input);
 		free(tmp_input);
-		input = NULL;
+		input = NULL; 
 		free_tokens(head);
 	}
 }
+

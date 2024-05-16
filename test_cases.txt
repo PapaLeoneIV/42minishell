@@ -91,6 +91,18 @@ expect:-echo $ $ $
 input:-echo $PWD $ $
 expect:-echo /nfs/homes/rileone/Desktop/42/minishell $ $
 -
-input:echo ">|"
+input:-echo ">|"
 expect:-echo >|
+-
+input:-echo "$'USER'"
+expect:-echo $'USER'
+-
+input:-echo $'USE'R
+expect:-echo USER
+-
+input:-echo "$U'SE'R"
+expect:-echo 'SE'R
+-
+input:-echo emm"a |><"
+expect:-echo emma |><
 -
