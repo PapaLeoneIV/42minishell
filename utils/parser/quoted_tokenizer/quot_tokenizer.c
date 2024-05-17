@@ -47,10 +47,15 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 		parser->char_type = get_char_type_quoted(node->value[parser->count]);
 		if (parser->state == STATE_GENERAL)
 			general_state_handler_quoted(node->value, parser);
-		else if (parser->state == STATE_DOLLAR && (parser->char_type  != REG_CHAR && parser->char_type != DIGIT_CHAR))
+		else if (parser->state == STATE_DOLLAR && ((parser->char_type != REG_CHAR && parser->char_type != DIGIT_CHAR)
+		|| (parser->char_type == DIGIT_CHAR && node->value[parser->count - 1] == '$')))
 			dollar_state_handler_quoted(node->value, parser, shell);												//DOLLAR STATE
 		if (node->value[parser->count + 1] == '\0')
-			slice_end_token(node->value, parser, shell);														//SLICE END TOKEN						
+		{
+
+			if (!slice_end_token(node->value, parser, shell))
+				return (0);														//SLICE END TOKEN						
+		}
 		parser->count++;
 	}
 	return parser;
@@ -70,13 +75,20 @@ void general_state_handler_quoted(char *stringa, t_parser *pars)
 }
 void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 {
-	/***qui dipende se voglio gestire $1 $2 $3 ....*/
+	/***qui dipende se voglio gestire $1 $2 $3 $? ....*/
+
+
+	/***per il momento $? viene espanso e risulta uguale a NULL (ERRORE)*/
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
 	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
 	{
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
 		set_token_values(pars->token, &pars->info);
+		if (strcmp(pars->token->value, "$0") == 0)
+			pars->token->value = ft_strdup("bash");
+		else
+			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);
 		pars->start = pars->count + 1;
 	}
@@ -85,10 +97,16 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count}; 
 		set_token_values(pars->token, &pars->info);
-		token_add_back(&pars->head, pars->token);
+		if (pars->token->value)
+		{
+			token_add_back(&pars->head, pars->token);
+			expand_env_var(&pars->token->value, shell);		
+		}
+		else
+			free(pars->token);
 		pars->start = pars->count;
 		pars->count--;
 	}
-	expand_env_var(&pars->token->value, shell);
+	
 	pars->state = STATE_GENERAL;
 }

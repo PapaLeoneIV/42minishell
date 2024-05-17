@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/14 15:10:02 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:12:35 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,20 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 		else if ((pars->state == STATE_SQUOTE && pars->char_type == SQUOTES_CHAR) 
 		|| (pars->state == STATE_DQUOTE && pars->char_type == DQUOTES_CHAR)) 							                                                                                                       
 			quoted_state_handler(stringa, pars);
-		else if (pars->state == STATE_DOLLAR && (pars->char_type != REG_CHAR && pars->char_type != DIGIT_CHAR))
-			dollar_state_handler(stringa, pars, shell);													
+		else if (pars->state == STATE_DOLLAR && ((pars->char_type != REG_CHAR && pars->char_type != DIGIT_CHAR)
+		|| (pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$')))
+			dollar_state_handler(stringa, pars, shell);										
 		if (stringa[pars->count + 1] == '\0')
-			slice_end_token(stringa, pars, shell);																			
+		{
+			if (!slice_end_token(stringa, pars, shell))
+				return (0);																			
+		}
 		pars->count++;
 	}
 	(void)shell;
 	return (1);
 }
+
 
 void trim_middleline_whitespaces(t_parser *pars)
 {
@@ -143,11 +148,27 @@ void change_non_special_tokens_to_word_tokens(t_parser *pars)
 	ptr = pars->head;
 	while(ptr)
 	{
-		if (ptr->type == DOLLAR_TOKEN || ptr->type == SING_QUOTES_TOKEN || ptr->type == DOUBLE_QUOTES_TOKEN) 
+		if (ptr->type == DOLLAR_TOKEN 
+		|| ptr->type == SING_QUOTES_TOKEN 
+		|| ptr->type == DOUBLE_QUOTES_TOKEN) 
 			ptr->type = WORD_TOKEN;
 		ptr = ptr->next;
 	}
 	
+}
+void free_tokens(t_token *head)
+{
+	t_token *current;
+	t_token *tmp;
+
+	current = head;
+	while (current != NULL)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp->value);
+		free(tmp);
+	}
 }
 
 t_token *tokenize_input(char *input, t_shell *shell)
@@ -157,12 +178,12 @@ t_token *tokenize_input(char *input, t_shell *shell)
 
 	pars = (t_parser){0};
 	if (create_token_list(input, shell, &pars) == 0)
-		return (0);
-	unpack_quoted_tokens(&pars, shell);
+		return (free_tokens(pars.head), NULL);
+	 unpack_quoted_tokens(&pars, shell);
 	join_tokens_values_when_no_space_between(&pars, shell);
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);
-	change_non_special_tokens_to_word_tokens(&pars);
+	//change_non_special_tokens_to_word_tokens(&pars);
  	token_print(pars.head);								//to use tester.py enable this function
  	//print_token_type_and_value(pars.head);  
 	head = pars.head;

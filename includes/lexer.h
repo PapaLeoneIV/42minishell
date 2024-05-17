@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/14 11:42:14 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/17 13:37:41 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int			get_char_type(char *str, t_parser *pars, int count);
 void		slice_single_char_token(char *stringa, t_parser *pars);
 void		slice_redirect_token(char *stringa, t_parser *pars);
 void		slice_token_string(char *stringa, t_parser *pars);
-void		slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
+int			slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
 void 		slice_token_string_doll_spec_case(char *stringa, t_parser *pars);
 
 /*TOKENIZER HELPERS(STATE HANDLERS)*/
@@ -144,11 +144,13 @@ char		*set_token_value_post_expansion(char *envp_string);
 void		expand_env_var(char **token_value,t_shell *shell);
 
 /*SYNTAX ANALIZER*/
-int 		syntax_error_handler(t_token *head, char *input);
+int 		syntax_error_handler(t_token *head);
 int 		handle_pipe_synt_error(char *input, int next_char, char *non_valid_char);
 int			handle_gr_less_synt_error(char *input, int next_char, char *non_valid_char, char sign);
 int			parenthesis_error_handler(t_token *head);
 int 		check_for_non_valid_char(char *input, char *non_valid_char);
 
+/**TOKEN MEMORY*/
+void free_tokens(t_token *head);
 
 #endif

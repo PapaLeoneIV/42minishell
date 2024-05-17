@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/14 14:42:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:20:00 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,21 @@ void slice_token_string(char *stringa, t_parser *pars)
 
 }
 
-void slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
+int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 {
-	if (stringa[pars->start] == '\0')
-		return ;
+	if (stringa[pars->count] == '\0')
+		return 0;
 	pars->token = token_new(NULL);
-	if (pars->state == STATE_DQUOTE)	
-		pars->info = (t_token_info){DOUBLE_QUOTES_TOKEN, stringa, pars->start, pars->count + 1};
+	if (pars->state == STATE_DQUOTE)
+		return(perror("Error: unclosed double quotes\n"), 0);
 	else if (pars->state == STATE_SQUOTE)	
-		pars->info = (t_token_info){SING_QUOTES_TOKEN, stringa, pars->start, pars->count + 1};
+		return(perror("Error: unclosed single quotes\n"), 0);
 	else if (pars->state == STATE_DOLLAR)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
-	else
+	else 
 		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start, pars->count + 1};
 	set_token_values(pars->token, &pars->info);
-	if (pars->token->type == DOLLAR_TOKEN)
+	if (pars->token->type == DOLLAR_TOKEN && strcmp(pars->token->value, "$"))
 	{
 		expand_env_var(&pars->token->value, shell);
 		if(pars->token->value)
@@ -72,6 +72,7 @@ void slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	}
 	else
 		token_add_back(&pars->head, pars->token);
+	return (1);
 }
 
 void slice_redirect_token(char *stringa, t_parser *pars)

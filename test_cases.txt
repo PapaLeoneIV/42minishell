@@ -40,8 +40,8 @@ expect:-echo
 input:-echo "'$USE'R"
 expect:-echo ''R
 -
-input:-echo "Nested > "$USE"R"'q'"uote"
-expect:-echo Nested > Rquote
+input:-echo "Nested > "$USE'"R"'q"uote"
+expect:-echo Nested > "R"quote
 -
 input:-echo cat $HOME'/'config | grep "setting=" > $USER/config_backup
 expect:-echo cat /nfs/homes/rileone/config | grep setting= > rileone/config_backup

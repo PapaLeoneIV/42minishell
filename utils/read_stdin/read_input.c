@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/14 19:32:17 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:06:05 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,7 @@ char *join_token_values(t_token *head)
 	return joined_values;
 }
 
-void free_tokens(t_token *head)
-{
-	t_token *current;
-	t_token *tmp;
 
-	current = head;
-	while (current != NULL)
-	{
-		tmp = current;
-		current = current->next;
-		free(tmp->value);
-		free(tmp);
-	}
-}
 
 
 t_token *look_tokens_ahead(t_token *current)
@@ -91,23 +78,21 @@ void read_from_stdin(t_shell *shell)
 {
 	t_token     *head;
 	char		*input;
- 	char		*tmp_input; 
  	(void)shell;
 	while (1)
 	{
 		input = readline("(MINISHELL)$");
 		head = tokenize_input(input, shell);
- 		if (head == NULL)
+ 		/* if (head == NULL)
 			continue; 
-		tmp_input = join_token_values(head);
-		if (syntax_error_handler(head, tmp_input) == 0)
+	 	if (syntax_error_handler(head) == 0)
 			printf("SYNTAX ERROR NEAR UNEXPECTED TOKEN\n");
 	   	if( parse_redirections(head, shell) == 0)
 			printf("Redirection error\n");
 		free(input);
-		free(tmp_input);
-		input = NULL; 
-		free_tokens(head);
+		input = NULL;  
+		free_tokens(head); */
+/* 		exit(1); */
 	}
 }
 

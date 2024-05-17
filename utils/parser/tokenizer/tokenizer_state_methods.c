@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/14 14:38:26 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:56:07 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,20 @@ void quoted_state_handler(char *stringa, t_parser *pars)
 
 void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
-	/***qui dipende se voglio gestire $1 $2 $3 ....*/
+	/***qui dipende se voglio gestire $1 $2 $3 $? ....*/
+
+
+	/***per il momento $? viene espanso e risulta uguale a NULL (ERRORE)*/
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
 	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
 	{
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
 		set_token_values(pars->token, &pars->info);
+		if (strcmp(pars->token->value, "$0") == 0)
+			pars->token->value = ft_strdup("bash");
+		else
+			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);
 		pars->start = pars->count + 1;
 	}
@@ -65,7 +72,7 @@ void general_state_handler(char *stringa, t_parser *pars)
 	|| pars->char_type == DOLLAR_CHAR)
 	{	
 		c = get_char_type(stringa, pars, pars->count + 1);
-		if (pars->char_type == DOLLAR_CHAR && c != REG_CHAR)
+		if (pars->char_type == DOLLAR_CHAR && c == WHITESPACE_CHAR)
 		{
 			slice_token_string_doll_spec_case(stringa, pars);
 			return ;
