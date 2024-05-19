@@ -141,21 +141,6 @@ void remove_null_tokens(t_parser *pars)
 	}
 }
 
-void change_non_special_tokens_to_word_tokens(t_parser *pars)
-{
-	t_token *ptr;
-
-	ptr = pars->head;
-	while(ptr)
-	{
-		if (ptr->type == DOLLAR_TOKEN 
-		|| ptr->type == SING_QUOTES_TOKEN 
-		|| ptr->type == DOUBLE_QUOTES_TOKEN) 
-			ptr->type = WORD_TOKEN;
-		ptr = ptr->next;
-	}
-	
-}
 void free_tokens(t_token *head)
 {
 	t_token *current;
@@ -180,10 +165,9 @@ t_token *tokenize_input(char *input, t_shell *shell)
 	if (create_token_list(input, shell, &pars) == 0)
 		return (free_tokens(pars.head), NULL);
 	 unpack_quoted_tokens(&pars, shell);
-	join_tokens_values_when_no_space_between(&pars, shell);
+	join_tokens_values_when_no_space_between(&pars);
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);
-	//change_non_special_tokens_to_word_tokens(&pars);
  	token_print(pars.head);								//to use tester.py enable this function
  	//print_token_type_and_value(pars.head);  
 	head = pars.head;

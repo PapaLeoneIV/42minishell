@@ -36,7 +36,7 @@ SRC =   $(addprefix $(UTILS_ENV)/, path_utils.c set_env.c) \
                 $(addprefix $(READ_SDTIN)/, read_input.c) \
                 $(addprefix $(TOKENIZER)/, tokenizer_state_methods.c tokenizer.c tokenizer_utils.c tokenizer_helpers.c tokenizer_slice_methods.c) \
                 $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \
-                $(addprefix $(SYNTAX_HANDLER)/, syntax_analizer.c) \
+                $(addprefix $(SYNTAX_HANDLER)/, syntax_analizer.c syntax_analizer_helpers.c) \
                 $(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
 
 all: $(NAME)

@@ -83,15 +83,20 @@ void read_from_stdin(t_shell *shell)
 	{
 		input = readline("(MINISHELL)$");
 		head = tokenize_input(input, shell);
- 		/* if (head == NULL)
+ 		 if (head == NULL)
 			continue; 
 	 	if (syntax_error_handler(head) == 0)
-			printf("SYNTAX ERROR NEAR UNEXPECTED TOKEN\n");
-	   	if( parse_redirections(head, shell) == 0)
+		{
+			/**qui non bisogna stampare l errore in quanto l ho gia messo dentro la funzione*/
+			printf("Syntax error\n");
+			free_tokens(head);
+			continue;
+		}
+	   	if(parse_redirections(head, shell) == 0)
 			printf("Redirection error\n");
 		free(input);
 		input = NULL;  
-		free_tokens(head); */
+		free_tokens(head); 
 /* 		exit(1); */
 	}
 }

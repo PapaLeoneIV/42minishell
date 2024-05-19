@@ -28,12 +28,11 @@ void join_tokens(t_token **node, t_token **prev)
 	*node = *prev;
 }
 
-void join_tokens_values_when_no_space_between(t_parser *pars, t_shell *shell)
+void join_tokens_values_when_no_space_between(t_parser *pars)
 {
 
 	t_token *prev;
 	t_token *ptr;
-	(void)shell;
 	ptr = pars->head;
 	while(ptr != NULL)
 	{

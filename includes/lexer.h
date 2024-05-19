@@ -134,8 +134,7 @@ void		dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 /*QUOTED TOKENIZER HELPERS*/
 t_token		*check_prev(t_token *token);
 void		join_tokens(t_token **node, t_token **prev);
-void		join_tokens_values_when_no_space_between(t_parser *pars, t_shell *shell);
-char		*join_list_into_quoted_token(t_token *head);
+void		join_tokens_values_when_no_space_between(t_parser *pars);
 void		unpack_quoted_tokens(t_parser *pars, t_shell *shell);
 
 /**EXPANSION HELPERS*/
@@ -145,10 +144,15 @@ void		expand_env_var(char **token_value,t_shell *shell);
 
 /*SYNTAX ANALIZER*/
 int 		syntax_error_handler(t_token *head);
-int 		handle_pipe_synt_error(char *input, int next_char, char *non_valid_char);
-int			handle_gr_less_synt_error(char *input, int next_char, char *non_valid_char, char sign);
-int			parenthesis_error_handler(t_token *head);
-int 		check_for_non_valid_char(char *input, char *non_valid_char);
+void change_non_special_tokens_to_word_tokens(t_token *head);
+
+/*SYNTAX ANALIZER*/
+int look_next_token_pipe(t_token *next);
+int handle_pipe_synt_error_tokens(t_token *ptr);
+int check_for_non_valid_char_list(t_token *ptr, char *non_valid_char);
+int handle_greater_synt_error_tokens(t_token *ptr);
+int handle_lesser_synt_error_tokens(t_token *ptr);
+
 
 /**TOKEN MEMORY*/
 void free_tokens(t_token *head);
