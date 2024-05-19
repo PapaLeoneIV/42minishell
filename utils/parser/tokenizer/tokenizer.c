@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/17 17:12:35 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/19 17:38:06 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ t_token *tokenize_input(char *input, t_shell *shell)
 	pars = (t_parser){0};
 	if (create_token_list(input, shell, &pars) == 0)
 		return (free_tokens(pars.head), NULL);
-	 unpack_quoted_tokens(&pars, shell);
+	unpack_quoted_tokens(&pars, shell);
 	join_tokens_values_when_no_space_between(&pars);
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);

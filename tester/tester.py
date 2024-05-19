@@ -47,7 +47,7 @@ def color_text(text, color):
 
 def main():
     test_cases = read_test_cases('test_cases.txt')
-    process = subprocess.Popen(['./minishell'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=0)
+    process = subprocess.Popen(['../minishell'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=0)
     # Wait for minishell to be ready
    
     while True:

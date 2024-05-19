@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/17 17:06:05 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/19 19:07:40 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,34 +45,107 @@ t_token *look_tokens_ahead(t_token *current)
 	
 }
 
+int check_if_is_a_redirection(t_token *node)
+{
+	/**bisogna aggiungerci la gestione dell heredoc*/
+	if(node->type == GREATER_TOKEN || node->type == REDIR_OUT_TOKEN || node->type == LESSER_TOKEN)
+		return (1);
+	return (0);
+}
+
+int count_pipes(t_token *head)
+{
+	t_token *ptr;
+	int counter;
+
+	counter = 0;
+	ptr = head;
+	while(ptr)
+	{
+		if(ptr->type == PIPE_TOKEN)
+			counter++;
+		ptr = ptr->next;		
+	}
+	return counter;
+}
+
+
+void copy_token_info(t_token **new, t_token *old)
+{
+	t_token *tmp;
+
+	tmp = *new;
+
+	tmp->value = old->value; 
+	tmp->type = old->type;
+	tmp->next = old->next;
+	tmp->prev = old->prev;	
+}
+
+t_token *split_command_based_on_pipes(t_token **ptr)
+{
+	t_token *newlist;
+	t_token *newnode;
+	
+	newlist = NULL;
+	while(*ptr && (*ptr)->type != PIPE_TOKEN)
+	{
+		newnode = token_new(NULL);
+		copy_token_info(&newnode, *ptr);
+		if(!newnode)
+		{
+			free_tokens(newlist); 
+			return NULL;
+		}				
+		token_add_back(&newlist, newnode);
+		(*ptr) = (*ptr)->next;
+	}
+	if ((*ptr) && (*ptr)->type == PIPE_TOKEN)
+		(*ptr) = (*ptr)->next;
+	return newlist;
+}
+
 int parse_redirections(t_token *head, t_shell *shell)
 {
-	t_token *current;
-	t_token *tmp;
-/* 	int i;
+/* 	t_token *current;
+ */	t_token *token_ahead;
+	t_token *tmp_list;
+	t_token *ptr;
+	int n_pipes;
+	int i;
+	(void)shell;
 
-	i = 0; */
-	current = head;
-	
-	while (current != NULL)
+	/**devo spezzare la lista in base alle pipe.
+	 * e analizzare le redirection piu facilmente 
+	 * 
+	*/
+	ptr = head;
+	n_pipes = count_pipes(head); /***devo stare attemto se il numero di pipes e' zero */
+	i = 0;
+	while(ptr && i < n_pipes)
 	{
-		/**reset everything before next loop*/
-			if (current->type == GREATER_TOKEN)
+		tmp_list = split_command_based_on_pipes(&ptr);
+		while (tmp_list != NULL && tmp_list->type != PIPE_TOKEN)
+		{
+			if(check_if_is_a_redirection(tmp_list))
 			{
-				tmp = look_tokens_ahead(current);
-				if (tmp == NULL)
+				token_ahead = look_tokens_ahead(tmp_list);
+				if (token_ahead == NULL)
 					return (0);
-				if (tmp->type == WORD_TOKEN)
+				if (token_ahead->type == WORD_TOKEN)
 				{
-					
+					printf("token dopo la redirection == %s\n", token_ahead->value);
+					/**inserisci informazioni nella struttura*/
 				}
 			}
-		/**need to develop rules even for LESSER >> and maybe heredoc*/
-		current = current->next;
+			tmp_list = tmp_list->next;
+		}
+		free_tokens(tmp_list);
+		i++;
 	}
-	(void)shell;
 	return 1;
 }
+
 
 void read_from_stdin(t_shell *shell)
 {
@@ -83,15 +156,14 @@ void read_from_stdin(t_shell *shell)
 	{
 		input = readline("(MINISHELL)$");
 		head = tokenize_input(input, shell);
- 		 if (head == NULL)
+ 		if (head == NULL)
 			continue; 
 	 	if (syntax_error_handler(head) == 0)
 		{
-			/**qui non bisogna stampare l errore in quanto l ho gia messo dentro la funzione*/
-			printf("Syntax error\n");
 			free_tokens(head);
 			continue;
 		}
+/* 		char *tmp = join_token_values(head); */
 	   	if(parse_redirections(head, shell) == 0)
 			printf("Redirection error\n");
 		free(input);
