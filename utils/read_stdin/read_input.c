@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/19 19:07:40 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/20 19:03:53 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ t_token *look_tokens_ahead(t_token *current)
 		return (NULL);
 	if (current->next->type != WORD_TOKEN && current->next->type != WHITESPACE_TOKEN)
 		return (NULL);
+	if (current->next->type == WORD_TOKEN)
+		return current->next;
 	if(current->next->type == WHITESPACE_TOKEN && (current->next->next && current->next->next->type == WORD_TOKEN))
 		return current->next->next;
 	
@@ -49,7 +51,7 @@ int check_if_is_a_redirection(t_token *node)
 {
 	/**bisogna aggiungerci la gestione dell heredoc*/
 	if(node->type == GREATER_TOKEN || node->type == REDIR_OUT_TOKEN || node->type == LESSER_TOKEN)
-		return (1);
+		return (SUCCESS);
 	return (0);
 }
 
@@ -76,10 +78,8 @@ void copy_token_info(t_token **new, t_token *old)
 
 	tmp = *new;
 
-	tmp->value = old->value; 
+	tmp->value = ft_strdup(old->value);
 	tmp->type = old->type;
-	tmp->next = old->next;
-	tmp->prev = old->prev;	
 }
 
 t_token *split_command_based_on_pipes(t_token **ptr)
@@ -120,7 +120,7 @@ int parse_redirections(t_token *head, t_shell *shell)
 	 * 
 	*/
 	ptr = head;
-	n_pipes = count_pipes(head); /***devo stare attemto se il numero di pipes e' zero */
+	n_pipes = count_pipes(head) + 1; /***devo stare attemto se il numero di pipes e' zero */
 	i = 0;
 	while(ptr && i < n_pipes)
 	{
@@ -131,11 +131,10 @@ int parse_redirections(t_token *head, t_shell *shell)
 			{
 				token_ahead = look_tokens_ahead(tmp_list);
 				if (token_ahead == NULL)
-					return (0);
+					return (ERROR);
 				if (token_ahead->type == WORD_TOKEN)
 				{
 					printf("token dopo la redirection == %s\n", token_ahead->value);
-					/**inserisci informazioni nella struttura*/
 				}
 			}
 			tmp_list = tmp_list->next;
@@ -143,7 +142,7 @@ int parse_redirections(t_token *head, t_shell *shell)
 		free_tokens(tmp_list);
 		i++;
 	}
-	return 1;
+	return (SUCCESS);
 }
 
 
@@ -156,20 +155,17 @@ void read_from_stdin(t_shell *shell)
 	{
 		input = readline("(MINISHELL)$");
 		head = tokenize_input(input, shell);
- 		if (head == NULL)
+  		if (head == NULL)
 			continue; 
-	 	if (syntax_error_handler(head) == 0)
+	 	if (syntax_error_handler(head) == ERROR)
 		{
 			free_tokens(head);
 			continue;
-		}
-/* 		char *tmp = join_token_values(head); */
-	   	if(parse_redirections(head, shell) == 0)
+		} 
+     	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
 		free(input);
-		input = NULL;  
-		free_tokens(head); 
-/* 		exit(1); */
+		free_tokens(head);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/19 17:38:06 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/20 19:01:41 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void print_token_type_and_value(t_token *head)
 int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 {
 	if (stringa == NULL || shell == NULL || pars == NULL)
-		return (0);
+		return (ERROR);
 	while(stringa[pars->count] == ' ')  											
 		pars->count++;
 	pars->start = pars->count;
@@ -82,12 +82,12 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 		if (stringa[pars->count + 1] == '\0')
 		{
 			if (!slice_end_token(stringa, pars, shell))
-				return (0);																			
+				return (ERROR);																			
 		}
 		pars->count++;
 	}
 	(void)shell;
-	return (1);
+	return (SUCCESS);
 }
 
 
@@ -162,7 +162,7 @@ t_token *tokenize_input(char *input, t_shell *shell)
 	t_token *head;
 
 	pars = (t_parser){0};
-	if (create_token_list(input, shell, &pars) == 0)
+	if (create_token_list(input, shell, &pars) == ERROR)
 		return (free_tokens(pars.head), NULL);
 	unpack_quoted_tokens(&pars, shell);
 	join_tokens_values_when_no_space_between(&pars);

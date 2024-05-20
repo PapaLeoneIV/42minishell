@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/19 16:34:47 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:23:01 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ typedef struct s_commands
 	char*				filename;
 	struct s_commands	*next;
 } 			t_command;
+
+enum error_handling
+{
+	ERROR,
+	SUCCESS,
+};
+
 enum State
 {
 	STATE_GENERAL,

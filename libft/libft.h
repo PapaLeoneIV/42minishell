@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/02 14:23:59 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:23:15 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,6 @@ typedef enum e_errors
 	INVALID_INPUT,
 }	t_errors;
 
-typedef enum e_state
-{
-	SUCCESS,
-	FAILURE,
-	CONTINUE,
-}	t_state;
 
 
 

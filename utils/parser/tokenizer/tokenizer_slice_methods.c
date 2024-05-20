@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/17 17:20:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/20 12:44:25 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	else 
 		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start, pars->count + 1};
 	set_token_values(pars->token, &pars->info);
-	if (pars->token->type == DOLLAR_TOKEN && strcmp(pars->token->value, "$"))
+	if (pars->token->type == WORD_TOKEN && !ft_strncmp(pars->token->value, "", ft_strlen(pars->token->value)))
+		return 1;
+	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$", ft_strlen(pars->token->value)))
 	{
 		expand_env_var(&pars->token->value, shell);
 		if(pars->token->value)

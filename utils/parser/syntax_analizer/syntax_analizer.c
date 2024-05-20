@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:36:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/17 13:37:27 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/20 19:05:04 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,17 @@ void change_non_special_tokens_to_word_tokens(t_token *head)
 		ptr = ptr->next;
 	}
 }
-
+/* 
 int syntax_error_handler(t_token *head)
 {
     t_token *ptr;
 
     ptr = head;
     if (check_for_non_valid_char_list(ptr, "{}();\\&*") == 1)
-       return 0;
+    {
+       printf("Invalid character found!\n");
+       return (ERROR);
+    }
     change_non_special_tokens_to_word_tokens(head);
     while(ptr)
     {
@@ -41,7 +44,7 @@ int syntax_error_handler(t_token *head)
             if (handle_pipe_synt_error_tokens(ptr) == 0)
             {
                 printf("Syntax error near unexpected token '|'\n");
-                return (0);
+                return (ERROR);
             }
         }
          else if (ptr->type == GREATER_TOKEN)
@@ -49,7 +52,7 @@ int syntax_error_handler(t_token *head)
             if (handle_greater_synt_error_tokens(ptr) == 0)
             {
                 printf("Syntax error near unexpected token '>'\n");
-                return (0);
+                return (ERROR);
             }    
         }
         else if (ptr->type == LESSER_TOKEN)
@@ -57,11 +60,98 @@ int syntax_error_handler(t_token *head)
             if (handle_lesser_synt_error_tokens(ptr) == 0)
             {
                 printf("Syntax error near unexpected token '<'\n");
-                return (0);
+                return (ERROR);
             }   
         }    
         ptr = ptr->next;
     }
-    return 1;
+    return (SUCCESS);
+} */
+
+
+void remove_whitespaces(t_token *head)
+{
+    t_token *ptr;
+    t_token *tmp;
+
+    tmp = NULL;
+    ptr = head;
+    while(ptr)
+    {
+        if(ptr->type == WHITESPACE_TOKEN)
+        {
+            if(!ptr->prev && ptr->next)
+            {
+                tmp = ptr->next;
+                free(ptr->value);
+                free(ptr);
+                ptr = tmp;
+            }
+            else if (!ptr->next && ptr->prev)
+            {
+                tmp = ptr->prev;
+                free(ptr->value);
+                free(ptr);
+                ptr = tmp;
+            }
+            else if(ptr->prev && ptr->next)
+            {
+                tmp = ptr->next;
+                ptr->prev->next = ptr->next;
+                ptr->next->prev = ptr->prev;
+                free(ptr->value);
+                free(ptr);
+                ptr = tmp;
+            }
+            else
+            {
+                free(ptr->value);
+                free(ptr);
+            }
+        }
+        ptr = ptr->next;
+    }
 }
 
+int syntax_error_handler(t_token *head)
+{
+    t_token *ptr;
+
+    ptr = head;
+    if (check_for_non_valid_char_list(ptr, "{}();\\&*") == 1)
+    {
+       printf("Invalid character found!\n");
+       return (ERROR);
+    }
+    change_non_special_tokens_to_word_tokens(head);
+    remove_whitespaces(head);
+    while(ptr)
+    {
+        if (ptr->type == PIPE_TOKEN)
+        {
+            if (handle_pipe_synt_error_tokens(ptr) == 0)
+            {
+                printf("Syntax error near unexpected token '|'\n");
+                return (ERROR);
+            }
+        }
+         else if (ptr->type == GREATER_TOKEN)
+        {
+            if (handle_greater_synt_error_tokens(ptr) == 0)
+            {
+                printf("Syntax error near unexpected token '>'\n");
+                return (ERROR);
+            }    
+        }
+        else if (ptr->type == LESSER_TOKEN)
+        {
+            if (handle_lesser_synt_error_tokens(ptr) == 0)
+            {
+                printf("Syntax error near unexpected token '<'\n");
+                return (ERROR);
+            }   
+        }    
+        ptr = ptr->next;
+    }
+    return (SUCCESS);
+}

@@ -73,11 +73,17 @@ void unpack_quoted_tokens(t_parser *pars, t_shell *shell)
 		if (ptr->type == DOUBLE_QUOTES_TOKEN)
 		{
   			list = tokenize_quoted_values(ptr, shell);
-			(void)list;
- 			free(ptr->value);
-			ptr->value = join_quoted_token_expansion(list->head);
+			if (list == NULL)
+			{
+				ptr = ptr->next;
+				continue;
+			}
+			else
+			{
+				free(ptr->value);
+				ptr->value = join_quoted_token_expansion(list->head);
+			}
 		}
   		ptr = ptr->next;
 	}
-
 }
