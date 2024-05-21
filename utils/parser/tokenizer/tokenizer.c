@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/20 19:01:41 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 20:20:05 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ void print_token_type_and_value(t_token *head)
 		}
 }
 
+/***Crea una lista di token per una prima scrematura degli argomenti, i vari token sono in lexer.h
+ * E' una finite state machine, ogni stato (GENERAL, SQUOTES/DQUOTES, DOLLARSIGN) possiede le proprie regole
+ * per capire quando e come tagliare la stringa.
+*/
+
+
 int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 {
 	if (stringa == NULL || shell == NULL || pars == NULL)
@@ -90,6 +96,9 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 	return (SUCCESS);
 }
 
+/**Tutti i token consecutivi che sono WHITESPACE vengo rimossi 
+ * per un parsing piu comodo successivamente
+*/
 
 void trim_middleline_whitespaces(t_parser *pars)
 {
@@ -116,6 +125,11 @@ void trim_middleline_whitespaces(t_parser *pars)
 		ptr = ptr->next;
 	}
 }
+
+/**Se l espansione di una variabile non e' stata trovata, 
+ * il token->value viene settato a NULL. Questa funzione 
+ * serve una volta individuati a rimuoverli dalla lista
+*/
 
 void remove_null_tokens(t_parser *pars)
 {
@@ -155,6 +169,14 @@ void free_tokens(t_token *head)
 		free(tmp);
 	}
 }
+
+/**Dopo aver creato una prima lista di token,
+ * la lista viene refinita:
+ * - tokenizzazione dei token double quotes con annessa espansione
+ * - i token che sono vicini senza spazi vengo joinati insieme (es: "/home/"$USER) ==> priva tokenizzati separatamente e rimessi insieme
+ * - - rimuovo tutti gli spazi consecutivi nel mezzo della stringa di input
+ * - rimuovo le env che sono state espanse a NULL in quanto non valide
+*/
 
 t_token *tokenize_input(char *input, t_shell *shell)
 {

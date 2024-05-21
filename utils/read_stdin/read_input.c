@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/20 19:03:53 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 20:47:17 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,7 @@
 #include "../../includes/lexer.h"
 
 
-char *join_token_values(t_token *head)
-{
-	char *joined_values;
-	t_token *current;
-
-	current = head;
-	joined_values = NULL;
-	while (current != NULL)
-	{
-		joined_values = ft_strjoin(joined_values, current->value);
-		current = current->next;
-	}
-	return joined_values;
-}
-
-
+/**se incontro una redirection controllo che il token successivo sia necessariamente una parola*/
 
 
 t_token *look_tokens_ahead(t_token *current)
@@ -55,6 +40,8 @@ int check_if_is_a_redirection(t_token *node)
 	return (0);
 }
 
+/**Self explanatory*/
+
 int count_pipes(t_token *head)
 {
 	t_token *ptr;
@@ -71,6 +58,7 @@ int count_pipes(t_token *head)
 	return counter;
 }
 
+/**Copio le informazioni alll interno del nuovo token */
 
 void copy_token_info(t_token **new, t_token *old)
 {
@@ -81,6 +69,10 @@ void copy_token_info(t_token **new, t_token *old)
 	tmp->value = ft_strdup(old->value);
 	tmp->type = old->type;
 }
+
+/**La lista di token viene splittata in base alle pipeline per un
+ * piu facile parsing delle redirection
+*/
 
 t_token *split_command_based_on_pipes(t_token **ptr)
 {
@@ -105,39 +97,62 @@ t_token *split_command_based_on_pipes(t_token **ptr)
 	return newlist;
 }
 
+int handle_redirection_logic(t_token *node, t_shell *shell)
+{
+
+	t_token *node_ahead;
+
+	if(check_if_is_a_redirection(node))
+	{
+		node_ahead = look_tokens_ahead(node);
+		if (node_ahead == NULL)
+			return (ERROR);
+		if (node_ahead->type == WORD_TOKEN)
+		{
+			
+
+			
+			printf("redirec to/from  == %s\n", node_ahead->value);
+		}
+	}
+}
+
 int parse_redirections(t_token *head, t_shell *shell)
 {
-/* 	t_token *current;
- */	t_token *token_ahead;
 	t_token *tmp_list;
+	t_token *node;
 	t_token *ptr;
 	int n_pipes;
 	int i;
 	(void)shell;
-
-	/**devo spezzare la lista in base alle pipe.
-	 * e analizzare le redirection piu facilmente 
-	 * 
-	*/
+	
 	ptr = head;
-	n_pipes = count_pipes(head) + 1; /***devo stare attemto se il numero di pipes e' zero */
-	i = 0;
+	n_pipes = count_pipes(head);
+	/***
+	 * 
+	 * 
+	 * -------------------------------------------------------------------
+	 * sto facendo una lista non un array tonto, domani guarda questa cosa
+	 * -------------------------------------------------------------------
+	 * 									|
+	 * 									|
+	 * 									V
+	*/
+	shell->cmd_info = ft_calloc(n_pipes + 1, sizeof(t_command));
+	i = -1;
 	while(ptr && i < n_pipes)
 	{
 		tmp_list = split_command_based_on_pipes(&ptr);
-		while (tmp_list != NULL && tmp_list->type != PIPE_TOKEN)
+		node = tmp_list;
+		while (node != NULL && node->type != PIPE_TOKEN)
 		{
-			if(check_if_is_a_redirection(tmp_list))
+			if (handle_redirection_logic(node, shell) == SUCCESS)
 			{
-				token_ahead = look_tokens_ahead(tmp_list);
-				if (token_ahead == NULL)
-					return (ERROR);
-				if (token_ahead->type == WORD_TOKEN)
-				{
-					printf("token dopo la redirection == %s\n", token_ahead->value);
-				}
+				/**qui vorrei rimuovere i la redirection e l argomento della redirection per poi splittare 
+				 * il blocco e ottenere solamente comandi e argomenti.
+				*/
 			}
-			tmp_list = tmp_list->next;
+			node = node->next;
 		}
 		free_tokens(tmp_list);
 		i++;
@@ -146,12 +161,14 @@ int parse_redirections(t_token *head, t_shell *shell)
 }
 
 
+/**Loop principale dove ricevo la stringa e faccio il parsing*/
+
 void read_from_stdin(t_shell *shell)
 {
 	t_token     *head;
 	char		*input;
  	(void)shell;
-	while (1)
+	while (true)
 	{
 		input = readline("(MINISHELL)$");
 		head = tokenize_input(input, shell);

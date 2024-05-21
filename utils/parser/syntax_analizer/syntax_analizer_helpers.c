@@ -29,6 +29,9 @@ int handle_pipe_synt_error_tokens(t_token *ptr)
     return (ERROR);
 }
 
+/**Se all interno della stringa che ci viene passata e' presente uno dei caratteri
+ * all interno della variabile non_valid_char posso ritornare un errore
+*/
 
 int check_for_non_valid_char_list(t_token *ptr, char *non_valid_char)
 {

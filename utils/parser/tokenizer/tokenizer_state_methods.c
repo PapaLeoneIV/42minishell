@@ -6,13 +6,14 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/17 14:56:07 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 20:06:00 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/lexer.h"
 
+/*Funzione per la gestione dello QUOTED STATE*/
 void quoted_state_handler(char *stringa, t_parser *pars)
 {
 	int Mquotes_arr[2] = {DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN};
@@ -24,12 +25,11 @@ void quoted_state_handler(char *stringa, t_parser *pars)
 	pars->state = STATE_GENERAL;
 }
 
+/*Funzione per la gestione del DOLLAR STATE*/
+
 void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
-	/***qui dipende se voglio gestire $1 $2 $3 $? ....*/
-
-
-	/***per il momento $? viene espanso e risulta uguale a NULL (ERRORE)*/
+	/**TODO, $? viene espanso a NULL*/
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
 	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
 	{
@@ -63,6 +63,8 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 }
 
 
+/*Funzione per la gestione dello GENERAL STATE*/
+
 void general_state_handler(char *stringa, t_parser *pars)
 {
 	char c;
@@ -77,15 +79,15 @@ void general_state_handler(char *stringa, t_parser *pars)
 			slice_token_string_doll_spec_case(stringa, pars);
 			return ;
 		}
-		if (pars->count > pars->start)																								//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
+		if (pars->count > pars->start)
 			slice_token_string(stringa, pars);
 		if ((pars->char_type == REDIR_OUTPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_OUTPUT_CHAR ) 
 		|| ( pars->char_type == REDIR_INPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_INPUT_CHAR))
 			return (slice_redirect_token(stringa, pars));
 		if (pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR 
-		|| pars->char_type == PIPELINE_CHAR || pars->char_type == WHITESPACE_CHAR) 															//incotro un carattere speciale e me lo prendo
+		|| pars->char_type == PIPELINE_CHAR || pars->char_type == WHITESPACE_CHAR) 															
 			slice_single_char_token(stringa, pars);
-		if (pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR  || pars->char_type == DOLLAR_CHAR)  						//cambio lo state machine per gestire le virgolette
+		if (pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR  || pars->char_type == DOLLAR_CHAR) 
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}
 }

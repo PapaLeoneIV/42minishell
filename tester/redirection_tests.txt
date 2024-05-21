@@ -10,3 +10,6 @@ echo "Il numero di righe è: $(wc -l < inputfile.txt)" > output.txt
 cat file1.txt \> not_a_redirection.txt
 cat "input file.txt" > "output file.txt"
 exec 3>1 1>logfile.txt 2>&1
+
+
+

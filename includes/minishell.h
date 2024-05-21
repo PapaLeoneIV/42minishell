@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/16 12:53:53 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 20:44:33 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,14 @@
 #include "./lexer.h"
 
 typedef struct s_token t_token;
+typedef struct s_command t_command;
+
 
 typedef struct s_shell
 {
     char        *line;
     char        **envp;
+    t_command   *cmd_info;
     
 }   t_shell;
 

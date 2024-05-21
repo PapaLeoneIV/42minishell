@@ -6,7 +6,7 @@ t_token *check_prev(t_token *token)
 	t_token *prev;
 
 	prev = token->prev;
-	if (prev == NULL || prev->type == WHITESPACE_TOKEN)
+	if (prev == NULL || prev->type == WHITESPACE_TOKEN || (prev))
 		return NULL;
 	if (prev->type == WORD_TOKEN || prev->type == DOUBLE_QUOTES_TOKEN
 	|| prev->type == SING_QUOTES_TOKEN || prev->type == DOLLAR_TOKEN)
@@ -16,6 +16,7 @@ t_token *check_prev(t_token *token)
 
 void join_tokens(t_token **node, t_token **prev)
 {
+
 	(*prev)->value = ft_strjoin((*prev)->value, (*node)->value);
 	if((*node)->next)
 		(*node)->next->prev = (*prev);
@@ -37,14 +38,16 @@ void join_tokens_values_when_no_space_between(t_parser *pars)
 	while(ptr != NULL)
 	{
 		prev = check_prev(ptr);
-		if (!prev)
+		if (!prev || (prev && prev->value && prev->value[0] == '\0'))
 		{
 			ptr = ptr->next;
 			continue;
 		}
 		if (ptr && (ptr->type == WORD_TOKEN || ptr->type == SING_QUOTES_TOKEN 
 		|| ptr->type == DOUBLE_QUOTES_TOKEN || ptr->type == DOLLAR_TOKEN ) && prev)
+		{
 			join_tokens(&ptr, &prev);
+		}
 		ptr = ptr->next;
 	}
 }

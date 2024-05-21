@@ -6,11 +6,16 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:36:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/20 19:05:04 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:57:11 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/lexer.h"
+/**Una volta aver tokenizzato ed espanso le variabili all interno delle
+ * double quotes, posso rendere tutte i vari token dei WORD_TOKEN generici
+ * per il momento.
+*/
+
 void change_non_special_tokens_to_word_tokens(t_token *head)
 {
 	t_token *ptr;
@@ -69,6 +74,10 @@ int syntax_error_handler(t_token *head)
 } */
 
 
+/**Ugly lo so, ma mi serve per rimuovere i whitespace dalla
+ * lista di token 
+*/
+
 void remove_whitespaces(t_token *head)
 {
     t_token *ptr;
@@ -125,6 +134,7 @@ int syntax_error_handler(t_token *head)
     }
     change_non_special_tokens_to_word_tokens(head);
     remove_whitespaces(head);
+    ptr = head;
     while(ptr)
     {
         if (ptr->type == PIPE_TOKEN)

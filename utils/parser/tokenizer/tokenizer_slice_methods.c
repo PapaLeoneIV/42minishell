@@ -6,12 +6,13 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/20 12:44:25 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:34:02 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
+/*Funzione che serve per tagliare i vari token speciali composti da un solo carattere*/
 
 void slice_single_char_token(char *stringa, t_parser *pars)
 {
@@ -28,6 +29,9 @@ void slice_single_char_token(char *stringa, t_parser *pars)
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
 }
+
+/**Caso limite dove il carattere "$" isolato viene gestito come una qualsiasi stringa*/
+
 void slice_token_string_doll_spec_case(char *stringa, t_parser *pars)
 {
 	pars->token = token_new(NULL);
@@ -38,6 +42,10 @@ void slice_token_string_doll_spec_case(char *stringa, t_parser *pars)
 
 }
 
+
+
+/**Funzione per tagliare i token nel GENERAL STATE*/
+
 void slice_token_string(char *stringa, t_parser *pars)
 {
 	pars->token = token_new(NULL);
@@ -47,6 +55,10 @@ void slice_token_string(char *stringa, t_parser *pars)
 	pars->start = pars->count + 1;
 
 }
+
+/**Funzione per gestire la EOL, il token->type viene affidato in base allo STATE in cui 
+ * la macchina si trova in quel momento.
+*/
 
 int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 {
@@ -76,6 +88,10 @@ int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 		token_add_back(&pars->head, pars->token);
 	return (1);
 }
+
+/**Caso limite dove controllo il carattere corrente e quello successivo per vedere
+ * se si tratte di una singola o doppia redirection.
+*/
 
 void slice_redirect_token(char *stringa, t_parser *pars)
 {

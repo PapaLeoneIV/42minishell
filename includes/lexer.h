@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/20 14:23:01 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/21 20:45:01 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct parser
 } 				t_parser;
 
 
-typedef struct s_commands
+typedef struct s_command
 {
 	char 				**cmd;
 	int					in;
@@ -54,8 +54,14 @@ typedef struct s_commands
 	int					type_of_redirection;
 	int					first_command;
 	char*				filename;
-	struct s_commands	*next;
+	struct s_command	*next;
 } 			t_command;
+
+enum bool
+{
+	false,
+	true, 
+};
 
 enum error_handling
 {
