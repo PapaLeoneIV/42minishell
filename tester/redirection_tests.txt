@@ -1,0 +1,17 @@
+ filcate1.txt > file2.txt > file3.txt >"  dsadasd
+grep "testo" < inputfile.txt > outputfile.txt
+grep "testo" < inputfile.txt > outputfile.txt
+cat file1.txt 1>file2.txt 2>errorlog.txt
+(cat file1.txt > file2.txt) && echo "Fatto"
+cat file1.txt | grep "testo" > output.txt
+exec 3>&1 1>logfile.txt 2>&1
+cat file1.txt > file2.txt && grep "testo" file2.txt | sort > sorted.txt
+echo "Il numero di righe è: $(wc -l < inputfile.txt)" > output.txt
+cat file1.txt \> not_a_redirection.txt
+cat "input file.txt" > "output file.txt"
+exec 3>1 1>logfile.txt 2>&1
+cat file1.txt | tee file2.txt | grep "pattern" > filtered_output.txt
+cat file1.txt | grep "pattern1" > intermediate.txt | grep "pattern2" >> final_output.txt
+
+
+
