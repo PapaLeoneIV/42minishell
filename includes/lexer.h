@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/21 20:45:01 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/22 15:55:18 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,21 @@ typedef struct parser
 } 				t_parser;
 
 
+typedef struct s_redir
+{
+
+	int					type_of_redirection;
+	char*				filename;
+	struct s_redir		*next;
+} t_redir;
+
 typedef struct s_command
 {
 	char 				**cmd;
 	int					in;
 	int					out;
-	int					type_of_redirection;
-	int					first_command;
-	char*				filename;
+	struct s_redir		**redirection_info;
+	int					cmd_id;
 	struct s_command	*next;
 } 			t_command;
 
@@ -169,5 +176,6 @@ int handle_lesser_synt_error_tokens(t_token *ptr);
 
 /**TOKEN MEMORY*/
 void free_tokens(t_token *head);
+void redirection_clear(t_token **head);
 
 #endif

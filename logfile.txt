@@ -1,6 +1,0 @@
-rileone@c2r4p11:~/Desktop/42/minishell$ [Krileone@c2r4p11:~/Desktop/42/minishell$ [Krileone@c2r4p11:~/Desktop/42/minishell$ ^C
-rileone@c2r4p11:~/Desktop/42/minishell$ ^C
-rileone@c2r4p11:~/Desktop/42/minishell$ ^C
-rileone@c2r4p11:~/Desktop/42/minishell$ ^C
-rileone@c2r4p11:~/Desktop/42/minishell$ ^C
-rileone@c2r4p11:~/Desktop/42/minishell$ exit
