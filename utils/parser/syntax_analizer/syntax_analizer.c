@@ -160,7 +160,24 @@ int syntax_error_handler(t_token *head)
                 printf("Syntax error near unexpected token '<'\n");
                 return (ERROR);
             }   
-        }    
+        }
+        /**questi devo scrivere*/
+        else if (ptr->type == HEREDOC_TOKEN)
+        {
+            if(headle_heredoc_syntax_error_tokens(ptr) == 0)
+            {
+                printf("Syntax error near unexpected token '<<'\n");
+                return (ERROR);
+            }
+        } 
+        else if (ptr->type == REDIR_OUT_TOKEN)
+        {
+            if(handle_redir_out_syntax_error_tokens(ptr) == 0)
+            {
+                printf("Syntax error near unexpected token '>&'\n");
+                return (ERROR);
+            }
+        } 
         ptr = ptr->next;
     }
     return (SUCCESS);

@@ -6,10 +6,11 @@ t_token *check_prev(t_token *token)
 	t_token *prev;
 
 	prev = token->prev;
-	if (prev == NULL || prev->type == WHITESPACE_TOKEN || (prev))
+	if (prev == NULL || prev->type == WHITESPACE_TOKEN)
 		return NULL;
 	if (prev->type == WORD_TOKEN || prev->type == DOUBLE_QUOTES_TOKEN
-	|| prev->type == SING_QUOTES_TOKEN || prev->type == DOLLAR_TOKEN)
+	|| prev->type == SING_QUOTES_TOKEN || prev->type == DOLLAR_TOKEN
+	|| prev->type == HERDOC_FILENAME_WITHQUOTES)
 		return prev; 
 	return NULL;
 }
@@ -31,14 +32,19 @@ void join_tokens(t_token **node, t_token **prev)
 
 void join_tokens_values_when_no_space_between(t_parser *pars)
 {
-
+	/**qui devo aggiungere una logica per cui se il primo dei token che 
+	 * viene joinato e' un token di tipo heredoc_quotes devo mantenere questo datatype
+	 * e non convertirlo nel type del token successivo 
+	 * 
+	*/
 	t_token *prev;
 	t_token *ptr;
 	ptr = pars->head;
 	while(ptr != NULL)
 	{
 		prev = check_prev(ptr);
-		if (!prev || (prev && prev->value && prev->value[0] == '\0'))
+		if (!prev || (prev && prev->type != HERDOC_FILENAME_WITHQUOTES 
+		&& prev->value && prev->value[0] == '\0'))
 		{
 			ptr = ptr->next;
 			continue;

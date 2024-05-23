@@ -57,16 +57,12 @@ void quoted_state_handler(char *stringa, t_parser *pars)
 	int Mquotes_arr[2] = {DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN};
 	int here_doc_before;
 	
-	pars->token = token_new(NULL);
-	pars->info = (t_token_info){Mquotes_arr[pars->char_type == SQUOTES_CHAR], stringa, pars->start + 1, pars->count};
 	here_doc_before = look_behind_for_heredoc(pars->head);
+	pars->token = token_new(NULL);
 	if(here_doc_before == true)
-	{
-		printf("c' e' un heredoc prima delle double quotes");
-		/**qui va aggiunto un check sull ultimi nodi, mi prendo l ultimo nodo prima di un whitespace
-	 * se e' un heredoc non espando, altrimenti posso procedere all espansione!
-	*/		
-	}
+		pars->info = (t_token_info){HERDOC_FILENAME_WITHQUOTES, stringa, pars->start + 1, pars->count};		
+	else
+		pars->info = (t_token_info){Mquotes_arr[pars->char_type == SQUOTES_CHAR], stringa, pars->start + 1, pars->count};
 	set_token_values(pars->token, &pars->info);
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;

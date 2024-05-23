@@ -70,7 +70,7 @@ int handle_greater_synt_error_tokens(t_token *ptr)
         if (tmp->prev->prev->type == WORD_TOKEN && !ft_isnumber(tmp->prev->value))
             return (SUCCESS);
     } */
-    else if(tmp->prev->type == WORD_TOKEN && ft_isnumber(tmp->prev->value))
+    else if(tmp->prev && tmp->prev->type == WORD_TOKEN && ft_isnumber(tmp->prev->value))
         return (ERROR);
     if (tmp->next->type == WHITESPACE_TOKEN)
     {

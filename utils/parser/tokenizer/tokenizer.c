@@ -56,6 +56,10 @@ void print_token_type_and_value(t_token *head)
 				printf("WHITESPACE_TOKEN ");
 				// Handle WHITESPACE_TOKEN
 			}
+			else if (current->type == HERDOC_FILENAME_WITHQUOTES) {
+				printf("HEREDOC_FILENAME_WITHOQUOTES ");
+				// Handle WHITESPACE_TOKEN
+			}
 			printf("{Value: %s}\n", current->value);
 			current = current->next;
 		}
@@ -136,6 +140,17 @@ void trim_middleline_whitespaces(t_parser *pars)
  * - rimuovo le env che sono state espanse a NULL in quanto non valide
 */
 
+
+/***per il momento:
+ * - se un token e' di tipo double quotes, ma e' preceduto da unn HEREDOC viene marchiato come HEREDOC_FILENAME_WITHQUOTES
+ * - ho deciso di non mantenere le doppie virgolette, in quanto se seguito da qualcosa quando viene joinato 
+ * 			si crea qualcosa di tipo es: << "here"doc ====> diventa un token->value "here"doc e non heredoc invece
+ * - se HEREDOC_FILENAME_WITHQUOTES deve essere joinato con altre cose perche non c'e' spazio tra i token 
+ * 			mantiene comquneue il suo tokenTYPE HEREDOC_FILENAME_WITHQUOTES
+ * 
+ * 
+*/
+
 t_token *tokenize_input(char *input, t_shell *shell)
 {
 	t_parser pars;
@@ -147,10 +162,10 @@ t_token *tokenize_input(char *input, t_shell *shell)
 		/**qui immagino che devo marchiare il primo token parola/s&dquotes dopo l heredoc*/
 	unpack_quoted_tokens(&pars, shell);
 	join_tokens_values_when_no_space_between(&pars);
+	//print_token_type_and_value(pars.head); 
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);
- 	//token_print(pars.head);								//to use tester.py enable this function
- 	//print_token_type_and_value(pars.head);  
+ 	token_print(pars.head);								//to use tester.py enable this function
 	head = pars.head;
 	return (head);
 }

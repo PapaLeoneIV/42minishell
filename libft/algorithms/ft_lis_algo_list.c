@@ -110,7 +110,6 @@ t_dll_list	*ft_build_lis_lis(t_dll_list *list, t_dll_list *len_list,
 	return (res);
 }
 
-12 3 21  4 532 53 53 25 253 253 35 5 65 76657 57 4 4342 5
 
 
 

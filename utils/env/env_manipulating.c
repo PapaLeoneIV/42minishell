@@ -49,13 +49,13 @@ void	export_path(t_env **lst, char **mtx)
 			mtx[i] = trimming(mtx[i], "export");
 			tmp = find_node(lst, ft_substr(mtx[i], 0, ft_strchri(mtx[i], '+')));
 			if (!tmp)
-				add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env));
+				add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
 			tmp->body = ft_strjoin(tmp->body, ft_substr(mtx[i], ft_strchri(mtx[i], '=') + 1 , ft_strlen(mtx[i])));
 		}
 		else
 		{
 			mtx[i] = trimming(mtx[i], "export");
-			add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env));
+			add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
 			//free(str);
 		}
 		i++;

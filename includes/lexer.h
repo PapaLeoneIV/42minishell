@@ -97,6 +97,7 @@ enum TokenType
 	DOUBLE_QUOTES_TOKEN,   //7
 	DOLLAR_TOKEN,          //8
 	WHITESPACE_TOKEN,      //9
+	HERDOC_FILENAME_WITHQUOTES, //10
 
 };
 

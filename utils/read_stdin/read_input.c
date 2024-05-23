@@ -24,7 +24,7 @@ void read_from_stdin(t_shell *shell)
 	while (true)
 	{
 		prompt_path = get_directory_path();
-		input = readline(prompt_path);
+		input = readline("(MINISHELL)$");
 		head = tokenize_input(input, shell);
 		add_history(input);
   		if (head == NULL)
@@ -34,12 +34,12 @@ void read_from_stdin(t_shell *shell)
 			free_tokens(head);
 			continue;
 		} 
-		/*forse in futuro sara' necessario farsi una copia della lst di token*/
+		//forse in futuro sara' necessario farsi una copia della lst di token
      	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
 		free(input);
 		free_tokens(head);
-		free(prompt_path);
+		free(prompt_path); 
 	}
 }
 

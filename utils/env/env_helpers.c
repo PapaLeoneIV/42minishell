@@ -61,7 +61,7 @@ t_env	*lst_new_env(char *envp_line, char **en)
 		new->head = ft_strdup(envp_line);
 		new->esistence = 1;
 	}
-	new->env = en;
+	new->env_mtx = en;
 	new->next = NULL;
 	return (new);
 }
