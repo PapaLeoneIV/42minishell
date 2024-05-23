@@ -2,29 +2,15 @@
 
 #include "../../../includes/lexer.h"
 
-int look_next_token_pipe(t_token *next)
-{
-    if (next->next == NULL)
-        return (ERROR);
-    if (next->next->type != WORD_TOKEN && next->next->type != GREATER_TOKEN
-    && next->next->type != LESSER_TOKEN && next->next->type != REDIR_OUT_TOKEN)
-        return (ERROR);
-    return (SUCCESS);
-}
+
 
 int handle_pipe_synt_error_tokens(t_token *ptr)
 {
     if(ptr->next == NULL || ptr->prev == NULL)
         return (ERROR);
-    if (ptr->prev->type == WHITESPACE_TOKEN)
-    {
-        if (ptr->prev->prev == NULL)
+    if (ptr->prev->type != WORD_TOKEN && ptr->prev->type != HERDOC_FILENAME_WITHQUOTES)
             return (ERROR);
-        if (ptr->prev->prev->type != WORD_TOKEN)
-            return (ERROR);
-    }
-    if ((ptr->next->type == WHITESPACE_TOKEN && look_next_token_pipe(ptr->next))
-    || ptr->next->type == WORD_TOKEN)
+    if(ptr->next->type == WORD_TOKEN || ptr->prev->type == HERDOC_FILENAME_WITHQUOTES)
         return (SUCCESS);
     return (ERROR);
 }
@@ -40,7 +26,8 @@ int check_for_non_valid_char_list(t_token *ptr, char *non_valid_char)
     while(ptr)
     {
         i = 0;
-        if (ptr->type == DOUBLE_QUOTES_TOKEN || ptr->type == SING_QUOTES_TOKEN)
+        if (ptr->type == DOUBLE_QUOTES_TOKEN || ptr->type == SING_QUOTES_TOKEN 
+        || ptr->type == HERDOC_FILENAME_WITHQUOTES)
         {
             ptr = ptr->next;
             continue;   
@@ -63,25 +50,11 @@ int handle_greater_synt_error_tokens(t_token *ptr)
     tmp = ptr;
     if (tmp->next == NULL)
         return (ERROR);
-/*     if (tmp->prev->type == WHITESPACE_TOKEN)
-    {
-        if (tmp->prev->prev == NULL)
-            return (ERROR);
-        if (tmp->prev->prev->type == WORD_TOKEN && !ft_isnumber(tmp->prev->value))
-            return (SUCCESS);
-    } */
     else if(tmp->prev && tmp->prev->type == WORD_TOKEN && ft_isnumber(tmp->prev->value))
         return (ERROR);
-    if (tmp->next->type == WHITESPACE_TOKEN)
-    {
-        if (tmp->next->next == NULL)
-            return (ERROR);
-        if (tmp->next->next->type == WORD_TOKEN)
-            return (SUCCESS);
-    }
     else if (tmp->next->type == WORD_TOKEN)
-        return (SUCCESS);    
-    return (ERROR); 
+        return (SUCCESS);
+    return (ERROR);
 }
 
 int handle_lesser_synt_error_tokens(t_token *ptr)
@@ -91,14 +64,7 @@ int handle_lesser_synt_error_tokens(t_token *ptr)
     tmp = ptr;
     if (tmp->next == NULL)
         return (ERROR);
-    if (tmp->next->type == WHITESPACE_TOKEN)
-    {
-        if (tmp->next->next == NULL)
-            return (ERROR);
-        if (tmp->next->next->type == WORD_TOKEN)
-            return (SUCCESS);
-    }
     else if (tmp->next->type == WORD_TOKEN)
-        return (SUCCESS);    
-    return (ERROR); 
+        return (SUCCESS);
+    return (ERROR);
 }

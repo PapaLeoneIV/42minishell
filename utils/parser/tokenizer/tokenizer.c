@@ -6,20 +6,11 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 22:20:23 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 20:07:56 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-/*TODO :
-	- devo controllare che tutti i token vengono assegnati correttamente es :WHITESPACE not handle atm FATTO_
-	- devo finire di parsere: devo trovare un modo di capire quando vanno incollati insieme due > > &&  < < FATTO
-	- devo capire quando devo incollare insieme i dollar sign con le stringhe 
-	precedenti e posteriori (mi sembra di doverle attaccare solo quando non c e il whitespace)
-	- devo finire di espandere le variabili quando necessario
-*/
-
 
 void print_token_type_and_value(t_token *head)
 {
@@ -89,11 +80,8 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 		else if (pars->state == STATE_DOLLAR && ((pars->char_type != REG_CHAR && pars->char_type != DIGIT_CHAR)
 		|| (pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$')))
 			dollar_state_handler(stringa, pars, shell);										
-		if (stringa[pars->count + 1] == '\0')
-		{
-			if (!slice_end_token(stringa, pars, shell))
+		if (stringa[pars->count + 1] == '\0' && !slice_end_token(stringa, pars, shell))
 				return (ERROR);																			
-		}
 		pars->count++;
 	}
 	(void)shell;
@@ -120,6 +108,7 @@ void trim_middleline_whitespaces(t_parser *pars)
 			{
 				current = tmp;
 				tmp = tmp->next;
+				free(current->value);
 				free(current); //devo liberare meglio tutto il token anche value credo 
 			}
 			ptr->next = tmp;
@@ -141,15 +130,7 @@ void trim_middleline_whitespaces(t_parser *pars)
 */
 
 
-/***per il momento:
- * - se un token e' di tipo double quotes, ma e' preceduto da unn HEREDOC viene marchiato come HEREDOC_FILENAME_WITHQUOTES
- * - ho deciso di non mantenere le doppie virgolette, in quanto se seguito da qualcosa quando viene joinato 
- * 			si crea qualcosa di tipo es: << "here"doc ====> diventa un token->value "here"doc e non heredoc invece
- * - se HEREDOC_FILENAME_WITHQUOTES deve essere joinato con altre cose perche non c'e' spazio tra i token 
- * 			mantiene comquneue il suo tokenTYPE HEREDOC_FILENAME_WITHQUOTES
- * 
- * 
-*/
+
 
 t_token *tokenize_input(char *input, t_shell *shell)
 {
@@ -159,7 +140,6 @@ t_token *tokenize_input(char *input, t_shell *shell)
 	pars = (t_parser){0};
 	if (create_token_list(input, shell, &pars) == ERROR)
 		return (free_tokens(pars.head), NULL);
-		/**qui immagino che devo marchiare il primo token parola/s&dquotes dopo l heredoc*/
 	unpack_quoted_tokens(&pars, shell);
 	join_tokens_values_when_no_space_between(&pars);
 	//print_token_type_and_value(pars.head); 

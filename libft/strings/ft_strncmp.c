@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/02 15:23:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 20:08:14 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
+#include <string.h>
 
 int	ft_strncmp(char *s1, char *s2, unsigned int n)
 {
@@ -31,18 +32,19 @@ int	ft_strncmp(char *s1, char *s2, unsigned int n)
 	}
 	return (0);
 }
-/*
-int	main(void)
+
+/* int	main(void)
 {
 	char	*s1;
 	char	*s2;
 	int		len;
 	int		s3;
 
-	s1 = "abcdef";
+	s1 = NULL;
  	s2 = "abcdefghijklmnop";
-	len = ft_strlen("abcdef");
+	len = strlen("abcdef");
 	s3 = ft_strncmp(s1,  s2, len);
 	printf("Queto e' il valore ritornato da strcmp : %i\n", s3);
 }
-*/
+
+ */
