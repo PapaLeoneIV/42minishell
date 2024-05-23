@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 22:34:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:44:13 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct parser
 typedef struct s_redir
 {
 
+	int					in;
+	int					out;
 	int					type_of_redirection;
 	char*				filename;
 	struct s_redir		*next;
@@ -57,9 +59,8 @@ typedef struct s_redir
 typedef struct s_command
 {
 	char 				**cmd;
-	int					in;
-	int					out;
 	struct s_redir		**redirection_info;
+	int					pip[2];
 	int					cmd_id;
 	struct s_command	*next;
 } 			t_command;

@@ -6,19 +6,67 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/21 20:06:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:53:30 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/lexer.h"
 
+
+t_token *get_last_token(t_token *ptr)
+{
+	if (!ptr)
+		return NULL;
+	while(ptr->next)
+	{
+		ptr = ptr->next;
+	}
+	return ptr;
+}
+
+int traverse_list_backword_for_heredoc(t_token *last_node)
+{
+	if (last_node->prev == NULL)
+		return false;
+	while(last_node->type == WHITESPACE_TOKEN && last_node != NULL)
+			last_node = last_node->prev;
+	if(last_node->type == HEREDOC_TOKEN)
+		return true;
+	else 
+		return false;
+}
+
+int look_behind_for_heredoc(t_token *head)
+{
+	t_token *last;
+	t_token *ptr;
+	
+	ptr = head;
+	last = get_last_token(ptr);
+	if (!last)
+		return false;
+	if (traverse_list_backword_for_heredoc(last))
+		return true;
+	return false;
+}
+
 /*Funzione per la gestione dello QUOTED STATE*/
 void quoted_state_handler(char *stringa, t_parser *pars)
 {
 	int Mquotes_arr[2] = {DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN};
+	int here_doc_before;
+	
 	pars->token = token_new(NULL);
 	pars->info = (t_token_info){Mquotes_arr[pars->char_type == SQUOTES_CHAR], stringa, pars->start + 1, pars->count};
+	here_doc_before = look_behind_for_heredoc(pars->head);
+	if(here_doc_before == true)
+	{
+		printf("c' e' un heredoc prima delle double quotes");
+		/**qui va aggiunto un check sull ultimi nodi, mi prendo l ultimo nodo prima di un whitespace
+	 * se e' un heredoc non espando, altrimenti posso procedere all espansione!
+	*/		
+	}
 	set_token_values(pars->token, &pars->info);
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
