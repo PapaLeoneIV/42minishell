@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 22:28:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/24 13:24:34 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,18 @@ void add_back_redirections(t_redir **lst, t_redir *node)
 
 t_command *new_command(int counter)
 {
-		t_command *cmd_node;
+	t_command *cmd_node;
 
-		cmd_node = ft_calloc(1, sizeof(t_command));
-		cmd_node->cmd = NULL;
-		cmd_node->cmd_id = counter;
-		cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
-		cmd_node->next = NULL;
-
-		return cmd_node;
+	cmd_node = ft_calloc(1, sizeof(t_command));
+	cmd_node->cmd = NULL;
+	cmd_node->cmd_id = counter;
+	cmd_node->fork_id = 0;
+	cmd_node->in = stdin;
+	cmd_node->out = stdout;
+	cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
+	cmd_node->next = NULL;
+	cmd_node->prev = NULL;
+	return cmd_node;
 }
 
 void add_back_commands(t_command **lst, t_command *node)
@@ -65,6 +68,7 @@ void add_back_commands(t_command **lst, t_command *node)
 	while (ptrlst->next != NULL)
 		ptrlst = ptrlst->next;
 	ptrlst->next = node;
+	node->prev = ptrlst;
 }
 
 char **from_lst_to_mtx(t_token *head)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/23 12:44:13 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/24 13:23:49 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,12 @@ typedef struct s_command
 {
 	char 				**cmd;
 	struct s_redir		**redirection_info;
-	int					pip[2];
+	int					in;
+	int					out;
 	int					cmd_id;
+	int					fork_id;
 	struct s_command	*next;
+	struct s_command	*prev;
 } 			t_command;
 
 enum bool

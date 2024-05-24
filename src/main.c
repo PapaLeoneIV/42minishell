@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:02:41 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/23 18:24:54 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/24 11:09:36 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,3 +35,6 @@ int main(int argc, char **argv , char **envp)
 /*     set_env(&shell, envp); */
     return (0);
 }
+
+/* aggiunto -I./include al main, aggiunto prev a typedef struct s_command e aggiornato e relativo new_cmd
+ */
