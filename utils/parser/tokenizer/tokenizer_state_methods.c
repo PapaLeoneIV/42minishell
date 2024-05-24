@@ -6,19 +6,63 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/21 20:06:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 18:23:29 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/lexer.h"
 
+
+t_token *get_last_token(t_token *ptr)
+{
+	if (!ptr)
+		return NULL;
+	while(ptr->next)
+	{
+		ptr = ptr->next;
+	}
+	return ptr;
+}
+
+int traverse_list_backword_for_heredoc(t_token *last_node)
+{
+	if (last_node->prev == NULL)
+		return false;
+	while(last_node->type == WHITESPACE_TOKEN && last_node != NULL)
+			last_node = last_node->prev;
+	if(last_node->type == HEREDOC_TOKEN)
+		return true;
+	else 
+		return false;
+}
+
+int look_behind_for_heredoc(t_token *head)
+{
+	t_token *last;
+	t_token *ptr;
+	
+	ptr = head;
+	last = get_last_token(ptr);
+	if (!last)
+		return false;
+	if (traverse_list_backword_for_heredoc(last))
+		return true;
+	return false;
+}
+
 /*Funzione per la gestione dello QUOTED STATE*/
 void quoted_state_handler(char *stringa, t_parser *pars)
 {
 	int Mquotes_arr[2] = {DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN};
+	int here_doc_before;
+	
+	here_doc_before = look_behind_for_heredoc(pars->head);
 	pars->token = token_new(NULL);
-	pars->info = (t_token_info){Mquotes_arr[pars->char_type == SQUOTES_CHAR], stringa, pars->start + 1, pars->count};
+	if(here_doc_before == true)
+		pars->info = (t_token_info){HERDOC_FILENAME_WITHQUOTES, stringa, pars->start + 1, pars->count};		
+	else
+		pars->info = (t_token_info){Mquotes_arr[pars->char_type == SQUOTES_CHAR], stringa, pars->start + 1, pars->count};
 	set_token_values(pars->token, &pars->info);
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
@@ -37,7 +81,7 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
 		set_token_values(pars->token, &pars->info);
 		if (strcmp(pars->token->value, "$0") == 0)
-			pars->token->value = ft_strdup("bash");
+			pars->token->value = ft_strdup("minishell");
 		else
 			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);

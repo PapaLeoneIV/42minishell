@@ -1,0 +1,32 @@
+import subprocess
+    with open(filename, 'r') as file:
+        for line in file:
+def run_command(process, command):
+    process.stdin.write(command + "\n")
+    process.stdin.flush()
+    output = []
+    prompt_seen = False
+        line = process.stdout.readline().strip()
+        if not line and process.poll() is not None:
+            break  # If line is empty and the process has ended
+            if prompt_seen:
+                prompt_seen = True
+        elif prompt_seen:
+            output.append(line)
+    return "\n".join(output)
+def color_text(text, color):
+    """ Adds ANSI color codes to the text. """
+    colors = {
+        'end': '\033[0m',     # Reset to default
+    return colors[color] + text + colors['end']
+    process = subprocess.Popen(['../minishell'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=0)
+    # Wait for minishell to be ready
+        if '(MINISHELL)$' in process.stdout.readline().strip():
+    for index, test in enumerate(test_cases, 1):
+        output = run_command(process, test['input'])
+        result = 'PASSED' if output == expect else 'FAILED'
+        color = 'green' if result == 'PASSED' else 'red'
+        print(f" Output: '{output}'", flush=True)
+        print(color_text(f" Result: {result}", color), flush=True)
+        print(flush=True)  # Flush the blank line for separation
+    process.terminate()  # Terminate the minishell process

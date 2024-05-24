@@ -30,7 +30,7 @@ typedef struct s_command t_command;
 
 typedef struct s_env
 {
-	char			**env;
+	char			**env_mtx;
 	char			*head;
 	char			*body;
 	short			esistence;
@@ -41,7 +41,6 @@ typedef struct s_env
 typedef struct s_shell
 {
     char        *line;
-    char        **envp;
     t_command   **cmd_info;
     t_env       **env;
 }   t_shell;

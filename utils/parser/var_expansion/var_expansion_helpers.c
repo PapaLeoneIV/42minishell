@@ -44,16 +44,16 @@ void expand_env_var(char **token_value, t_shell *shell)
 	char *tmp;
 	
 	i = 0;
-	envp_len = mtx_count_rows(shell->envp);
+	envp_len = mtx_count_rows(shell->env[0]->env_mtx);
 	while(i < envp_len)
 	{
-		pathKey = get_key_envp(shell->envp[i]);
+		pathKey = get_key_envp(shell->env[0]->env_mtx[i]);
 		if (!strcmp(*token_value + 1, pathKey))
 		{
 			free(pathKey);
 			pathKey = NULL;
 			tmp = *token_value;		
-			*token_value = set_token_value_post_expansion(shell->envp[i]);
+			*token_value = set_token_value_post_expansion(shell->env[0]->env_mtx[i]);
 			free(tmp);
 			return ; 
 		}
