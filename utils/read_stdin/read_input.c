@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/24 20:05:14 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/24 20:21:29 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void print_shell_info(t_shell *shell)
             printf("No command.\n");
         }
 
-        printf("Pipe: [%d, %d]\n", cmd_info->pip[0], cmd_info->pip[1]);
 
         if (cmd_info->redirection_info != NULL) {
             t_redir *redir_info = *cmd_info->redirection_info;

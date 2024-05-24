@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/24 20:07:21 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/24 20:20:51 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	execute_cmd(t_shell **shell)
 	cmd = (*(*shell)->cmd_info);
 	while(cmd)
 	{
-		if (execution(cmd, (*shell)->env) == 0)
+		if (execution(cmd, (*shell)->env) == ERROR)
 		{
 			
 			perror("ERROR");
