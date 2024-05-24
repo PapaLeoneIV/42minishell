@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 22:34:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:44:13 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ typedef struct parser
 	t_token_info info;
 } 				t_parser;
 
-
 typedef struct s_redir
 {
-
+	int					in;
+	int					out;
 	int					type_of_redirection;
 	char*				filename;
 	struct s_redir		*next;
@@ -57,9 +57,8 @@ typedef struct s_redir
 typedef struct s_command
 {
 	char 				**cmd;
-	int					in;
-	int					out;
 	struct s_redir		**redirection_info;
+	int					pip[2];
 	int					cmd_id;
 	struct s_command	*next;
 } 			t_command;
@@ -96,6 +95,7 @@ enum TokenType
 	DOUBLE_QUOTES_TOKEN,   //7
 	DOLLAR_TOKEN,          //8
 	WHITESPACE_TOKEN,      //9
+	HERDOC_FILENAME_WITHQUOTES, //10
 
 };
 
@@ -112,8 +112,8 @@ enum CharType
 	DOLLAR_SPECIAL_CHAR, // 8
 	DIGIT_CHAR,          // 9
 	QUESTION_MARK_CHAR,  // 10
-
 };
+
 /*TOKEN CREATION METHODS*/
 void		set_token_values(t_token *token, t_token_info *info);
 t_token		*token_new(char *data);
@@ -123,7 +123,6 @@ void		token_print(t_token *head);
 /*TOKENIZER MAIN FUNCTIONS*/
 t_token		*tokenize_input(char *input, t_shell *shell);
 int			create_token_list(char *stringa, t_shell *shell, t_parser *pars);
-
 
 /*TOKENIZER HELPERS*/
 int			look_for_another_redirect(char *stringa, t_parser *pars);
@@ -166,32 +165,30 @@ int 		syntax_error_handler(t_token *head);
 void 		change_non_special_tokens_to_word_tokens(t_token *head);
 
 /*SYNTAX ANALIZER*/
-int look_next_token_pipe(t_token *next);
-int handle_pipe_synt_error_tokens(t_token *ptr);
-int check_for_non_valid_char_list(t_token *ptr, char *non_valid_char);
-int handle_greater_synt_error_tokens(t_token *ptr);
-int handle_lesser_synt_error_tokens(t_token *ptr);
-
+int			handle_pipe_synt_error_tokens(t_token *ptr);
+int			handle_greater_synt_error_tokens(t_token *ptr);
+int			handle_lesser_synt_error_tokens(t_token *ptr);
+int			headle_heredoc_syntax_error_tokens(t_token *ptr);
+int			handle_redirout_synt_error_tokens(t_token *ptr);
 
 /**TOKEN MEMORY*/
-void free_tokens(t_token *head);
-void remove_null_tokens(t_parser *pars);
-void redirection_clear(t_token **head);
+void		free_tokens(t_token *head);
+void		remove_null_tokens(t_parser *pars);
+void		redirection_clear(t_token **head);
 
 /**REDIRECTION PARSING*/
-int parse_redirections(t_token *head, t_shell *shell);
-int handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node);
-int remove_redir(t_token **redir);
-t_token *split_command_based_on_pipes(t_token **ptr);
-int count_pipes(t_token *head);
-t_token *look_tokens_ahead(t_token *current);
-
+int			parse_redirections(t_token *head, t_shell *shell);
+int			handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node);
+int			remove_redir(t_token **redir);
+t_token		*split_command_based_on_pipes(t_token **ptr);
+int			count_pipes(t_token *head);
+t_token		*look_tokens_ahead(t_token *current);
 
 /**REDIRECTION PARSING (HELPERS)*/
-t_redir *new_redir_node(int type, char *value);
-void add_back_redirections(t_redir **lst, t_redir *node);
-t_command *new_command(int counter);
-void add_back_commands(t_command **lst, t_command *node);
-char **from_lst_to_mtx(t_token *head);
+t_redir		*new_redir_node(int type, char *value);
+void		add_back_redirections(t_redir **lst, t_redir *node);
+t_command	*new_command(int counter);
+void		add_back_commands(t_command **lst, t_command *node);
+char		**from_lst_to_mtx(t_token *head);
 
 #endif
