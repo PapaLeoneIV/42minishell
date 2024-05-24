@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 13:38:23 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:56:12 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,9 @@ t_dll_list	*ft_build_lis_lis(t_dll_list *list, t_dll_list *len_list,
 	}
 	return (res);
 }
+
+
+
 
 t_dll_list	*ft_lis_algo_list(int *lis_len, t_dll_list *a)
 {

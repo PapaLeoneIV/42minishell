@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/22 17:23:06 by fgori            ###   ########.fr       */
+/*   Updated: 2024/05/23 20:06:14 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,15 @@ char	*trimming(char *big, char *removed)
 void	echo_path(char **str)
 {
 	int		i;
-	short	j;
+	short	n_flag;
 
 	i = 1;
-	j = 1;
+	n_flag = true;
+	/*qui bisogna assicurarsi che str[1] esista altrimenti andiamo in SEGFAULT*/
 	if (ft_strncmp(str[1], "-n", ft_strlen(str[1])) == 0)
 	{
 		i++;
-		j = 0;
+		n_flag = false;
 	}	
 	while (str[i])
 	{
@@ -64,7 +65,7 @@ void	echo_path(char **str)
 			printf(" ");
 		i++;
 	}
-	if (j != 0)
+	if (!n_flag)
 		printf("\n");
 	free(str);
 	return ;

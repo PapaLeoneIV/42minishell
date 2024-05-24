@@ -12,6 +12,16 @@
 
 #include "../includes/minishell.h"
 
+/***per il momento:
+ * - se un token e' di tipo double quotes, ma e' preceduto da unn HEREDOC viene marchiato come HEREDOC_FILENAME_WITHQUOTES
+ * - ho deciso di non mantenere le doppie virgolette, in quanto se seguito da qualcosa quando viene joinato si creano dei problemi
+ * 			si crea qualcosa di tipo es: << "here"doc ====> diventa un token->value "here"doc e non heredoc invece
+ * - se HEREDOC_FILENAME_WITHQUOTES deve essere joinato con altre cose perche non c'e' spazio tra i token 
+ * 			mantiene comquneue il suo tokenTYPE HEREDOC_FILENAME_WITHQUOTES
+ * 
+ * 
+*/
+
 int main(int argc, char **argv , char **envp)
 {
     t_shell shell;
