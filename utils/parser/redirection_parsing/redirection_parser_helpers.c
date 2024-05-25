@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/24 19:25:58 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/25 10:14:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ t_command *new_command(int counter)
 	cmd_node->fork_id = 0;
 	cmd_node->in = STDIN_FILENO;
 	cmd_node->out = STDOUT_FILENO;
-	cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
+	//cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
+	cmd_node->redirection_info = NULL;
 	cmd_node->next = NULL;
 	cmd_node->prev = NULL;
 	return cmd_node;

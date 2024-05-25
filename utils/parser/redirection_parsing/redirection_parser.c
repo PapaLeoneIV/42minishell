@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/23 13:51:26 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/25 10:15:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ int handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node)
 		if (node_ahead == NULL)
 			return (ERROR);
 		if (node_ahead->type == WORD_TOKEN)
-		{	
+		{
+			if (!cmd_node->redirection_info)
+					cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
 			redirection_node = new_redir_node(node->type, node_ahead->value);
 			add_back_redirections(cmd_node->redirection_info, redirection_node);
 			return SUCCESS;

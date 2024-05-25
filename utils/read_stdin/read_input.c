@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/24 20:21:29 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/25 10:18:51 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void read_from_stdin(t_shell *shell)
 	t_token     *head;
 	char		*input;
 	char	*prompt_path;
- 	(void)shell;
+	
 	while (true)
 	{
 		prompt_path = get_directory_path();
@@ -84,7 +84,7 @@ void read_from_stdin(t_shell *shell)
 		 * - ho lassciato qualche commento e un NOTA BENE per l heredoc
 		 * - ho creato il .h per le funzione dell executioner
 		*/
-		if (execute_cmd(&shell) == ERROR)
+		if (execute_cmd(shell) == ERROR)
 		{
 			/**da vedere come gestire l errore*/
 		}

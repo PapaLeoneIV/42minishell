@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redline_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:16:15 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/22 22:01:02 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/25 10:34:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*trim_current_path(char *path)
 	count = 0;
 	direct_depth = 0;
 	if (n_slash <= 3)
-		return (path);
+		return (NULL);
 	else
 	{
 		count = ft_strlen(path) - 1;
@@ -61,6 +61,8 @@ char	*get_directory_path(void)
 
 	path = getcwd(NULL, 0);
 	trimmed_path = trim_current_path(path);
+	if(!trimmed_path)
+		trimmed_path = ft_strdup(path);
 	free(path);
 	tmp = ft_strjoin(trimmed_path, " ");
 	path = ft_strjoin("\033[0;32mminishell~:\033[0m ../",
