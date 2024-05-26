@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/26 12:16:01 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/26 21:39:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,13 +120,13 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	if (cmd->fork_id == 0)
 	{
 		if (cmd->next)
-		close(shell->shell_pip[0]);
+			close(shell->shell_pip[0]);
  		make_things(cmd->cmd, find_node(env, "PATH")); 
 	}
 	else
 	{
-		//close(pip[1]);
-		//dup2(pip[0], STDIN_FILENO);
+		close(shell->shell_pip[1]);
+		dup2(shell->shell_pip[0], STDIN_FILENO);
 	}
 	return SUCCESS;
 }
