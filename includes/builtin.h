@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:42:51 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/22 22:37:24 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/26 11:31:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_env	**get_env_info(char *en[]);
 void	env_path(t_env	**env);
 void	export_path(t_env **lst, char **mtx);
 t_env	*lst_new_env(char *str, char **en);
-
+t_env	*find_node(t_env **lst, char *str);
 void    clean_env_lst(t_env **lst);
 void    clean_env_node(t_env **lst);
 void	unset_path(t_env **lst, char **mtx);
