@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/23 20:07:56 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/28 11:47:30 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ t_token *tokenize_input(char *input, t_shell *shell)
 	//print_token_type_and_value(pars.head); 
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);
- 	token_print(pars.head);								//to use tester.py enable this function
+ 	//token_print(pars.head);								//to use tester.py enable this function
 	head = pars.head;
 	return (head);
 }

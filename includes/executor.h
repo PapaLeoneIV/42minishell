@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/26 11:55:56 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/28 12:01:41 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ typedef struct s_redir t_redir;
 
 int	execute_cmd(t_shell *shell);
 int	execution(t_command *cmd, t_env **env,  t_shell *shell);
-int	list_of_in(t_redir *dir);
-int	list_of_out(t_redir *dir);
+int	list_of_in(t_redir **dir);
+int	list_of_out(t_redir **dir);
 
 
 #endif
