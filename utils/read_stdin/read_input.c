@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/28 11:15:59 by fgori            ###   ########.fr       */
+/*   Updated: 2024/05/29 11:19:16 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void read_from_stdin(t_shell *shell)
 	while (true)
 	{
 		prompt_path = get_directory_path();
-		input = readline("(MINISHELL)$");
+		input = readline("(MINISHELL)$ ");
 		head = tokenize_input(input, shell);
 		add_history(input);
   		if (head == NULL)

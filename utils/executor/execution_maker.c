@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/28 13:41:27 by fgori            ###   ########.fr       */
+/*   Updated: 2024/05/29 13:00:35 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	list_of_out(t_redir **dir)
 			fd = open((*dir)->filename,  O_TRUNC | O_CREAT | O_RDWR, 0777);
 			if (fd < 0)
 				break ;
-			if ((*dir)->next)
+			if ((*dir)->next && (*dir)->next->type_of_redirection == GREATER_TOKEN)
 				close(fd);
 			(*dir) = (*dir)->next;
 		}
@@ -35,7 +35,7 @@ int	list_of_out(t_redir **dir)
 			fd = open((*dir)->filename,  O_APPEND | O_CREAT | O_RDWR, 0777);
 			if (fd < 0)
 				break ;
-			if ((*dir)->next)
+			if ((*dir)->next && (*dir)->next->type_of_redirection == REDIR_OUT_TOKEN)
 				close(fd);
 			(*dir) = (*dir)->next;
 		}
@@ -61,7 +61,7 @@ int	list_of_in(t_redir **dir)
 			(*dir) = (*dir)->next;
 			return(-1);
 		}
-		if ((*dir)->next)
+		if ((*dir)->next && (*dir)->next->type_of_redirection == LESSER_TOKEN)
 			close(fd);
 		(*dir) = (*dir)->next;   
 	}
@@ -113,6 +113,9 @@ int	make_things(char **cmd, t_env *path)
 // da lavorare non completa!!!!!
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
+	int		pip[2];
+	int		tm_i;
+	int		tm_ou;
 	t_redir	**tmp;
 	/**Note da osservare credo:
 	 * - l heredoc deve essere la prima cosa che va eseguita da quello che ho visto, (va cercato se c e' un 
@@ -120,11 +123,17 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	 * 			di heredoc prima di ogni altro comando. Il contenuto dell heredoc va poi visto se essere espanso oppure no.
 	 * - 
 	*/
+	(void)shell;
+	tm_i = cmd->in;
+	tm_ou = cmd->out;
+	if (cmd->next != NULL)
+		if (pipe(pip) < 0)
+			return(perror ("ERROR while opening the pipe\n"), ERROR);
 	if (cmd->next)
-		dup2(cmd->in, shell->shell_pip[0]);
-	if (cmd->prev)	
-		dup2(cmd->out, shell->shell_pip[1]);
-	//dovrei aver aggiustato la cosa, adesso la memoria viene allocata solo nel caso in cui si trovino delle redirection quindi se non ve ne sono il programma va avanti seguendo l'if
+	{
+		cmd->out = pip[1];
+		cmd->next->in = pip[0];
+	}
 	tmp = cmd->redirection_info;
 	while (tmp)
 	{
@@ -140,20 +149,35 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	
 	}
-	printf ("in e : %d, mentr out: %d", cmd->in,cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
 	{
-		//if (cmd->next)
-		//	close(shell->shell_pip[0]);
- 		make_things(cmd->cmd, find_node(env, "PATH")); 
+		if (cmd->in != tm_i)
+        {
+            dup2(cmd->in, 0);
+            close(cmd->in);
+        }
+        if (cmd->out != tm_ou)
+        {
+            dup2(cmd->out, 1);
+            close(cmd->out);
+        }
+        // Close unused pipe ends in the child process
+        if (cmd->next)
+            close(pip[0]);
+        if (cmd->prev)
+            close(pip[1]);
+
+ 		make_things(cmd->cmd, find_node(env, "PATH"));
 	}
 	else
 	{
-		//close(shell->shell_pip[1]);
-		//dup2(shell->shell_pip[0], STDIN_FILENO);
+		if (cmd->in != 0)
+            close(cmd->in);
+        if (cmd->out != 1)
+            close(cmd->out);
 	}
 	return SUCCESS;
 }
@@ -167,9 +191,6 @@ int	execute_cmd(t_shell *shell)
 	cmd = (*shell->cmd_info);
 	tm_in = dup(0);
 	tm_out = dup(1);
-	if (cmd->next != NULL)
-		if (pipe(shell->shell_pip) < 0)
-			return(perror ("ERROR while opening the pipe\n"), ERROR);
 	while(cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
@@ -180,8 +201,11 @@ int	execute_cmd(t_shell *shell)
 		}
 		cmd = cmd->next;
 	}
-	waitpid(-1, NULL, 0);
+	while (waitpid(-1, NULL, 0) > 0)
+		;
 	dup2(tm_in, 0);
 	dup2(tm_out, 1);
+	close(tm_in);
+	close(tm_out);
 	return (SUCCESS);
 }
