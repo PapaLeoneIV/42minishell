@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/29 13:00:35 by fgori            ###   ########.fr       */
+/*   Updated: 2024/05/30 10:36:18 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,31 @@ void	freeall(char **mat)
 	free(mat);
 }
 
-int	make_things(char **cmd, t_env *path)
+int	ft_biltin(char **tmp, t_env **lst)
+{
+	int i;
+
+	i = -1;
+	if (ft_strncmp(tmp[0], "cd", 2) == 0)
+	{
+		i = cd_path(tmp);
+	}
+	else if (ft_strncmp(tmp[0], "pwd", 3) == 0)
+	{
+		i = pwd_path();
+	}
+	else if (ft_strncmp(tmp[0], "echo", 4) == 0)
+		i = echo_path(tmp);
+	else if (ft_strncmp(tmp[0], "env", 3) == 0)
+		i = env_path(lst);
+	else if (ft_strncmp(tmp[0], "export", 6) == 0)
+		i = export_path(lst, tmp);
+	else if (ft_strncmp(tmp[0], "unset", 5) == 0)
+		i = unset_path(lst, tmp);
+	return (i);
+}
+
+int	make_things(char **cmd, t_env *path, t_env **env)
 {
 	char	**open_path;
 	char	*tmp;
@@ -90,25 +114,29 @@ int	make_things(char **cmd, t_env *path)
 	int		i;
 
 	i = 0;
-	open_path = ft_split(path->body, ':');
-	while (open_path[i])
+	if (ft_biltin(cmd, env) == -1)
 	{
-		tmp = ft_strjoin(open_path[i], "/");
-		supp = ft_strjoin(tmp, cmd[0]);
-		free(tmp);
-		if (access(supp, F_OK | X_OK) == 0)
-			break ;
-		free (supp);
-		i++;
+		open_path = ft_split(path->body, ':');
+		while (open_path[i])
+		{
+			tmp = ft_strjoin(open_path[i], "/");
+			supp = ft_strjoin(tmp, cmd[0]);
+			free(tmp);
+			if (access(supp, F_OK | X_OK) == 0)
+				break ;
+			free (supp);
+			i++;
+		}
+		freeall(open_path);
+		if (!supp)
+			return (perror("access don't replies"), -1);
+		if (execve(supp, cmd, path->env_mtx) < 0)
+			perror("ERROR\n execve don't replies");
+		free(supp);
 	}
-	freeall(open_path);
-	if (!supp)
-		return (perror("access don't replies"), -1);
-	if (execve(supp, cmd, path->env_mtx) < 0)
-		perror("ERROR\n execve don't replies");
-	free(supp);
 	return (1);
 }
+
 
 // da lavorare non completa!!!!!
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
@@ -170,7 +198,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
         if (cmd->prev)
             close(pip[1]);
 
- 		make_things(cmd->cmd, find_node(env, "PATH"));
+ 		make_things(cmd->cmd, find_node(env, "PATH"), env);
 	}
 	else
 	{

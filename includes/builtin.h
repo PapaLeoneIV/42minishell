@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:42:51 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/26 11:31:33 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/30 10:29:26 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,17 @@ typedef struct s_env t_env;
 
 void	add_node_to_env_struct(t_env **lst, t_env *new);
 char	*get_directory_path(void);
-void	cd_path(char **mtx);
-void	pwd_path(void);
+int		cd_path(char **mtx);
+int		pwd_path(void);
 char	*trimming(char *big, char *removed);
-void	echo_path(char **str);
+int		echo_path(char **str);
 t_env	**get_env_info(char *en[]);
-void	env_path(t_env	**env);
-void	export_path(t_env **lst, char **mtx);
+int		env_path(t_env	**env);
+int		export_path(t_env **lst, char **mtx);
 t_env	*lst_new_env(char *str, char **en);
 t_env	*find_node(t_env **lst, char *str);
 void    clean_env_lst(t_env **lst);
 void    clean_env_node(t_env **lst);
-void	unset_path(t_env **lst, char **mtx);
+int		unset_path(t_env **lst, char **mtx);
 
 #endif

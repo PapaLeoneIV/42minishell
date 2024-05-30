@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/22 22:05:50 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/30 10:28:10 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_env	*find_node(t_env **lst, char *str)
 	return (NULL);
 }
 
-void	export_path(t_env **lst, char **mtx)
+int	export_path(t_env **lst, char **mtx)
 {
 	t_env	*tmp;
 	int i;
@@ -40,13 +40,13 @@ void	export_path(t_env **lst, char **mtx)
 			printf("declare -x %s=%s\n", tmp->head, tmp->body);
 			tmp = tmp->next;
 		}
-		return ;
+		return (1);
 	}
 	while (mtx[i])
 	{
-		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
+		if (ft_strncmp(mtx[i], "+=", ft_strlen(mtx[i])) == 0)
 		{
-			mtx[i] = trimming(mtx[i], "export");
+			i++;
 			tmp = find_node(lst, ft_substr(mtx[i], 0, ft_strchri(mtx[i], '+')));
 			if (!tmp)
 				add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
@@ -54,28 +54,29 @@ void	export_path(t_env **lst, char **mtx)
 		}
 		else
 		{
-			mtx[i] = trimming(mtx[i], "export");
 			add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
 			//free(str);
 		}
 		i++;
+		return (1);
 	}
+	return (-1);
 }
 
-void	unset_path(t_env **lst, char **mtx)
+int	unset_path(t_env **lst, char **mtx)
 {
 	t_env	*tmp;
 
 	if (!mtx[0])
 	{
 		perror("ERROR\n");
-		return ;
+		return (-1);
 	}
 	tmp = find_node(lst, mtx[0]);
 	if (!tmp)
 	{
 		perror("ERROR\n");
-		return ;
+		return (-1);
 	}
 	if (!tmp->next)
 	{
@@ -88,5 +89,5 @@ void	unset_path(t_env **lst, char **mtx)
 		tmp->next->prev = tmp->prev;
 		clean_env_node(&tmp);
 	}
-
+	return (1);
 }

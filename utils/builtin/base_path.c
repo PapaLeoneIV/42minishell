@@ -3,33 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/23 20:06:14 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/30 10:32:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //cd comand funtion//
-void	cd_path(char **mtx)
+int	cd_path(char **mtx)
 {
-	if (mtx_count_rows(mtx) > 2)
+	if (mtx_count_rows(mtx) < 2)
 	{
 		perror("ERROR\ntoo many arguments");
-		return ;
+		return (-1);
 	}
 	chdir(mtx[1]);
+	return (1);
 }
 
-void	pwd_path(void)
+int	pwd_path(void)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
 	printf("%s\n", path);
 	free(path);
+	return (1);
 }
 
 char	*trimming(char *big, char *removed)
@@ -45,13 +47,15 @@ char	*trimming(char *big, char *removed)
 	return(&big[i]);
 }
 
-void	echo_path(char **str)
+int	echo_path(char **str)
 {
 	int		i;
 	short	n_flag;
 
 	i = 1;
 	n_flag = true;
+	if (!str)
+		return (-1);
 	/*qui bisogna assicurarsi che str[1] esista altrimenti andiamo in SEGFAULT*/
 	if (ft_strncmp(str[1], "-n", ft_strlen(str[1])) == 0)
 	{
@@ -68,10 +72,10 @@ void	echo_path(char **str)
 	if (!n_flag)
 		printf("\n");
 	free(str);
-	return ;
+	return (1);
 }
 
-void	env_path(t_env	**env)
+int	env_path(t_env	**env)
 {
 	t_env	*tmp;
 
@@ -82,5 +86,6 @@ void	env_path(t_env	**env)
 			printf("%s=%s\n", tmp->head, tmp->body);
 		tmp = tmp->next;
 	}
+	return (1);
 }
 //cd comand funtion end//
