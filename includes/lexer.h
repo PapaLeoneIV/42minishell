@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/25 09:06:13 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/31 12:23:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 #define LEXER_H
 
 #include "./minishell.h"
-typedef struct s_shell t_shell;
 
+typedef struct s_command t_command;
+typedef struct s_shell t_shell;
+typedef struct s_redir t_redir;
 
 typedef struct s_token_info
 {

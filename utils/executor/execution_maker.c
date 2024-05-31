@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/30 10:36:18 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/31 14:32:18 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
             close(pip[1]);
 
  		make_things(cmd->cmd, find_node(env, "PATH"), env);
+		exit(0);
 	}
 	else
 	{
@@ -210,6 +211,34 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	return SUCCESS;
 }
 
+int	exit_path(t_command *cmd, t_shell *shell)
+{
+	unsigned int	exit_status;
+	int 			i;
+
+	i = 0;
+	exit_status = 0;
+
+	waitpid(-1, NULL, 0);
+	if (mtx_count_rows(cmd->cmd) > 2)
+		return(perror("ERROR\nto many argument"), -1);
+	if (cmd->cmd[1])
+	{
+		while (cmd->cmd[1][i])
+		{
+			if (!ft_isdigit(cmd->cmd[1][i]))
+				return(perror("ERROR\nalpha in exit status"), ERROR);
+			i++;
+		}
+		exit_status = (unsigned int)ft_atoi(cmd->cmd[1]);
+		if (exit_status > 255)
+			exit_status %= 256;
+	
+	}
+	clean_all(shell);
+	return (exit_status);
+}
+
 int	execute_cmd(t_shell *shell)
 {
 	t_command	*cmd;
@@ -219,6 +248,12 @@ int	execute_cmd(t_shell *shell)
 	cmd = (*shell->cmd_info);
 	tm_in = dup(0);
 	tm_out = dup(1);
+	if (!(cmd->next) && ft_strncmp(cmd->cmd[0], "exit", ft_strlen(cmd->cmd[0])) == 0)
+	{
+		close (tm_in);
+		close (tm_out);
+		exit(exit_path(cmd, shell));
+	}
 	while(cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)

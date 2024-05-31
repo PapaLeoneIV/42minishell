@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rileone <rileone@student.42.fr>            +#+  +:+       +#+         #
+#    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/05/24 20:08:56 by rileone          ###   ########.fr        #
+#    Updated: 2024/05/31 12:25:07 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c) \
 				$(addprefix $(EXECUTOR)/, execution_maker.c) \
 				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c)  \
 				$(addprefix $(REDIRECTION)/, redirection_parser.c redirection_parser_helpers.c)  \
-				$(addprefix $(CLEANING)/, tokenizer_cleaner.c env_cleaner.c)  \
+				$(addprefix $(CLEANING)/, tokenizer_cleaner.c env_cleaner.c cmd_cleaner.c)  \
 
 all: $(NAME)
 

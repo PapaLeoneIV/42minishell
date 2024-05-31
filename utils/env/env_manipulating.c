@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/30 10:28:10 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/31 14:16:42 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,22 @@ int	export_path(t_env **lst, char **mtx)
 		tmp = (*lst);
 		while (tmp)
 		{
-			printf("declare -x %s=%s\n", tmp->head, tmp->body);
+			if (tmp->esistence > -1)
+				printf("declare -x %s=%s\n", tmp->head, tmp->body);
 			tmp = tmp->next;
 		}
 		return (1);
 	}
 	while (mtx[i])
 	{
-		if (ft_strncmp(mtx[i], "+=", ft_strlen(mtx[i])) == 0)
+		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
 		{
-			i++;
 			tmp = find_node(lst, ft_substr(mtx[i], 0, ft_strchri(mtx[i], '+')));
 			if (!tmp)
 				add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
 			tmp->body = ft_strjoin(tmp->body, ft_substr(mtx[i], ft_strchri(mtx[i], '=') + 1 , ft_strlen(mtx[i])));
+			if (tmp->esistence == 1)
+				tmp->esistence = 0;
 		}
 		else
 		{

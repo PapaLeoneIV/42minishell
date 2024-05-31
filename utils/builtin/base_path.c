@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/30 10:32:20 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/31 10:45:15 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	echo_path(char **str)
 			printf(" ");
 		i++;
 	}
-	if (!n_flag)
+	if (n_flag)
 		printf("\n");
 	free(str);
 	return (1);
@@ -82,7 +82,7 @@ int	env_path(t_env	**env)
 	tmp = (*env);
 	while (tmp)
 	{
-		if (tmp->esistence == 0)
+		if (tmp->esistence <= 0)
 			printf("%s=%s\n", tmp->head, tmp->body);
 		tmp = tmp->next;
 	}

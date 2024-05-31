@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/29 11:19:16 by fgori            ###   ########.fr       */
+/*   Updated: 2024/05/31 11:48:51 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ void read_from_stdin(t_shell *shell)
 	{
 		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
+		free(prompt_path); 
 		head = tokenize_input(input, shell);
 		add_history(input);
+		free(input);
   		if (head == NULL)
 			continue; 
 	 	if (syntax_error_handler(head) == ERROR)
@@ -78,6 +80,7 @@ void read_from_stdin(t_shell *shell)
 		}
      	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
+		free_tokens(head);
 		/**ho sistemato un po di cose:
 		 * - i ritorni delle funzioni.
 		 * - alcune assegnazioni.
@@ -88,9 +91,6 @@ void read_from_stdin(t_shell *shell)
 		{
 			/**da vedere come gestire l errore*/
 		}
-		free(input);
-		free_tokens(head);
-		free(prompt_path); 
 	}
 }
 

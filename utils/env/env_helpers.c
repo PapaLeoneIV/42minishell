@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:23:54 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/22 22:39:12 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:01:10 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ t_env	*lst_new_env(char *envp_line, char **en)
 		new->head = ft_substr(envp_line, 0, envp_equal_idx);
 		new->body = ft_substr(envp_line, envp_equal_idx + 1, ft_strlen(envp_line));
 		new->esistence = 0;
+		if (ft_strncmp(new->head, "_", ft_strlen(new->head)) == 0)
+			new->esistence = -1;
 	}
-	else
+	else 
 	{
 		new->head = ft_strdup(envp_line);
 		new->esistence = 1;
