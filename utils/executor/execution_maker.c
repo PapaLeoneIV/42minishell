@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 14:32:18 by fgori            ###   ########.fr       */
+/*   Updated: 2024/05/31 14:45:43 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,25 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	return SUCCESS;
 }
 
+void	open_redir(t_redir **redir)
+{
+	t_redir	**tmp;
+	
+	tmp = redir;
+	while (tmp)
+	{
+		if (!(*tmp))
+			break ;
+		if ((*tmp)->type_of_redirection  == GREATER_TOKEN
+			|| (*tmp)->type_of_redirection  == REDIR_OUT_TOKEN)
+			close(list_of_out(&(*tmp)));
+		else if ((*tmp)->type_of_redirection  == LESSER_TOKEN)
+			close(list_of_in(&(*tmp)));
+		/* else
+			heardoc_path(); */
+	}
+}
+
 int	exit_path(t_command *cmd, t_shell *shell)
 {
 	unsigned int	exit_status;
@@ -218,8 +237,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 
 	i = 0;
 	exit_status = 0;
-
-	waitpid(-1, NULL, 0);
+	open_redir(cmd->redirection_info);
 	if (mtx_count_rows(cmd->cmd) > 2)
 		return(perror("ERROR\nto many argument"), -1);
 	if (cmd->cmd[1])
