@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/23 18:23:29 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:06:29 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,28 +109,39 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 
 /*Funzione per la gestione dello GENERAL STATE*/
 
-void general_state_handler(char *stringa, t_parser *pars)
+void general_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
-	char c;
+	char next;
+	char prev;
 	
+	prev = -1;
+	next = -1;
 	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == PIPELINE_CHAR || pars->char_type == REDIR_INPUT_CHAR 
 	|| pars->char_type ==  REDIR_OUTPUT_CHAR || pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR 
-	|| pars->char_type == DOLLAR_CHAR)
+	|| pars->char_type == DOLLAR_CHAR || pars->char_type == TILDE_CHAR)
 	{	
-		c = get_char_type(stringa, pars, pars->count + 1);
-		if (pars->char_type == DOLLAR_CHAR && c == WHITESPACE_CHAR)
+		if (stringa[pars->count + 1])
+			next = get_char_type(stringa, pars, pars->count + 1);
+		if (pars->count > 0 && stringa[pars->count - 1])
+			prev = get_char_type(stringa, pars, pars->count - 1);
+		if (pars->char_type == DOLLAR_CHAR && next == WHITESPACE_CHAR)
 		{
 			slice_token_string_doll_spec_case(stringa, pars);
 			return ;
 		}
-		if (pars->count > pars->start)
+		if (pars->char_type == TILDE_CHAR && (prev == WHITESPACE_CHAR || !prev) && next == WHITESPACE_CHAR)
+		{
+			slice_single_char_token(stringa, pars, shell);
+			return;
+		}
+		if (pars->count > pars->start && pars->char_type != TILDE_CHAR)
 			slice_token_string(stringa, pars);
 		if ((pars->char_type == REDIR_OUTPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_OUTPUT_CHAR ) 
 		|| ( pars->char_type == REDIR_INPUT_CHAR && look_for_another_redirect(stringa, pars) == REDIR_INPUT_CHAR))
 			return (slice_redirect_token(stringa, pars));
 		if (pars->char_type == REDIR_OUTPUT_CHAR || pars->char_type == REDIR_INPUT_CHAR 
 		|| pars->char_type == PIPELINE_CHAR || pars->char_type == WHITESPACE_CHAR) 															
-			slice_single_char_token(stringa, pars);
+			slice_single_char_token(stringa, pars, shell);
 		if (pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR  || pars->char_type == DOLLAR_CHAR) 
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}

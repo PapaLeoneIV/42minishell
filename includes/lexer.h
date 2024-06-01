@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/31 12:23:57 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/01 15:04:40 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ enum CharType
 	DOLLAR_SPECIAL_CHAR, // 8
 	DIGIT_CHAR,          // 9
 	QUESTION_MARK_CHAR,  // 10
+	TILDE_CHAR,
 };
 
 /*TOKEN CREATION METHODS*/
@@ -135,14 +136,14 @@ int			valid_regchar(char *str, t_parser *pars);
 int			get_char_type(char *str, t_parser *pars, int count);
 
 /*TOKENIZER HELPERS(SLICE METHODS)*/
-void		slice_single_char_token(char *stringa, t_parser *pars);
+void		slice_single_char_token(char *stringa, t_parser *pars, t_shell *shell);
 void		slice_redirect_token(char *stringa, t_parser *pars);
 void		slice_token_string(char *stringa, t_parser *pars);
 int			slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
 void 		slice_token_string_doll_spec_case(char *stringa, t_parser *pars);
 
 /*TOKENIZER HELPERS(STATE HANDLERS)*/
-void		general_state_handler(char *stringa, t_parser *pars);
+void		general_state_handler(char *stringa, t_parser *pars, t_shell *shell);
 void		dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell);
 void		quoted_state_handler(char *stringa, t_parser *pars);
 void		check_and_change_status(int *state, int c, t_parser *pars);
@@ -151,7 +152,7 @@ void		check_and_change_status(int *state, int c, t_parser *pars);
 int			valid_regchar_quoted(char c);
 int			get_char_type_quoted(char c);
 t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell);
-void		general_state_handler_quoted(char *stringa, t_parser *pars);
+void		general_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell);
 void		dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell);
 
 /*QUOTED TOKENIZER HELPERS*/

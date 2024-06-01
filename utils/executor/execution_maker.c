@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/01 13:56:37 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/01 16:24:51 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 	}
-	tmp = cmd->redirection_info;
+	tmp = cmd->redirection_info;        
 	while (tmp)
 	{
 		if (!(*tmp))
