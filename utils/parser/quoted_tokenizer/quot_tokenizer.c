@@ -48,7 +48,7 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 	{
 		parser->char_type = get_char_type_quoted(node->value[parser->count]);
 		if (parser->state == STATE_GENERAL)
-			general_state_handler_quoted(node->value, parser);
+			general_state_handler_quoted(node->value, parser, shell);
 		else if (parser->state == STATE_DOLLAR && ((parser->char_type != REG_CHAR && parser->char_type != DIGIT_CHAR)
 		|| (parser->char_type == DIGIT_CHAR && node->value[parser->count - 1] == '$')))
 			dollar_state_handler_quoted(node->value, parser, shell);												//DOLLAR STATE
@@ -62,14 +62,14 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 	return parser;
 }
 
-void general_state_handler_quoted(char *stringa, t_parser *pars)
+void general_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 {
 	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR)
 	{
 		if (pars->count > pars->start)  																									//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
 		if (pars->char_type == WHITESPACE_CHAR)
-			slice_single_char_token(stringa, pars);
+			slice_single_char_token(stringa, pars, shell);
 		if (pars->char_type == DOLLAR_CHAR)  						//cambio lo state machine per gestire le virgolette
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}

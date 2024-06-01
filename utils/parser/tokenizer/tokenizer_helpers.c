@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/21 20:06:28 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:21:05 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int get_char_type(char *str, t_parser *pars, int count)
 		return (DOLLAR_CHAR);
 	else if (str[count] == '?')
 		return (QUESTION_MARK_CHAR);
+	else if (str[count] == '~')
+		return (TILDE_CHAR);
 	else if (ft_isalpha(str[count]) || valid_regchar(str, pars))
 		return (REG_CHAR);
 	else if (ft_isdigit(str[count]))

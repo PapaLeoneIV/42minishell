@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/28 11:47:30 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/01 15:03:59 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 	{
 		pars->char_type = get_char_type(stringa, pars, pars->count); 												
 		if (pars->state == STATE_GENERAL)	
-			general_state_handler(stringa, pars);  														
+			general_state_handler(stringa, pars, shell);  														
 		else if ((pars->state == STATE_SQUOTE && pars->char_type == SQUOTES_CHAR) 
 		|| (pars->state == STATE_DQUOTE && pars->char_type == DQUOTES_CHAR)) 							                                                                                                       
 			quoted_state_handler(stringa, pars);
@@ -81,7 +81,7 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 		|| (pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$')))
 			dollar_state_handler(stringa, pars, shell);										
 		if (stringa[pars->count + 1] == '\0' && !slice_end_token(stringa, pars, shell))
-				return (ERROR);																			
+				return (ERROR);
 		pars->count++;
 	}
 	(void)shell;
