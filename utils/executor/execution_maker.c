@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/01 10:13:15 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/01 10:35:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,21 +87,21 @@ int	ft_biltin(char **tmp, t_env **lst)
 	int i;
 
 	i = -1;
-	if (ft_strncmp(tmp[0], "cd", 2) == 0)
+	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
 	{
 		i = cd_path(tmp);
 	}
-	else if (ft_strncmp(tmp[0], "pwd", 3) == 0)
+	else if (ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0)
 	{
 		i = pwd_path();
 	}
-	else if (ft_strncmp(tmp[0], "echo", 4) == 0)
+	else if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0)
 		i = echo_path(tmp);
-	else if (ft_strncmp(tmp[0], "env", 3) == 0)
+	else if (ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0)
 		i = env_path(lst);
-	else if (ft_strncmp(tmp[0], "export", 6) == 0)
+	else if (ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0)
 		i = export_path(lst, tmp);
-	else if (ft_strncmp(tmp[0], "unset", 5) == 0)
+	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
 		i = unset_path(lst, tmp);
 	return (i);
 }
@@ -128,27 +128,36 @@ char	*ft_access(char **open_path, char *cmd)
 	return (NULL);
 }
 
-int	make_things(char **cmd, t_env *path, t_env **env)
+int	make_things(char **cmd, t_env *path/*, t_env **env*/)
 {
 	char	**open_path;
 	char	*supp;
 	
-	if (ft_biltin(cmd, env) == -1)
-	{
-		open_path = ft_split(path->body, ':');
-		supp = ft_access(open_path, cmd[0]);
-		if (!supp)
-			return(perror("ERROR\nunfinded path"), -1);
-		freeall(open_path);
-		if (!supp)
-			return (perror("access don't replies"), -1);
-		if (execve(supp, cmd, path->env_mtx) < 0)
-			perror("ERROR\n execve don't replies");
-		free(supp);
-	}
+	open_path = ft_split(path->body, ':');
+	supp = ft_access(open_path, cmd[0]);
+	if (!supp)
+		return(perror("ERROR\nunfinded path"), -1);
+	freeall(open_path);
+	if (!supp)
+		return (perror("access don't replies"), -1);
+	if (execve(supp, cmd, path->env_mtx) < 0)
+		perror("ERROR\n execve don't replies");
+	free(supp);
 	return (1);
 }
 
+int	is_a_biltin(char **tmp)
+{
+	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
+			return (1);
+	return (0);
+}
 
 // da lavorare non completa!!!!!
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
@@ -209,12 +218,14 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
             close(pip[0]);
         if (cmd->prev)
             close(pip[1]);
-
- 		make_things(cmd->cmd, find_node(env, "PATH"), env);
+		if (!is_a_biltin(cmd->cmd))
+ 			make_things(cmd->cmd, find_node(env, "PATH")/*, env*/);
 		exit(0);
 	}
 	else
 	{
+		if (is_a_biltin(cmd->cmd))
+			ft_biltin(cmd->cmd, env);
 		if (cmd->in != 0)
             close(cmd->in);
         if (cmd->out != 1)
