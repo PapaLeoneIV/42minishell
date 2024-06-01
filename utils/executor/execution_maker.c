@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 14:45:43 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/01 11:09:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int	make_things(char **cmd, t_env *path, t_env **env)
 	int		i;
 
 	i = 0;
+	signal(SIGQUIT, SIG_DFL);
 	if (ft_biltin(cmd, env) == -1)
 	{
 		open_path = ft_split(path->body, ':');

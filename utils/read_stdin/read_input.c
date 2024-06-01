@@ -3,20 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/31 11:48:51 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/01 11:41:11 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include "../../includes/lexer.h"
-#include "../../includes/executor.h"
 
-/**Loop principale dove ricevo la stringa e faccio il parsing*/
-
-#include <stdio.h>
+struct sigaction signal_g;
 
 // Function to print the contents of the t_command and t_redir structures
 void print_shell_info(t_shell *shell)
@@ -62,11 +58,15 @@ void read_from_stdin(t_shell *shell)
 	t_token     *head;
 	char		*input;
 	char	*prompt_path;
-	
+
+	memset(&signal_g, 0, sizeof(signal_g));
+	set_signal_handler(&signal_g);
 	while (true)
 	{
 		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
+		if (!input)
+			handle_ctrl_d(shell, input);
 		free(prompt_path); 
 		head = tokenize_input(input, shell);
 		add_history(input);
@@ -81,12 +81,6 @@ void read_from_stdin(t_shell *shell)
      	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
 		free_tokens(head);
-		/**ho sistemato un po di cose:
-		 * - i ritorni delle funzioni.
-		 * - alcune assegnazioni.
-		 * - ho lassciato qualche commento e un NOTA BENE per l heredoc
-		 * - ho creato il .h per le funzione dell executioner
-		*/
 		if (execute_cmd(shell) == ERROR)
 		{
 			/**da vedere come gestire l errore*/

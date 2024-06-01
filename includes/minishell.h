@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/31 12:23:36 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/01 11:47:30 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 # include "../libft/printf/ft_printf.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <signal.h>
 
-
+#include "signals.h"
 #include "./lexer.h"
 #include "./builtin.h"
 #include "./executor.h"
