@@ -7,6 +7,7 @@
         "get_next_line_bonus.h": "c",
         "type_traits": "c",
         "cstdlib": "c",
-        "ft_printf.h": "c"
+        "ft_printf.h": "c",
+        "executor.h": "c"
     }
 }

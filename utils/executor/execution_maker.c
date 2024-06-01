@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/01 10:35:39 by codespace        ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/06/01 13:56:37 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
@@ -133,6 +134,8 @@ int	make_things(char **cmd, t_env *path/*, t_env **env*/)
 	char	**open_path;
 	char	*supp;
 	
+	
+	signal(SIGQUIT, SIG_DFL);
 	open_path = ft_split(path->body, ':');
 	supp = ft_access(open_path, cmd[0]);
 	if (!supp)
