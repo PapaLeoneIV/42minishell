@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:52:33 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 14:45:43 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/01 10:13:15 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,27 +106,39 @@ int	ft_biltin(char **tmp, t_env **lst)
 	return (i);
 }
 
-int	make_things(char **cmd, t_env *path, t_env **env)
+char	*ft_access(char **open_path, char *cmd)
 {
-	char	**open_path;
 	char	*tmp;
 	char	*supp;
 	int		i;
 
 	i = 0;
+	if (access(cmd, F_OK | X_OK) == 0)
+			return (cmd);
+	while (open_path[i])
+	{
+		tmp = ft_strjoin(open_path[i], "/");
+		supp = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (access(supp, F_OK | X_OK) == 0)
+			return (supp);
+		free (supp);
+		i++;
+	}
+	return (NULL);
+}
+
+int	make_things(char **cmd, t_env *path, t_env **env)
+{
+	char	**open_path;
+	char	*supp;
+	
 	if (ft_biltin(cmd, env) == -1)
 	{
 		open_path = ft_split(path->body, ':');
-		while (open_path[i])
-		{
-			tmp = ft_strjoin(open_path[i], "/");
-			supp = ft_strjoin(tmp, cmd[0]);
-			free(tmp);
-			if (access(supp, F_OK | X_OK) == 0)
-				break ;
-			free (supp);
-			i++;
-		}
+		supp = ft_access(open_path, cmd[0]);
+		if (!supp)
+			return(perror("ERROR\nunfinded path"), -1);
 		freeall(open_path);
 		if (!supp)
 			return (perror("access don't replies"), -1);
