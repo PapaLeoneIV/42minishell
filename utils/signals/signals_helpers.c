@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:41:05 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/01 11:53:40 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/02 09:00:23 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void handle_ctrl_d(t_shell *shell, char *input)
 {
 	clean_all(shell);
 	free(input);
-	write(1, "\nexit", 5);
+	write(1, "\nexit", 5);	//questo ci va? o lo hai usato come controllo?
 	exit(1);
 }
 

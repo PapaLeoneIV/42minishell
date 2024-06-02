@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/01 16:24:51 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/02 10:36:01 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,32 @@ int	is_a_biltin(char **tmp)
 	return (0);
 }
 
+int	heardoc_path(t_redir **redir)
+{
+	int		fd;
+	char	*line;
+	
+	fd = open("here", O_TRUNC | O_CREAT | O_RDWR, 0777);
+	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
+	{
+		while (1)
+		{
+			ft_putchar_fd('>', 1);
+			line = get_next_line(0);
+			if (ft_strncmp(line, (*redir)->filename, ft_strlen(line)) == 0)
+				break ;
+			ft_putstr_fd(line, fd);
+		}
+		if ((*redir)->next && (*redir)->next->type_of_redirection == HEREDOC_TOKEN)
+		{
+			close(fd);
+			unlink("here");
+		}
+		(*redir) = (*redir)->next;
+	}
+	return (fd);
+}
+
 // da lavorare non completa!!!!!
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
@@ -196,8 +222,8 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 			cmd->out = list_of_out(&(*tmp));
 		else if ((*tmp)->type_of_redirection  == LESSER_TOKEN)
 			cmd->in = list_of_in(&(*tmp));
-		/* else
-			heardoc_path(); */
+		else
+			cmd->in = heardoc_path(&(*tmp));
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	
 	}
