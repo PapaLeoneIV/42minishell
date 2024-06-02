@@ -9,5 +9,6 @@
         "cstdlib": "c",
         "ft_printf.h": "c",
         "executor.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
