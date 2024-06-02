@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 11:47:54 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/02 14:47:21 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,13 @@ int handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node)
 	t_redir *redirection_node;
 	(void)shell;
 	
-	if(node->type == GREATER_TOKEN || node->type == REDIR_OUT_TOKEN || node->type == LESSER_TOKEN  || node->type == HEREDOC_TOKEN)
+	if(node->type == GREATER_TOKEN || node->type == REDIR_OUT_TOKEN || node->type == LESSER_TOKEN || node->type == HEREDOC_TOKEN)
 	{
 		node_ahead = look_tokens_ahead(node);
 		if (node_ahead == NULL)
 			return (ERROR);
-		if (node_ahead->type == WORD_TOKEN)
+		if (node_ahead->type == WORD_TOKEN || (node->type == HEREDOC_TOKEN 
+		&& node_ahead->type == HERDOC_FILENAME_WITHQUOTES))
 		{
 			if (!cmd_node->redirection_info)
 					cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
