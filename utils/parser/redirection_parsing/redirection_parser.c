@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/25 10:15:34 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/02 11:47:54 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node)
 	t_redir *redirection_node;
 	(void)shell;
 	
-	if(node->type == GREATER_TOKEN || node->type == REDIR_OUT_TOKEN || node->type == LESSER_TOKEN)
+	if(node->type == GREATER_TOKEN || node->type == REDIR_OUT_TOKEN || node->type == LESSER_TOKEN  || node->type == HEREDOC_TOKEN)
 	{
 		node_ahead = look_tokens_ahead(node);
 		if (node_ahead == NULL)
