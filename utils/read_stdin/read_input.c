@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/01 16:15:29 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/02 13:58:45 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void read_from_stdin(t_shell *shell)
 		}
      	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
-		free_tokens(head);		
+		free_tokens(head);
+		print_shell_info(shell);	
 		if (execute_cmd(shell) == ERROR)
 		{
 			/**da vedere come gestire l errore*/
