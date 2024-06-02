@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/02 12:17:03 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/02 13:13:01 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 	}
-	printf("in and out sono %d e %d", cmd->in, cmd->out);
+	//printf("in and out sono %d e %d", cmd->in, cmd->out);
 	tmp = cmd->redirection_info;        
 	while (tmp)
 	{
@@ -257,7 +257,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	
 	}
-	printf("in and out sono %d e %d", cmd->in, cmd->out);
+	//printf("in and out sono %d e %d", cmd->in, cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	cmd->fork_id = fork();

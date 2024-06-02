@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 10:45:15 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/02 13:13:22 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,20 @@ int	echo_path(char **str)
 	n_flag = true;
 	if (!str)
 		return (-1);
-	/*qui bisogna assicurarsi che str[1] esista altrimenti andiamo in SEGFAULT*/
-	if (ft_strncmp(str[1], "-n", ft_strlen(str[1])) == 0)
+	if (mtx_count_rows(str) > 1)
 	{
-		i++;
-		n_flag = false;
-	}	
-	while (str[i])
-	{
-		printf("%s", str[i]);
-		if (str[i + 1])
-			printf(" ");
-		i++;
+		if (ft_strncmp(str[1], "-n", ft_strlen(str[1])) == 0)
+		{
+			i++;
+			n_flag = false;
+		}	
+		while (str[i])
+		{
+			printf("%s", str[i]);
+			if (str[i + 1])
+				printf(" ");
+			i++;
+		}
 	}
 	if (n_flag)
 		printf("\n");
