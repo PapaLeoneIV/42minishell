@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/02 10:36:01 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/02 12:17:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,26 +162,52 @@ int	is_a_biltin(char **tmp)
 	return (0);
 }
 
+int	gnl2(char **line)
+{
+	char	*buf;
+	int		i;
+	int		n;
+	char	ch;
+
+	buf = (char *)ft_calloc(10000, 1);
+	i = 1;
+	n = 0;
+	ch = 'c';
+	while (i > 0 && ch != '\n')
+	{
+		i = read(0, &ch, 1);
+		if (i < 0)
+			return (free(buf), 0);
+		buf[n] = ch;
+		n++;
+	}
+	*line = ft_strdup(buf);
+	if (!line)
+		return (free(buf), 0);
+	free(buf);
+	return (n);
+}
+
 int	heardoc_path(t_redir **redir)
 {
 	int		fd;
 	char	*line;
 	
-	fd = open("here", O_TRUNC | O_CREAT | O_RDWR, 0777);
+	fd = open(".here", O_TRUNC | O_CREAT | O_RDWR, 0777);
 	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
 	{
 		while (1)
 		{
 			ft_putchar_fd('>', 1);
-			line = get_next_line(0);
-			if (ft_strncmp(line, (*redir)->filename, ft_strlen(line)) == 0)
+			if (gnl2(&line) && line[ft_strlen((*redir)->filename)] == '\n'
+				&& ft_strncmp(line, (*redir)->filename, ft_strlen((*redir)->filename)) == 0)
 				break ;
 			ft_putstr_fd(line, fd);
 		}
 		if ((*redir)->next && (*redir)->next->type_of_redirection == HEREDOC_TOKEN)
 		{
 			close(fd);
-			unlink("here");
+			unlink(".here");
 		}
 		(*redir) = (*redir)->next;
 	}
@@ -212,6 +238,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 	}
+	printf("in and out sono %d e %d", cmd->in, cmd->out);
 	tmp = cmd->redirection_info;        
 	while (tmp)
 	{
@@ -222,11 +249,15 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 			cmd->out = list_of_out(&(*tmp));
 		else if ((*tmp)->type_of_redirection  == LESSER_TOKEN)
 			cmd->in = list_of_in(&(*tmp));
-		else
+		else if ((*tmp)->type_of_redirection  == HEREDOC_TOKEN)
+		{
+			cmd->here = (*tmp)->filename;
 			cmd->in = heardoc_path(&(*tmp));
+		}
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	
 	}
+	printf("in and out sono %d e %d", cmd->in, cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	cmd->fork_id = fork();
@@ -255,6 +286,10 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	{
 		if (is_a_biltin(cmd->cmd))
 			ft_biltin(cmd->cmd, env);
+		//if (cmd->here)
+		//	{
+		//		unlink(".here");
+		//	}
 		if (cmd->in != 0)
             close(cmd->in);
         if (cmd->out != 1)
