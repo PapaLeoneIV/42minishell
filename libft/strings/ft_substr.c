@@ -6,49 +6,32 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/01 14:13:09 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/03 16:35:06 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-
-static char	*ft_strnull(void)
-{
-	char	*p;
-
-	p = (char *)malloc(sizeof(char));
-	*p = 0;
-	return (p);
-}
-
 char	*ft_substr(char *s, int start, int len)
 {
-	char	*p;
-	int		i;
-	int	slen;
+	char	*res;
+	int	s_len;
 
-	if (!s)
-		return (0);
-	slen = ft_strlen(s);
-	if (start >= slen)
-		return (ft_strnull());
-	if (len < slen)
-		p = (char *)malloc(sizeof(char) * (len + 1));
-	else
-		p = (char *)malloc(sizeof(char) * ((slen - start) + 1));
-	if (!p)
-		return (0);
-	i = 0;
-	while (s[start] && len)
+	s_len = ft_strlen(s);
+	if (len > s_len)
+		len = s_len;
+	if (start > s_len)
 	{
-		p[i] = s[start];
-		start++;
-		i++;
-		len--;
+		len = 0;
+		start = s_len;
 	}
-	p[i] = 0;
-	return (p);
+	if (start + len > s_len)
+		len = s_len - start;
+	res = ft_calloc(len + 1, sizeof(char));
+	if (!res)
+		return (NULL);
+	ft_memcpy(res, &s[start], len);
+	return (res);
 }
 /*
 int	main(void)
