@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/02 13:13:01 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/03 20:43:38 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ char	*ft_access(char **open_path, char *cmd)
 	return (NULL);
 }
 
-int	make_things(char **cmd, t_env *path/*, t_env **env*/)
+int	make_things(char **cmd, t_env *path)
 {
 	char	**open_path;
 	char	*supp;
@@ -139,14 +139,15 @@ int	make_things(char **cmd, t_env *path/*, t_env **env*/)
 	open_path = ft_split(path->body, ':');
 	supp = ft_access(open_path, cmd[0]);
 	if (!supp)
-		return(perror("ERROR\nunfinded path"), -1);
+	{
+		freeall(open_path);	
+		return(perror("ERROR\nunfinded path"), ERROR);
+	}
 	freeall(open_path);
-	if (!supp)
-		return (perror("access don't replies"), -1);
 	if (execve(supp, cmd, path->env_mtx) < 0)
 		perror("ERROR\n execve don't replies");
 	free(supp);
-	return (1);
+	return (SUCCESS);
 }
 
 int	is_a_biltin(char **tmp)
@@ -260,6 +261,19 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	//printf("in and out sono %d e %d", cmd->in, cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
+	if (is_a_biltin(cmd->cmd) && !cmd->next && !cmd->cmd_id)
+	{
+		ft_biltin(cmd->cmd, env);
+		//if (cmd->here)
+		//	{
+		//		unlink(".here");
+		//	}
+		if (cmd->in != 0)
+            close(cmd->in);
+        if (cmd->out != 1)
+            close(cmd->out);
+		return SUCCESS;
+	}
 	cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
 	{
@@ -279,8 +293,13 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
         if (cmd->prev)
             close(pip[1]);
 		if (!is_a_biltin(cmd->cmd))
- 			make_things(cmd->cmd, find_node(env, "PATH")/*, env*/);
-		exit(0);
+		{
+			
+ 			if (make_things(cmd->cmd, find_node(env, "PATH")) == ERROR)
+			{
+				
+			}
+		}
 	}
 	else
 	{
@@ -340,7 +359,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 			exit_status %= 256;
 	
 	}
-	clean_all(shell);
+	clean_all(shell, 1);
 	return (exit_status);
 }
 

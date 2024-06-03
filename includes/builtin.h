@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:42:51 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 12:24:07 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/03 17:11:49 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ void    clean_env_node(t_env **lst);
 int		unset_path(t_env **lst, char **mtx);
 void	clean_redir(t_redir **redir);
 void	clean_cmd_node(t_command **cmd);
-void	clean_all(t_shell *shell);
+void	clean_all(t_shell *shell, int flag);
 
 #endif

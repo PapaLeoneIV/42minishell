@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 13:58:45 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/03 20:29:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void read_from_stdin(t_shell *shell)
 		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
 		if (!input)
-			handle_ctrl_d(shell, input);
+			handle_ctrl_d(shell, input, prompt_path);
 		free(prompt_path); 
 		head = tokenize_input(input, shell);
 		add_history(input);
@@ -81,11 +81,11 @@ void read_from_stdin(t_shell *shell)
      	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
 		free_tokens(head);
-		print_shell_info(shell);	
-		if (execute_cmd(shell) == ERROR)
+		/* print_shell_info(shell);	 */
+ 		if (execute_cmd(shell) == ERROR)
 		{
-			/**da vedere come gestire l errore*/
-		}
+		} 
+		clean_all(shell, 0);
 	}
 }
 

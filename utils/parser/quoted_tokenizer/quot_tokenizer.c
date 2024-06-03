@@ -37,7 +37,7 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 {	
 	t_parser *parser;
 
-	if (node && node->value && node->value[0] == '\0')
+	if (node && !(node->value))
 		return (NULL);
 	parser = ft_calloc(1, sizeof(t_parser));
 	parser->state = STATE_GENERAL;

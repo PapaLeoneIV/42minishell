@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 14:47:21 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/03 16:49:10 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ int parse_redirections(t_token *head, t_shell *shell)
 			check = -1;
 		}
 		cmd_node->cmd = from_lst_to_mtx(tmp_list);
+		free_tokens(tmp_list);
 /*		int j;
 		j = 0;
  		while(cmd_node->cmd && cmd_node->cmd[j])

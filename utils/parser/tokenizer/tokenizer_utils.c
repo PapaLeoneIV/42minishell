@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:02:26 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 14:42:38 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/03 18:20:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,24 @@ void set_token_values(t_token *token, t_token_info *info)
 
     len = info->end - info->start;
     token->type = info->type;
-
     tmp_not_trimmed = ft_substr(info->string, info->start, len);
+
+    
     if (token->type != DOUBLE_QUOTES_TOKEN && token->type != WHITESPACE_TOKEN)
         token->value = ft_strtrim(tmp_not_trimmed, " ");
     else
-        token->value = ft_strdup(tmp_not_trimmed);
+        token->value = ft_substr(tmp_not_trimmed, 0 , ft_strlen(tmp_not_trimmed));
     free(tmp_not_trimmed);
 }
 
 t_token *token_new(char *data)
 {
     t_token *token = malloc(sizeof(t_token));
-    if (token)
-    {
-        token->value = NULL;
-        token->type = 0;
-        token->next = NULL;
-        token->prev = NULL;
-    }
+
+    token->value = NULL;
+    token->type = 0;
+    token->next = NULL;
+    token->prev = NULL;
     (void)data;
     return token;
 }
