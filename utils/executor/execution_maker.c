@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/03 20:43:38 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 10:18:43 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,14 +127,32 @@ char	*ft_access(char **open_path, char *cmd)
 		i++;
 	}
 	return (NULL);
+
 }
 
-int	make_things(char **cmd, t_env *path)
+int	is_a_biltin(char **tmp)
+{
+	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
+			return (1);
+	return (0);
+}
+
+int	make_things(char **cmd, t_env *path, t_env	**env)
 {
 	char	**open_path;
 	char	*supp;
 	
-	
+	if (is_a_biltin(cmd))
+	{
+		ft_biltin(cmd, env);
+		return (SUCCESS);
+	}
 	signal(SIGQUIT, SIG_DFL);
 	open_path = ft_split(path->body, ':');
 	supp = ft_access(open_path, cmd[0]);
@@ -150,18 +168,6 @@ int	make_things(char **cmd, t_env *path)
 	return (SUCCESS);
 }
 
-int	is_a_biltin(char **tmp)
-{
-	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
-			return (1);
-	return (0);
-}
 
 int	gnl2(char **line)
 {
@@ -261,49 +267,36 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	//printf("in and out sono %d e %d", cmd->in, cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
-	if (is_a_biltin(cmd->cmd) && !cmd->next && !cmd->cmd_id)
+	if ((cmd->next && cmd->cmd_id )|| !is_a_biltin(cmd->cmd))
 	{
-		ft_biltin(cmd->cmd, env);
-		//if (cmd->here)
-		//	{
-		//		unlink(".here");
-		//	}
-		if (cmd->in != 0)
-            close(cmd->in);
-        if (cmd->out != 1)
-            close(cmd->out);
-		return SUCCESS;
-	}
-	cmd->fork_id = fork();
-	if (cmd->fork_id == 0)
-	{
-		if (cmd->in != tm_i)
-        {
-            dup2(cmd->in, 0);
-            close(cmd->in);
-        }
-        if (cmd->out != tm_ou)
-        {
-            dup2(cmd->out, 1);
-            close(cmd->out);
-        }
-        // Close unused pipe ends in the child process
-        if (cmd->next)
-            close(pip[0]);
-        if (cmd->prev)
-            close(pip[1]);
-		if (!is_a_biltin(cmd->cmd))
+		cmd->fork_id = fork();
+		if (cmd->fork_id == 0)
 		{
-			
- 			if (make_things(cmd->cmd, find_node(env, "PATH")) == ERROR)
+			if (cmd->in != tm_i)
+			{
+				dup2(cmd->in, 0);
+				close(cmd->in);
+			}
+			if (cmd->out != tm_ou)
+			{
+				dup2(cmd->out, 1);
+				close(cmd->out);
+			}
+			// Close unused pipe ends in the child process
+			if (cmd->next)
+				close(pip[0]);
+			if (cmd->prev)
+				close(pip[1]);
+			if (make_things(cmd->cmd, find_node(env, "PATH"), env) == ERROR)
 			{
 				
 			}
+			exit(0);
 		}
 	}
 	else
 	{
-		if (is_a_biltin(cmd->cmd))
+		if (is_a_biltin(cmd->cmd) && !cmd->next && !cmd->cmd_id)
 			ft_biltin(cmd->cmd, env);
 		//if (cmd->here)
 		//	{
@@ -357,7 +350,6 @@ int	exit_path(t_command *cmd, t_shell *shell)
 		exit_status = (unsigned int)ft_atoi(cmd->cmd[1]);
 		if (exit_status > 255)
 			exit_status %= 256;
-	
 	}
 	clean_all(shell, 1);
 	return (exit_status);
