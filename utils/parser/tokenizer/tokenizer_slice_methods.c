@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_slice_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/03 18:30:47 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 10:12:23 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	if (stringa[pars->count] == '\0')
 		return 0;
 	if (pars->state == STATE_DQUOTE)
-		return(perror("Error: unclosed double quotes\n"), 0);
+		return(perror("Error: unclosed double quotes\n"), ERROR);
 	else if (pars->state == STATE_SQUOTE)	
-		return(perror("Error: unclosed single quotes\n"), 0);
+		return(perror("Error: unclosed single quotes\n"), ERROR);
 	else if (pars->state == STATE_DOLLAR)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
 	else 
@@ -97,7 +97,7 @@ int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	{
 	 	free(pars->token->value);
 		free(pars->token); 
-		return 1;
+		return SUCCESS;
 	}
 	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$", ft_strlen(pars->token->value)))
 	{
@@ -108,10 +108,6 @@ int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 		{
 			free(pars->token->value);
 			free(pars->token);
-
-
-
-			
 		}
 	}
 	else

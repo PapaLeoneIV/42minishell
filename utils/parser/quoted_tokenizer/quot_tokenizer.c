@@ -55,7 +55,10 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 		if (node->value[parser->count + 1] == '\0')
 		{
 			if (!slice_end_token(node->value, parser, shell))
-				return (0);																			//SLICE END TOKEN						
+			{
+				/**error handling*/
+				return (NULL);																			//SLICE END TOKEN						
+			}
 		}
 		parser->count++;
 	}

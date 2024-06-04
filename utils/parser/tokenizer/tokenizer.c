@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/01 15:03:59 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 10:26:43 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,9 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 		|| (pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$')))
 			dollar_state_handler(stringa, pars, shell);										
 		if (stringa[pars->count + 1] == '\0' && !slice_end_token(stringa, pars, shell))
+		{
 				return (ERROR);
+		}
 		pars->count++;
 	}
 	(void)shell;
