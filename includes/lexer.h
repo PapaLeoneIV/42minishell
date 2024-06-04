@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 11:41:25 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/04 13:42:56 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_redir
 	int					in;
 	int					out;
 	int					type_of_redirection;
+	int					heredoc_expansion;
 	char*				filename;
 	struct s_redir		*next;
 } t_redir;
@@ -192,7 +193,7 @@ int			count_pipes(t_token *head);
 t_token		*look_tokens_ahead(t_token *current);
 
 /**REDIRECTION PARSING (HELPERS)*/
-t_redir		*new_redir_node(int type, char *value);
+t_redir		*new_redir_node(int type, char *value, int flag);
 void		add_back_redirections(t_redir **lst, t_redir *node);
 t_command	*new_command(int counter);
 void		add_back_commands(t_command **lst, t_command *node);

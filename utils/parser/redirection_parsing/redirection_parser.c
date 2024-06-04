@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 14:47:21 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:42:25 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ int handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node)
 		{
 			if (!cmd_node->redirection_info)
 					cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
-			redirection_node = new_redir_node(node->type, node_ahead->value);
+			if (node_ahead->type == HERDOC_FILENAME_WITHQUOTES)
+				redirection_node = new_redir_node(node->type, node_ahead->value, 1);
+			else
+				redirection_node = new_redir_node(node->type, node_ahead->value, 0);
 			add_back_redirections(cmd_node->redirection_info, redirection_node);
 			return SUCCESS;
 		}
@@ -145,7 +148,6 @@ int parse_redirections(t_token *head, t_shell *shell)
 	int		check;
 	int n_pipes;
 	int i;
-	(void)shell;
 	
 	ptr = head;
 	n_pipes = count_pipes(head) + 1;
@@ -172,16 +174,11 @@ int parse_redirections(t_token *head, t_shell *shell)
 			check = -1;
 		}
 		cmd_node->cmd = from_lst_to_mtx(tmp_list);
-/*		int j;
-		j = 0;
- 		while(cmd_node->cmd && cmd_node->cmd[j])
-		{
-			printf("%s\n", cmd_node->cmd[j]);
-			j++;
-		}
-		printf("\n"); */
+		free_tokens(tmp_list);
 		add_back_commands(shell->cmd_info, cmd_node);
 		i++;
+
+		/****stavamo guardando i mem leaks*/
 	}
 	return (SUCCESS);
 }

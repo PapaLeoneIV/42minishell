@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:41:05 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 09:00:23 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/03 20:29:02 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ void handle_signal(int signum)
 	}	
 }
 
-void handle_ctrl_d(t_shell *shell, char *input)
+void handle_ctrl_d(t_shell *shell, char *input, char *path)
 {
-	clean_all(shell);
+	clean_env_lst(shell->env);
+	if (shell->line)
+		free(shell->line);
 	free(input);
+	free(path);
 	write(1, "\nexit", 5);	//questo ci va? o lo hai usato come controllo?
 	exit(1);
 }

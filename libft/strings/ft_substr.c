@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/03 16:35:06 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/03 17:27:31 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_substr(char *s, int start, int len)
 	int	s_len;
 
 	s_len = ft_strlen(s);
+	if(s_len == 0)
+		return NULL;
 	if (len > s_len)
 		len = s_len;
 	if (start > s_len)

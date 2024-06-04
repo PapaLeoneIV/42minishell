@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 13:58:45 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 12:02:46 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void read_from_stdin(t_shell *shell)
 {
 	t_token     *head;
 	char		*input;
-	char	*prompt_path;
+	char		*prompt_path;
 
 	memset(&signal_g, 0, sizeof(signal_g));
 	set_signal_handler(&signal_g);
@@ -66,7 +66,7 @@ void read_from_stdin(t_shell *shell)
 		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
 		if (!input)
-			handle_ctrl_d(shell, input);
+			handle_ctrl_d(shell, input, prompt_path);
 		free(prompt_path); 
 		head = tokenize_input(input, shell);
 		add_history(input);
@@ -81,11 +81,10 @@ void read_from_stdin(t_shell *shell)
      	if(parse_redirections(head, shell) == ERROR)
 			printf("Redirection error\n");
 		free_tokens(head);
-		print_shell_info(shell);	
-		if (execute_cmd(shell) == ERROR)
+ 		if (execute_cmd(shell) == ERROR)
 		{
-			/**da vedere come gestire l errore*/
-		}
+		} 
+		clean_all(shell, 0);
 	}
 }
 

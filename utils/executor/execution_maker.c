@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/02 13:13:01 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/04 11:110:07 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,23 +129,24 @@ char	*ft_access(char **open_path, char *cmd)
 	return (NULL);
 }
 
-int	make_things(char **cmd, t_env *path/*, t_env **env*/)
+int	make_things(char **cmd, t_env *path, t_env **env)
 {
 	char	**open_path;
 	char	*supp;
 	
 	
 	signal(SIGQUIT, SIG_DFL);
-	open_path = ft_split(path->body, ':');
-	supp = ft_access(open_path, cmd[0]);
-	if (!supp)
-		return(perror("ERROR\nunfinded path"), -1);
-	freeall(open_path);
-	if (!supp)
-		return (perror("access don't replies"), -1);
-	if (execve(supp, cmd, path->env_mtx) < 0)
-		perror("ERROR\n execve don't replies");
-	free(supp);
+	if (ft_biltin(cmd, env) == -1)
+	{
+		open_path = ft_split(path->body, ':');
+		supp = ft_access(open_path, cmd[0]);
+		if (!supp)
+			return(perror("ERROR\nunfinded path"), ERROR);
+		freeall(open_path);
+		if (execve(supp, cmd, path->env_mtx) < 0)
+			perror("ERROR\n execve don't replies");
+		free(supp);
+	}
 	return (1);
 }
 
@@ -188,12 +189,15 @@ int	gnl2(char **line)
 	return (n);
 }
 
-int	heardoc_path(t_redir **redir)
+int	heardoc_path(t_redir **redir, t_env **env)
 {
 	int		fd;
 	char	*line;
+	t_env	*tmp;
 	
-	fd = open(".here", O_TRUNC | O_CREAT | O_RDWR, 0777);
+	fd = open((*redir)->filename, O_APPEND| O_CREAT | O_RDWR, 0777);
+	if (fd < 0)
+		return (perror("ERROR"), ERROR);
 	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
 	{
 		while (1)
@@ -201,15 +205,24 @@ int	heardoc_path(t_redir **redir)
 			ft_putchar_fd('>', 1);
 			if (gnl2(&line) && line[ft_strlen((*redir)->filename)] == '\n'
 				&& ft_strncmp(line, (*redir)->filename, ft_strlen((*redir)->filename)) == 0)
-				break ;
-			ft_putstr_fd(line, fd);
+				{
+					free(line);
+					break ;
+				}
+			if ((*redir)->heredoc_expansion)
+				/*funzione per espandere*/
+			else
+				ft_putstr_fd(line, fd);
+			free(line);
 		}
 		if ((*redir)->next && (*redir)->next->type_of_redirection == HEREDOC_TOKEN)
 		{
 			close(fd);
-			unlink(".here");
+			unlink((*redir)->filename);
 		}
-		(*redir) = (*redir)->next;
+		close(fd);
+		(*redir)->type_of_redirection = LESSER_TOKEN;
+		fd = 0;
 	}
 	return (fd);
 }
@@ -238,7 +251,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 	}
-	//printf("in and out sono %d e %d", cmd->in, cmd->out);
+	printf("in and out sono %d e %d\n", cmd->in, cmd->out);
 	tmp = cmd->redirection_info;        
 	while (tmp)
 	{
@@ -252,44 +265,48 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		else if ((*tmp)->type_of_redirection  == HEREDOC_TOKEN)
 		{
 			cmd->here = (*tmp)->filename;
-			cmd->in = heardoc_path(&(*tmp));
+			cmd->in = heardoc_path(tmp, env);
 		}
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	
 	}
-	//printf("in and out sono %d e %d", cmd->in, cmd->out);
+	printf("in and out sono %d e %d\n", cmd->in, cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
+	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
+		return (ft_biltin(cmd->cmd, env));
 	cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
 	{
 		if (cmd->in != tm_i)
-        {
-            dup2(cmd->in, 0);
-            close(cmd->in);
-        }
-        if (cmd->out != tm_ou)
-        {
-            dup2(cmd->out, 1);
-            close(cmd->out);
-        }
-        // Close unused pipe ends in the child process
-        if (cmd->next)
-            close(pip[0]);
-        if (cmd->prev)
-            close(pip[1]);
-		if (!is_a_biltin(cmd->cmd))
- 			make_things(cmd->cmd, find_node(env, "PATH")/*, env*/);
+		{
+			dup2(cmd->in, 0);
+			close(cmd->in);
+		}
+		if (cmd->out != tm_ou)
+		{
+			dup2(cmd->out, 1);
+			close(cmd->out);
+		}
+		// Close unused pipe ends in the child process
+		if (cmd->next)
+			close(pip[0]);
+		if (cmd->prev)
+			close(pip[1]);
+		t_env *tmp;
+
+		tmp = find_node(env, "PATH");
+		make_things(cmd->cmd, tmp, env);
+		/**quando exit ritorna ERRORE bisogna pulire la memoria*/
 		exit(0);
 	}
 	else
 	{
-		if (is_a_biltin(cmd->cmd))
-			ft_biltin(cmd->cmd, env);
-		//if (cmd->here)
-		//	{
-		//		unlink(".here");
-		//	}
+		if (cmd->here)
+			{
+				//waitpid(-1, NULL, 0);
+				//unlink();
+			}
 		if (cmd->in != 0)
             close(cmd->in);
         if (cmd->out != 1)
@@ -340,7 +357,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 			exit_status %= 256;
 	
 	}
-	clean_all(shell);
+	clean_all(shell, 1);
 	return (exit_status);
 }
 
@@ -359,6 +376,9 @@ int	execute_cmd(t_shell *shell)
 		close (tm_out);
 		exit(exit_path(cmd, shell));
 	}
+
+
+
 	while(cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)

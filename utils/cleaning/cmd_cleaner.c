@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 12:29:32 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/04 12:02:46 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ void	clean_cmd_node(t_command **cmd)
 	
 }
 
-void	clean_all(t_shell *shell)
+void	clean_all(t_shell *shell, int flag)
 {
-	clean_env_lst(shell->env);
+	if(flag)
+		clean_env_lst(shell->env);
 	if (shell->line)
 		free(shell->line);
 	if (shell->cmd_info)

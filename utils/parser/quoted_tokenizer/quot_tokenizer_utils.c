@@ -17,7 +17,9 @@ t_token *check_prev(t_token *token)
 
 void join_tokens(t_token **node, t_token **prev)
 {
+	char *tmp;
 
+	tmp = (*prev)->value;
 	(*prev)->value = ft_strjoin((*prev)->value, (*node)->value);
 	if((*node)->next)
 		(*node)->next->prev = (*prev);
@@ -26,6 +28,7 @@ void join_tokens(t_token **node, t_token **prev)
 	(*prev)->next = (*node)->next;
 	free((*node)->value);
 	free(*node);
+	free(tmp);
 	*node = NULL;
 	*node = *prev;
 }
@@ -61,11 +64,14 @@ void join_tokens_values_when_no_space_between(t_parser *pars)
 char *join_quoted_token_expansion(t_token *head)
 {
 	char *out;
+	char *tmp;
 	
 	out = NULL;
 	while(head)
 	{
+		tmp = out;
 		out = ft_strjoin(out, head->value);
+		free(tmp);
 		head = head->next; 
 	}
 	return out;
@@ -91,6 +97,8 @@ void unpack_quoted_tokens(t_parser *pars, t_shell *shell)
 			{
 				free(ptr->value);
 				ptr->value = join_quoted_token_expansion(list->head);
+				free_tokens(list->head);
+				free(list);
 			}
 		}
   		ptr = ptr->next;
