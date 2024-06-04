@@ -233,12 +233,6 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	int		tm_i;
 	int		tm_ou;
 	t_redir	**tmp;
-	/**Note da osservare credo:
-	 * - l heredoc deve essere la prima cosa che va eseguita da quello che ho visto, (va cercato se c e' un 
-	 * 			HEREDOC_TOKEN con associato WORD_TOKEN/HEREDOC_TOKEN_WITH_QUOTES) e va startato il prompt 
-	 * 			di heredoc prima di ogni altro comando. Il contenuto dell heredoc va poi visto se essere espanso oppure no.
-	 * - 
-	*/
 	(void)shell;
 	tm_i = cmd->in;
 	tm_ou = cmd->out;
@@ -251,7 +245,12 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->next->in = pip[0];
 	}
 	printf("in and out sono %d e %d\n", cmd->in, cmd->out);
-	tmp = cmd->redirection_info;        
+	tmp = cmd->redirection_info; 
+
+	/**
+	 * ATTENZIONE QUI->stai scorrendo il puntatore delle redirection info
+	 * fino a null, poi non possiamo pulirlo.
+	*/      
 	while (tmp)
 	{
 		if (!(*tmp))

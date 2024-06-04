@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
+#    By: rileone <rileone@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/06/04 15:10:23 by fgori            ###   ########.fr        #
+#    Updated: 2024/06/04 17:23:04 by rileone          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
 
-VALGRIND = valgrind --suppressions=ignore_readline.txt --leak-check=full --show-leak-kinds=all -s
+VALGRIND = valgrind --suppressions=ignore_readline.txt --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 valgrind: all
 	$(VALGRIND) ./$(NAME)
