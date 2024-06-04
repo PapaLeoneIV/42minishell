@@ -14,7 +14,7 @@ static int get_char_type_heredoc(char *str, t_parser *pars, int count)
 		return (REG_CHAR);
 	else if (ft_isdigit(str[count]))
 		return (DIGIT_CHAR);
-	return (DOLLAR_SPECIAL_CHAR);
+	return (TERMINATOR_CHAR);
 }
 
 static void general_state_handler_heredoc(char *input, t_parser* pars, t_shell *shell)
@@ -24,7 +24,7 @@ static void general_state_handler_heredoc(char *input, t_parser* pars, t_shell *
 	
 	prev = -1;
 	next = -1;
-    if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR)
+    if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR || pars->char_type == TERMINATOR_CHAR)
     {
         if (input[pars->count + 1])
 			next = get_char_type(input, pars, pars->count + 1);
@@ -75,24 +75,22 @@ static int slice_end_token_heredoc(char *stringa, t_parser *pars, t_shell *shell
 		token_add_back(&pars->head, pars->token);
 	return (SUCCESS);
 }
-
 char *join_token_values(t_token *list)
 {
-    char *output;
+    char *output;   
+    char *new_output; 
     t_token *ptr;
-    char *tmp;
 
-
+    output = NULL;
     ptr = list;
-    tmp = NULL;
-    while(ptr)
+    while (ptr != NULL)
     {
-        if(tmp)
-            output = ft_strjoin(tmp, ptr->value);
-        free(tmp);
-        tmp = output;
+        new_output = ft_strjoin(output, ptr->value);
+        free(output);
+        output = new_output;
         ptr = ptr->next;
     }
+
     return output;
 }
 
