@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 13:42:56 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/04 15:59:20 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ enum CharType
 	DIGIT_CHAR,          // 9
 	QUESTION_MARK_CHAR,  // 10
 	TILDE_CHAR,
+	TERMINATOR_CHAR,		//11
 };
 
 /*TOKEN CREATION METHODS*/
