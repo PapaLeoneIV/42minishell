@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/02 11:42:53 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/04 13:41:26 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/lexer.h"
 
-t_redir *new_redir_node(int type, char *value)
+t_redir *new_redir_node(int type, char *value, int flag)
 {
 	t_redir *redir_node;
 
 	redir_node = ft_calloc(1, sizeof(t_redir));
 	redir_node->filename = ft_strdup(value);
 	redir_node->type_of_redirection = type;
+	if (!flag)
+		redir_node->heredoc_expansion = 0;
+	else	
+		redir_node->heredoc_expansion = 1;
 	redir_node->next = NULL;
 	return redir_node;
 }

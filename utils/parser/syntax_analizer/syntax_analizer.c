@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:36:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/23 19:48:23 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 11:07:26 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,44 +83,6 @@ void remove_whitespaces(t_token *head)
             ptr = ptr->next;
     }
 }
-
-
-/* 
-
-void remove_whitespaces(t_token *head)
-{
-    t_token *ptr;
-    t_token *tmp;
-
-    tmp = NULL;
-    ptr = head;
-    while(ptr)
-    {
-        if(ptr->type == WHITESPACE_TOKEN)
-        {
-            if(!ptr->prev && ptr->next)
-            {
-                tmp = ptr->next;
-                ptr = tmp;
-            }
-            else if (!ptr->next && ptr->prev)
-            {
-                tmp = ptr->prev;
-                ptr = tmp;
-            }
-            else if(ptr->prev && ptr->next)
-            {
-                tmp = ptr->next;
-                ptr->prev->next = ptr->next;
-                ptr->next->prev = ptr->prev;
-                ptr = tmp;
-            }
-            free(ptr->value);
-            free(ptr);
-        }
-        ptr = ptr->next;
-    }
-} */
 
 int syntax_error_handler(t_token *head)
 {

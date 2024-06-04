@@ -101,7 +101,6 @@ void unpack_quoted_tokens(t_parser *pars, t_shell *shell)
 				free(list);
 			}
 		}
-
   		ptr = ptr->next;
 	}
 }

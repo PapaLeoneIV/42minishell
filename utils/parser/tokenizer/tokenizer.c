@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 10:26:43 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/04 12:02:46 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,9 @@ int create_token_list(char *stringa, t_shell *shell, t_parser *pars)
 		|| (pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$')))
 			dollar_state_handler(stringa, pars, shell);										
 		if (stringa[pars->count + 1] == '\0' && !slice_end_token(stringa, pars, shell))
-		{
 				return (ERROR);
-		}
 		pars->count++;
 	}
-	(void)shell;
 	return (SUCCESS);
 }
 
@@ -144,7 +141,6 @@ t_token *tokenize_input(char *input, t_shell *shell)
 		return (free_tokens(pars.head), NULL);
 	unpack_quoted_tokens(&pars, shell);
 	join_tokens_values_when_no_space_between(&pars);
-	//print_token_type_and_value(pars.head); 
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);
  	//token_print(pars.head);								//to use tester.py enable this function

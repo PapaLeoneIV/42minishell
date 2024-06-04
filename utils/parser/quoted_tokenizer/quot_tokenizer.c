@@ -56,7 +56,8 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 		{
 			if (!slice_end_token(node->value, parser, shell))
 			{
-				/**error handling*/
+				free_tokens(parser->head);
+				free(parser);
 				return (NULL);																			//SLICE END TOKEN						
 			}
 		}
