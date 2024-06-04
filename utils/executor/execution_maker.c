@@ -189,13 +189,13 @@ int	gnl2(char **line)
 	return (n);
 }
 
-int	heardoc_path(t_redir **redir, t_env **env)
+int	heardoc_path(t_redir **redir, t_shell *shell)
 {
 	int		fd;
 	char	*line;
-	t_env	*tmp;
-	
-	fd = open((*redir)->filename, O_APPEND| O_CREAT | O_RDWR, 0777);
+	char	*tmp;
+
+	fd = open((*redir)->filename, O_TRUNC| O_CREAT | O_RDWR, 0777);
 	if (fd < 0)
 		return (perror("ERROR"), ERROR);
 	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
@@ -210,15 +210,14 @@ int	heardoc_path(t_redir **redir, t_env **env)
 					break ;
 				}
 			if ((*redir)->heredoc_expansion)
-				/*funzione per espandere*/
+			{
+				tmp = heredoc_tokenizer(line, shell);
+				ft_putstr_fd(tmp, fd);
+				free (tmp);
+			}
 			else
 				ft_putstr_fd(line, fd);
 			free(line);
-		}
-		if ((*redir)->next && (*redir)->next->type_of_redirection == HEREDOC_TOKEN)
-		{
-			close(fd);
-			unlink((*redir)->filename);
 		}
 		close(fd);
 		(*redir)->type_of_redirection = LESSER_TOKEN;
@@ -264,8 +263,10 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 			cmd->in = list_of_in(&(*tmp));
 		else if ((*tmp)->type_of_redirection  == HEREDOC_TOKEN)
 		{
+			if (cmd->here)
+				unlink(cmd->here);
 			cmd->here = (*tmp)->filename;
-			cmd->in = heardoc_path(tmp, env);
+			cmd->in = heardoc_path(tmp, shell);
 		}
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	

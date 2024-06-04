@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_state_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/01 15:06:29 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/04 14:27:47 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
 		set_token_values(pars->token, &pars->info);
 		if (strcmp(pars->token->value, "$0") == 0)
+		{
+			free(pars->token->value);
 			pars->token->value = ft_strdup("minishell");
+		}
 		else
 			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);

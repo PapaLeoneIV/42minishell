@@ -91,7 +91,10 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
 		set_token_values(pars->token, &pars->info);
 		if (strcmp(pars->token->value, "$0") == 0)
-			pars->token->value = ft_strdup("bash");
+		{
+			free(pars->token->value);
+			pars->token->value = ft_strdup("minishell");
+		}
 		else
 			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);
