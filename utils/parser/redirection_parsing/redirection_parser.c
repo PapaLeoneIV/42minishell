@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 13:42:25 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/04 15:53:21 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ t_token *look_tokens_ahead(t_token *current)
 {
 	if (current->next == NULL)
 		return (NULL);
-	if (current->next->type != WORD_TOKEN && current->next->type != WHITESPACE_TOKEN)
+	if (current->next->type != WORD_TOKEN && current->next->type != HERDOC_FILENAME_WITHQUOTES)
 		return (NULL);
 	if (current->next->type == WORD_TOKEN)
 		return current->next;
-	if(current->next->type == WHITESPACE_TOKEN && (current->next->next && current->next->next->type == WORD_TOKEN))
-		return current->next->next;
+	if(current->next && (current->next->type == WORD_TOKEN || current->next->type == HERDOC_FILENAME_WITHQUOTES))
+		return current->next;
 	
 	return NULL;
 	
@@ -95,9 +95,9 @@ int handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node)
 			if (!cmd_node->redirection_info)
 					cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
 			if (node_ahead->type == HERDOC_FILENAME_WITHQUOTES)
-				redirection_node = new_redir_node(node->type, node_ahead->value, 1);
-			else
 				redirection_node = new_redir_node(node->type, node_ahead->value, 0);
+			else
+				redirection_node = new_redir_node(node->type, node_ahead->value, 1);
 			add_back_redirections(cmd_node->redirection_info, redirection_node);
 			return SUCCESS;
 		}
