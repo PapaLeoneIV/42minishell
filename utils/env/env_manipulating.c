@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 14:16:42 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/05 12:07:38 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ int	unset_path(t_env **lst, char **mtx)
 {
 	t_env	*tmp;
 
-	if (!mtx[0])
+	if (!mtx[1])
 	{
 		perror("ERROR\n");
 		return (-1);
 	}
-	tmp = find_node(lst, mtx[0]);
+	tmp = find_node(lst, mtx[1]);
 	if (!tmp)
 	{
 		perror("ERROR\n");

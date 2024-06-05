@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 22:37:32 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/05 11:45:29 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -837,4 +837,5 @@ int						*ft_findminmax(t_dll_list *stack_a);
  */
 int						ft_find_min(t_dll_list *a);
 
+char	*ft_itoa(int n);
 #endif

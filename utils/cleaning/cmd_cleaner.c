@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/04 12:02:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/05 12:05:45 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	clean_cmd_node(t_command **cmd)
 	while ((*cmd))
 	{
 		tmp = (*cmd);
+		close(tmp->in);
+		close(tmp->out);
 		freeall((*cmd)->cmd);
 		if ((*cmd)->redirection_info)
 			clean_redir((*cmd)->redirection_info);

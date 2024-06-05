@@ -90,11 +90,11 @@ int	ft_biltin(char **tmp, t_env **lst)
 	i = -1;
 	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
 	{
-		i = cd_path(tmp);
+		i = cd_path(tmp, lst);
 	}
 	else if (ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0)
 	{
-		i = pwd_path();
+		i = pwd_path(lst);
 	}
 	else if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0)
 		i = echo_path(tmp);
@@ -250,7 +250,6 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 	}
-	printf("in and out sono %d e %d\n", cmd->in, cmd->out);
 	tmp = cmd->redirection_info;        
 	while (tmp)
 	{
@@ -271,7 +270,6 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		if (cmd->in == -1 || cmd->out == -1)
 			return (ERROR);	
 	}
-	printf("in and out sono %d e %d\n", cmd->in, cmd->out);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
@@ -306,7 +304,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		if (cmd->here)
 			{
 				//waitpid(-1, NULL, 0);
-				//unlink();
+				unlink(cmd->here);
 			}
 		if (cmd->in != 0)
             close(cmd->in);
@@ -377,9 +375,6 @@ int	execute_cmd(t_shell *shell)
 		close (tm_out);
 		exit(exit_path(cmd, shell));
 	}
-
-
-
 	while(cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)

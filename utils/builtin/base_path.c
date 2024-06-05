@@ -3,33 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/03 16:58:14 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/05 17:34:44 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //cd comand funtion//
-int	cd_path(char **mtx)
+
+void	cd_excanger(char *new, char *path, t_env **env)
 {
+	t_env	*tmp;
+	char	*sup;
+	char	*sup_2;
+
+	tmp = find_node(env, path);
+	if (!tmp)
+	{
+		sup = ft_strjoin(path, "=");
+		sup_2 = ft_strjoin(sup, new);
+		free(sup);
+		add_node_to_env_struct(env, lst_new_env(sup_2, tmp->env_mtx));
+		free(sup_2);
+		return ;
+	}
+	free(tmp->body);
+	tmp->body = ft_strdup(new);
+	free(new);
+}
+
+int	cd_path(char **mtx, t_env **env)
+{
+	char	*old;
+	char	*new;
+	
 	if (mtx_count_rows(mtx) < 2)
 	{
 		perror("ERROR\ntoo many arguments");
 		return (-1);
 	}
+	old = getcwd(NULL, 0);
 	chdir(mtx[1]);
+	new = getcwd(NULL, 0);
+	cd_excanger(old, "OLDPWD", env);
+	cd_excanger(new, "PWD", env);
 	return (1);
 }
 
-int	pwd_path(void)
+int	pwd_path(t_env **env)
 {
-	char	*path;
+	t_env	*path;
 
-	path = getcwd(NULL, 0);
-	printf("%s\n", path);
+	path = find_node(env, "PWD");
+	printf("%s\n", path->body);
 	free(path);
 	return (1);
 }
