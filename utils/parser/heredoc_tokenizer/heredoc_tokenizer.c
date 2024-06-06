@@ -107,13 +107,10 @@ char *heredoc_tokenizer(char *input, t_shell *shell)
         else if (pars.state == STATE_DOLLAR && ((pars.char_type != REG_CHAR && pars.char_type != DIGIT_CHAR)
 		|| (pars.char_type == DIGIT_CHAR && input[pars.count - 1] == '$')))
 			dollar_state_handler(input, &pars, shell);				
-        if (input[pars.count + 1] == '\0')
+        if (input[pars.count + 1] == '\0' && !slice_end_token_heredoc(input, &pars, shell))
 		{
-			if (!slice_end_token_heredoc(input, &pars, shell))
-			{
 				free_tokens(pars.head);
 				return (NULL);																			//SLICE END TOKEN						
-			}
 		}
         pars.count++;
     }
