@@ -1,3 +1,5 @@
 *.o
 minishell
 *.a
+*.txt
+*.py
