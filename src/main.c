@@ -22,7 +22,6 @@ int main(int argc, char **argv , char **envp)
     (void)argv;
     if(argc != 1)
         perror("Wrong number of arguments my boi!");
-    shell.env = get_env_info(envp);
-    read_from_stdin(&shell);
+    read_from_stdin(&shell, envp);
     return (0);
 }
