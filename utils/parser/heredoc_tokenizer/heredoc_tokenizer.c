@@ -10,6 +10,8 @@ static int get_char_type_heredoc(char *str, t_parser *pars, int count)
 		return (DOLLAR_CHAR);
 	else if (str[count] == '?')
 		return (QUESTION_MARK_CHAR);
+	else if (str[count] == '\n')
+		return (NEWLINE_CHAR);
 	else if (ft_isalpha(str[count]) || valid_regchar(str, pars))
 		return (REG_CHAR);
 	else if (ft_isdigit(str[count]))
