@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 14:27:47 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/06 14:44:42 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 			free(pars->token->value);
 			pars->token->value = ft_strdup("minishell");
 		}
-		else
+		else if (strcmp(pars->token->value, "$?") == 0)
+			pars->token->value = ft_strdup(ft_itoa(shell->status));
+		else 
 			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);
 		pars->start = pars->count + 1;
