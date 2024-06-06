@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/05 11:39:28 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/06 13:47:36 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ int		list_of_in(t_redir **dir);
 int		list_of_out(t_redir **dir);
 void	freeall(char **mat);
 char	 *heredoc_tokenizer(char *input, t_shell *shell);
+int		gnl2(char **line);
+char	 **mtx_dup(char **mtx, int len);
+void	freeall(char **mat);
+int		list_of_out(t_redir **dir);
+int		list_of_in(t_redir **dir);
+int		heardoc_path(t_redir **redir, t_shell *shell);
 
 
 

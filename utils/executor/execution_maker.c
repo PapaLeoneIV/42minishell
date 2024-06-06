@@ -13,75 +13,6 @@
 
 #include "../../includes/minishell.h"
 
-int	list_of_out(t_redir **dir)
-{
-	int	fd;
-
-	if ((*dir)->type_of_redirection == GREATER_TOKEN)
-	{
-		while ((*dir) && (*dir)->type_of_redirection == GREATER_TOKEN)
-		{
-			fd = open((*dir)->filename,  O_TRUNC | O_CREAT | O_RDWR, 0777);
-			if (fd < 0)
-				break ;
-			if ((*dir)->next && (*dir)->next->type_of_redirection == GREATER_TOKEN)
-				close(fd);
-			(*dir) = (*dir)->next;
-		}
-	}
-	else
-	{
-		while ((*dir) && (*dir)->type_of_redirection == REDIR_OUT_TOKEN)
-		{
-			fd = open((*dir)->filename,  O_APPEND | O_CREAT | O_RDWR, 0777);
-			if (fd < 0)
-				break ;
-			if ((*dir)->next && (*dir)->next->type_of_redirection == REDIR_OUT_TOKEN)
-				close(fd);
-			(*dir) = (*dir)->next;
-		}
-	}
-	if (fd < 0)
-		{
-			printf("impossible to open: %s\n", (*dir)->filename);
-			return (-1);
-		}
-	return (fd);
-}
-
-int	list_of_in(t_redir **dir)
-{
-	int	fd;
-	
-	while ((*dir) && (*dir)->type_of_redirection == LESSER_TOKEN)
-	{
-		fd = open((*dir)->filename, O_RDONLY, 0777);
-		if (fd < 0)
-		{
-			printf("%s: No such file or directory\n", (*dir)->filename);
-			(*dir) = (*dir)->next;
-			return(-1);
-		}
-		if ((*dir)->next && (*dir)->next->type_of_redirection == LESSER_TOKEN)
-			close(fd);
-		(*dir) = (*dir)->next;   
-	}
-	return (fd);
-}
-
-void	freeall(char **mat)
-{
-	int	n;
-
-	n = 0;
-	while (mat[n])
-	{
-		free(mat[n]);
-		mat[n] = NULL;
-		n++;
-	}
-	free(mat);
-}
 
 int	ft_biltin(char **tmp, t_env **lst)
 {
@@ -94,7 +25,7 @@ int	ft_biltin(char **tmp, t_env **lst)
 	}
 	else if (ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0)
 	{
-		i = pwd_path(lst);
+		i = pwd_path();
 	}
 	else if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0)
 		i = echo_path(tmp);
@@ -129,21 +60,30 @@ char	*ft_access(char **open_path, char *cmd)
 	return (NULL);
 }
 
-int	make_things(char **cmd, t_env *path, t_env **env)
+int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 {
 	char	**open_path;
 	char	*supp;
-	
+	char 	**tmp_cmd;
+	char	**tmp_env;
 	
 	signal(SIGQUIT, SIG_DFL);
+	tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
+	tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
 	if (ft_biltin(cmd, env) == -1)
 	{
 		open_path = ft_split(path->body, ':');
-		supp = ft_access(open_path, cmd[0]);
+		supp = ft_access(open_path, tmp_cmd[0]);
 		if (!supp)
-			return(perror("ERROR\nunfinded path"), ERROR);
+		{
+			perror("ERROR\nunfinded path");
+			freeall(tmp_cmd);
+			freeall(tmp_env);
+			return((freeall(open_path), clean_all(shell, 1)), ERROR);
+		}
 		freeall(open_path);
-		if (execve(supp, cmd, path->env_mtx) < 0)
+		clean_all(shell, 1);
+		if (execve(supp, tmp_cmd, tmp_env) < 0)
 			perror("ERROR\n execve don't replies");
 		free(supp);
 	}
@@ -163,80 +103,38 @@ int	is_a_biltin(char **tmp)
 	return (0);
 }
 
-int	gnl2(char **line)
+int	open_redir(t_command *cmd, t_shell *shell)
 {
-	char	*buf;
-	int		i;
-	int		n;
-	char	ch;
-
-	buf = (char *)ft_calloc(10000, 1);
-	i = 1;
-	n = 0;
-	ch = 'c';
-	while (i > 0 && ch != '\n')
+	t_redir	*tmp;
+	
+	if (!cmd->redirection_info)
+		return (1);
+	tmp = (*cmd->redirection_info);
+	while (tmp)
 	{
-		i = read(0, &ch, 1);
-		if (i < 0)
-			return (free(buf), 0);
-		buf[n] = ch;
-		n++;
-	}
-	*line = ft_strdup(buf);
-	if (!line)
-		return (free(buf), 0);
-	free(buf);
-	return (n);
-}
-
-int	heardoc_path(t_redir **redir, t_shell *shell)
-{
-	int		fd;
-	char	*line;
-	char	*tmp;
-
-	fd = open((*redir)->filename, O_TRUNC| O_CREAT | O_RDWR, 0777);
-	if (fd < 0)
-		return (perror("ERROR"), ERROR);
-	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
-	{
-		while (1)
+		if (!tmp)
+			break ;
+		if (tmp->type_of_redirection  == GREATER_TOKEN
+			|| tmp->type_of_redirection  == REDIR_OUT_TOKEN)
+			cmd->out = list_of_out(&tmp);
+		else if (tmp->type_of_redirection  == LESSER_TOKEN)
+			cmd->in = list_of_in(&tmp);
+		else if (tmp->type_of_redirection  == HEREDOC_TOKEN)
 		{
-			ft_putchar_fd('>', 1);
-			if (gnl2(&line) && line[ft_strlen((*redir)->filename)] == '\n'
-				&& ft_strncmp(line, (*redir)->filename, ft_strlen((*redir)->filename)) == 0)
-				{
-					free(line);
-					break ;
-				}
-			if ((*redir)->heredoc_expansion)
-			{
-				tmp = heredoc_tokenizer(line, shell);
-				ft_putstr_fd(tmp, fd);
-				free (tmp);
-			}
-			else
-				ft_putstr_fd(line, fd);
-			free(line);
+			if (cmd->here)
+				unlink(cmd->here);
+			cmd->here = tmp->filename;
+			cmd->in = heardoc_path(&tmp, shell);
 		}
-		close(fd);
-		(*redir)->type_of_redirection = LESSER_TOKEN;
-		fd = 0;
+		if (cmd->out == -1 || cmd->in == -1)
+			return (ERROR);
 	}
-	return (fd);
+	return (1);
 }
 
-// da lavorare non completa!!!!!
-int	execution(t_command *cmd, t_env **env, t_shell *shell)
+int	set_pip(t_command *cmd, int *pip)
 {
-	int		pip[2];
-	int		tm_i;
-	int		tm_ou;
-	t_redir	**tmp;
-	(void)shell;
-	tm_i = cmd->in;
-	tm_ou = cmd->out;
-	if (cmd->next != NULL)
+	if ((cmd->cmd_id == 0 && cmd->next != NULL) || cmd->cmd_id != 0)
 		if (pipe(pip) < 0)
 			return(perror ("ERROR while opening the pipe\n"), ERROR);
 	if (cmd->next)
@@ -244,67 +142,45 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 	}
-	tmp = cmd->redirection_info;        
-	printf("in and out sono %d e %d\n", cmd->in, cmd->out);
-	tmp = cmd->redirection_info; 
+	return (1);
+}
 
-	/**
-	 * ATTENZIONE QUI->stai scorrendo il puntatore delle redirection info
-	 * fino a null, poi non possiamo pulirlo.
-	*/      
-	while (tmp)
+void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
+{
+	t_env	*tmp;
+
+	if (cmd->in != tm_i)
 	{
-		if (!(*tmp))
-			break ;
-		if ((*tmp)->type_of_redirection  == GREATER_TOKEN
-			|| (*tmp)->type_of_redirection  == REDIR_OUT_TOKEN)
-			cmd->out = list_of_out(&(*tmp));
-		else if ((*tmp)->type_of_redirection  == LESSER_TOKEN)
-			cmd->in = list_of_in(&(*tmp));
-		else if ((*tmp)->type_of_redirection  == HEREDOC_TOKEN)
-		{
-			if (cmd->here)
-				unlink(cmd->here);
-			cmd->here = (*tmp)->filename;
-			cmd->in = heardoc_path(tmp, shell);
-		}
-		if (cmd->in == -1 || cmd->out == -1)
-			return (ERROR);	
+		dup2(cmd->in, 0);
+		close(cmd->in);
 	}
-	dup2(cmd->in, 0);
-	dup2(cmd->out, 1);
-	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
-		return (ft_biltin(cmd->cmd, env));
+	if (cmd->out != tm_ou)
+	{
+		dup2(cmd->out, 1);
+		close(cmd->out);
+	}
+	// Close unused pipe ends in the child process
+	if (cmd->next)
+		close(cmd->pip[0]);
+	if (cmd->prev)
+		close(cmd->pip[1]);
+	tmp = find_node(shell->env, "PATH");
+	make_things(cmd->cmd, tmp, shell->env, shell);
+	/**quando exit ritorna ERRORE bisogna pulire la memoria*/
+	exit(0);
+}
+
+void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
+{
 	cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
 	{
-		if (cmd->in != tm_i)
-		{
-			dup2(cmd->in, 0);
-			close(cmd->in);
-		}
-		if (cmd->out != tm_ou)
-		{
-			dup2(cmd->out, 1);
-			close(cmd->out);
-		}
-		// Close unused pipe ends in the child process
-		if (cmd->next)
-			close(pip[0]);
-		if (cmd->prev)
-			close(pip[1]);
-		t_env *tmp;
-
-		tmp = find_node(env, "PATH");
-		make_things(cmd->cmd, tmp, env);
-		/**quando exit ritorna ERRORE bisogna pulire la memoria*/
-		exit(0);
+		child_process(shell, cmd, tm_i, tm_ou);
 	}
 	else
 	{
 		if (cmd->here)
 			{
-				//waitpid(-1, NULL, 0);
 				unlink(cmd->here);
 			}
 		if (cmd->in != 0)
@@ -312,27 +188,28 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
         if (cmd->out != 1)
             close(cmd->out);
 	}
+}
+
+// da lavorare non completa!!!!!
+int	execution(t_command *cmd, t_env **env, t_shell *shell)
+{
+	int		tm_i;
+	int		tm_ou;
+
+	tm_i = cmd->in;
+	tm_ou = cmd->out;
+	if (set_pip(cmd, cmd->pip) == ERROR)
+		return (ERROR);
+	if (open_redir(cmd, shell) == ERROR)
+		return (ERROR);
+	dup2(cmd->in, 0);
+	dup2(cmd->out, 1);
+	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
+		return (ft_biltin(cmd->cmd, env));
+	fork_and_ecseve(shell, cmd, tm_i, tm_ou);
 	return SUCCESS;
 }
 
-void	open_redir(t_redir **redir)
-{
-	t_redir	**tmp;
-	
-	tmp = redir;
-	while (tmp)
-	{
-		if (!(*tmp))
-			break ;
-		if ((*tmp)->type_of_redirection  == GREATER_TOKEN
-			|| (*tmp)->type_of_redirection  == REDIR_OUT_TOKEN)
-			close(list_of_out(&(*tmp)));
-		else if ((*tmp)->type_of_redirection  == LESSER_TOKEN)
-			close(list_of_in(&(*tmp)));
-		/* else
-			heardoc_path(); */
-	}
-}
 
 int	exit_path(t_command *cmd, t_shell *shell)
 {
@@ -341,7 +218,9 @@ int	exit_path(t_command *cmd, t_shell *shell)
 
 	i = 0;
 	exit_status = 0;
-	open_redir(cmd->redirection_info);
+	open_redir(cmd, shell);
+	close(cmd->in);
+	close(cmd->out);
 	if (mtx_count_rows(cmd->cmd) > 2)
 		return(perror("ERROR\nto many argument"), -1);
 	if (cmd->cmd[1])
@@ -355,42 +234,46 @@ int	exit_path(t_command *cmd, t_shell *shell)
 		exit_status = (unsigned int)ft_atoi(cmd->cmd[1]);
 		if (exit_status > 255)
 			exit_status %= 256;
-	
 	}
 	clean_all(shell, 1);
 	return (exit_status);
 }
 
+void	tm_close(int tm_in, int tm_out, int flag)
+{
+	if (flag)
+	{
+		dup2(tm_in, 0);
+		dup2(tm_out, 1);
+	}
+	close(tm_in);
+	close(tm_out);
+}
+
 int	execute_cmd(t_shell *shell)
 {
 	t_command	*cmd;
+	int			status;
 	int			tm_in;
 	int			tm_out;
 
 	cmd = (*shell->cmd_info);
 	tm_in = dup(0);
 	tm_out = dup(1);
-	if (!(cmd->next) && ft_strncmp(cmd->cmd[0], "exit", ft_strlen(cmd->cmd[0])) == 0)
+	if (!(cmd->next) && ft_strncmp(cmd->cmd[0],
+			"exit", ft_strlen(cmd->cmd[0])) == 0)
 	{
-		close (tm_in);
-		close (tm_out);
+		tm_close(tm_in,tm_out, 0);
 		exit(exit_path(cmd, shell));
 	}
 	while(cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
-		{
-			
-			perror("ERROR");
 			return (ERROR);
-		}
 		cmd = cmd->next;
 	}
-	while (waitpid(-1, NULL, 0) > 0)
-		;
-	dup2(tm_in, 0);
-	dup2(tm_out, 1);
-	close(tm_in);
-	close(tm_out);
+	while (waitpid(-1, &status, 0) > 0)
+		printf("-----%d", status);
+	tm_close(tm_in,tm_out, 1);
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/05 12:05:45 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/06 11:00:16 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ void	clean_cmd_node(t_command **cmd)
 	while ((*cmd))
 	{
 		tmp = (*cmd);
-		close(tmp->in);
-		close(tmp->out);
+		if (tmp->in != -1)
+			close(tmp->in);
+		if (tmp->out != -1)
+			close(tmp->out);
 		freeall((*cmd)->cmd);
 		if ((*cmd)->redirection_info)
 			clean_redir((*cmd)->redirection_info);
@@ -49,7 +51,10 @@ void	clean_cmd_node(t_command **cmd)
 void	clean_all(t_shell *shell, int flag)
 {
 	if(flag)
+	{
+		rl_clear_history();
 		clean_env_lst(shell->env);
+	}
 	if (shell->line)
 		free(shell->line);
 	if (shell->cmd_info)

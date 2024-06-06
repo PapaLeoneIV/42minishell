@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/01 11:47:30 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/06 14:33:25 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_shell
 	int			shell_pip[2];				//provato ad aggiungere qui questa pipe, l'intezione è di usarla come principale
     t_command   **cmd_info;
     t_env       **env;
+	int			status;
 }   t_shell;
 
 /**ENV FUNCTIONS*/
