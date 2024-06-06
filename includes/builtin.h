@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:42:51 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/05 17:22:27 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/06 09:32:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_redir t_redir;
 void	add_node_to_env_struct(t_env **lst, t_env *new);
 char	*get_directory_path(void);
 int		cd_path(char **mtx, t_env **env);
-int		pwd_path(t_env **env);
+int		pwd_path(void);
 char	*trimming(char *big, char *removed);
 int		echo_path(char **str);
 t_env	**get_env_info(char *en[]);

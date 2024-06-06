@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/05 17:34:44 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/06 10:02:21 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	cd_excanger(char *new, char *path, t_env **env)
 	char	*sup_2;
 
 	tmp = find_node(env, path);
-	if (!tmp)
+	if (tmp == NULL)
 	{
 		sup = ft_strjoin(path, "=");
 		sup_2 = ft_strjoin(sup, new);
@@ -53,12 +53,12 @@ int	cd_path(char **mtx, t_env **env)
 	return (1);
 }
 
-int	pwd_path(t_env **env)
+int	pwd_path(void)
 {
-	t_env	*path;
+	char	*path;
 
-	path = find_node(env, "PWD");
-	printf("%s\n", path->body);
+	path = getcwd(NULL, 0);
+	printf("%s\n", path);
 	free(path);
 	return (1);
 }
