@@ -22,16 +22,11 @@ static int get_char_type_heredoc(char *str, t_parser *pars, int count)
 static void general_state_handler_heredoc(char *input, t_parser* pars, t_shell *shell)
 {
     char next;
-	char prev;
-	
-	prev = -1;
 	next = -1;
     if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR || pars->char_type == TERMINATOR_CHAR)
     {
         if (input[pars->count + 1])
 			next = get_char_type(input, pars, pars->count + 1);
-		if (pars->count > 0 && input[pars->count - 1])
-			prev = get_char_type(input, pars, pars->count - 1);
 		if (pars->char_type == DOLLAR_CHAR && next == WHITESPACE_CHAR)
 		{
 			slice_token_string_doll_spec_case(input, pars);
