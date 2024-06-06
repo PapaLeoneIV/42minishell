@@ -70,6 +70,9 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 	signal(SIGQUIT, SIG_DFL);
 	tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
 	tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
+	/**se il comando e' sbagliato al momento ritorniamo uno da questa funzione senza
+	 * gestire l errore.(minishell/tester/LEAK_test_outputs/memory_leak_report_7.txt)
+	*/
 	if (ft_biltin(cmd, env) == -1)
 	{
 		open_path = ft_split(path->body, ':');
@@ -165,6 +168,8 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	if (cmd->prev)
 		close(cmd->pip[1]);
 	tmp = find_node(shell->env, "PATH");
+	/**se non trovi il path non devi eseguire il comando ma devi dare errore 
+	 *  minishell/tester/LEAK_test_outputs/memory_leak_report_15.txt)*/
 	make_things(cmd->cmd, tmp, shell->env, shell);
 	/**quando exit ritorna ERRORE bisogna pulire la memoria*/
 	exit(0);
