@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/07 11:58:24 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/07 14:29:56 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,40 @@ t_env	*find_node(t_env **lst, char *str)
 	return (NULL);
 }
 
+void	solo_export(t_env **lst)
+{
+	t_env	*tmp;
+
+	tmp = (*lst);
+	while (tmp)
+	{
+		if (tmp->esistence > -1)
+			printf("declare -x %s=%s\n", tmp->head, tmp->body);
+		tmp = tmp->next;
+	}
+}
+
+int	check_head(char *str)
+{
+	int	i;
+
+	i = 1;
+	if (ft_strchri(str, '=') == 0)
+	{
+		perror("invalid operetion\n");
+		return (0);
+	}
+	if (ft_isdigit(str[i]))
+		return (perror("number in top of variable"), 0);
+	while (str[i] != '\0' && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (perror("invalid character in variable name\n"), 0);
+		i++;
+	}
+	return(1);
+}
+
 int	export_path(t_env **lst, char **mtx)
 {
 	t_env	*tmp;
@@ -33,21 +67,9 @@ int	export_path(t_env **lst, char **mtx)
 
 	i = 1;
 	if (mtx_count_rows(mtx) == 1)
+		solo_export(lst);
+	while (mtx[i] && check_head(mtx[i]))
 	{
-		tmp = (*lst);
-		while (tmp)
-		{
-			if (tmp->esistence > -1)
-				printf("declare -x %s=%s\n", tmp->head, tmp->body);
-			tmp = tmp->next;
-		}
-		return (1);
-	}
-	while (mtx[i])
-	{
-		/***QUI BISOGNEREBBE FARE DEI CONTROLLI PER VEDER SE IL FORMATO DELLA STRINGA RICEVUTA
-			 * SIA VALIDA ESEMPIO:se io ti passo export ==dasd te lo prendi come valido
-			*/
 		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
 		{
 			tmp = find_node(lst, ft_substr(mtx[i], 0, ft_strchri(mtx[i], '+')));
@@ -58,10 +80,7 @@ int	export_path(t_env **lst, char **mtx)
 				tmp->esistence = 0;
 		}
 		else
-		{
 			add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
-			
-		}
 		i++;
 		return (1);
 	}
