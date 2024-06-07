@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/06 10:27:13 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/07 11:24:54 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,24 @@ int	cd_path(char **mtx, t_env **env)
 {
 	char	*old;
 	char	*new;
-	
-	if (mtx_count_rows(mtx) < 2)
-	{
-		perror("ERROR\ntoo many arguments");
-		return (-1);
-	}
+	int		mtx_rows;
+	int		result;
+	t_env	*tmp;
+
+	mtx_rows = mtx_count_rows(mtx);
+	if (mtx_rows > 2)
+		return (perror("ERROR\ntoo many arguments"), -1);
 	old = getcwd(NULL, 0);
-	chdir(mtx[1]);
+	if (mtx_rows == 2)
+		result = chdir(mtx[1]);
+	if (mtx_rows == 1)
+	{
+		tmp = find_node(env, "HOME");
+		result = chdir(tmp->body);
+	}
 	new = getcwd(NULL, 0);
+	if (result == -1)
+		perror(mtx[1]);
 	cd_excanger(old, "OLDPWD", env);
 	cd_excanger(new, "PWD", env);
 	return (1);
@@ -61,19 +70,6 @@ int	pwd_path(void)
 	printf("%s\n", path);
 	free(path);
 	return (1);
-}
-
-char	*trimming(char *big, char *removed)
-{
-	int	i;
-
-	i = 0;
-	while (removed[i])
-		i++;
-	//if (!removed[i])
-	//	return (NULL);
-	i++;
-	return(&big[i]);
 }
 
 int	echo_path(char **str)
@@ -102,7 +98,6 @@ int	echo_path(char **str)
 	}
 	if (n_flag)
 		printf("\n");
-/* 	free(str); */
 	return (1);
 }
 

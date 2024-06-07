@@ -68,6 +68,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 	char	**tmp_env;
 	
 	signal(SIGQUIT, SIG_DFL);
+	ft_putendl_fd("sono qui", 1);
 	tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
 	tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
 	if (ft_biltin(cmd, env) == -1)
@@ -103,48 +104,6 @@ int	is_a_biltin(char **tmp)
 	return (0);
 }
 
-int	open_redir(t_command *cmd, t_shell *shell)
-{
-	t_redir	*tmp;
-	
-	if (!cmd->redirection_info)
-		return (1);
-	tmp = (*cmd->redirection_info);
-	while (tmp)
-	{
-		if (!tmp)
-			break ;
-		if (tmp->type_of_redirection  == GREATER_TOKEN
-			|| tmp->type_of_redirection  == REDIR_OUT_TOKEN)
-			cmd->out = list_of_out(&tmp);
-		else if (tmp->type_of_redirection  == LESSER_TOKEN)
-			cmd->in = list_of_in(&tmp);
-		else if (tmp->type_of_redirection  == HEREDOC_TOKEN)
-		{
-			if (cmd->here)
-				unlink(cmd->here);
-			cmd->here = tmp->filename;
-			cmd->in = heardoc_path(&tmp, shell);
-		}
-		if (cmd->out == -1 || cmd->in == -1)
-			return (ERROR);
-	}
-	return (1);
-}
-
-int	set_pip(t_command *cmd, int *pip)
-{
-	if ((cmd->cmd_id == 0 && cmd->next != NULL) || cmd->cmd_id != 0)
-		if (pipe(pip) < 0)
-			return(perror ("ERROR while opening the pipe\n"), ERROR);
-	if (cmd->next)
-	{
-		cmd->out = pip[1];
-		cmd->next->in = pip[0];
-	}
-	return (1);
-}
-
 void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 {
 	t_env	*tmp;
@@ -166,7 +125,6 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 		close(cmd->pip[1]);
 	tmp = find_node(shell->env, "PATH");
 	make_things(cmd->cmd, tmp, shell->env, shell);
-	/**quando exit ritorna ERRORE bisogna pulire la memoria*/
 	exit(0);
 }
 
@@ -210,46 +168,6 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	return SUCCESS;
 }
 
-
-int	exit_path(t_command *cmd, t_shell *shell)
-{
-	unsigned int	exit_status;
-	int 			i;
-
-	i = 0;
-	exit_status = 0;
-	open_redir(cmd, shell);
-	close(cmd->in);
-	close(cmd->out);
-	if (mtx_count_rows(cmd->cmd) > 2)
-		return(perror("ERROR\nto many argument"), -1);
-	if (cmd->cmd[1])
-	{
-		while (cmd->cmd[1][i])
-		{
-			if (!ft_isdigit(cmd->cmd[1][i]))
-				return(perror("ERROR\nalpha in exit status"), ERROR);
-			i++;
-		}
-		exit_status = (unsigned int)ft_atoi(cmd->cmd[1]);
-		if (exit_status > 255)
-			exit_status %= 256;
-	}
-	clean_all(shell, 1);
-	return (exit_status);
-}
-
-void	tm_close(int tm_in, int tm_out, int flag)
-{
-	if (flag)
-	{
-		dup2(tm_in, 0);
-		dup2(tm_out, 1);
-	}
-	close(tm_in);
-	close(tm_out);
-}
-
 int	execute_cmd(t_shell *shell)
 {
 	t_command	*cmd;
@@ -264,7 +182,8 @@ int	execute_cmd(t_shell *shell)
 			"exit", ft_strlen(cmd->cmd[0])) == 0)
 	{
 		tm_close(tm_in,tm_out, 0);
-		exit(exit_path(cmd, shell));
+		if (exit_path(cmd, shell) == 300)
+			return (ERROR);
 	}
 	while(cmd)
 	{

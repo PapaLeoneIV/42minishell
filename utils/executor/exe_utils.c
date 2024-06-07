@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/06 13:28:38 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/07 10:15:26 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,28 @@ void	freeall(char **mat)
 		n++;
 	}
 	free(mat);
+}
+
+void	tm_close(int tm_in, int tm_out, int flag)
+{
+	if (flag)
+	{
+		dup2(tm_in, 0);
+		dup2(tm_out, 1);
+	}
+	close(tm_in);
+	close(tm_out);
+}
+
+int	set_pip(t_command *cmd, int *pip)
+{
+	if ((cmd->cmd_id == 0 && cmd->next != NULL) || cmd->cmd_id != 0)
+		if (pipe(pip) < 0)
+			return(perror ("ERROR while opening the pipe\n"), ERROR);
+	if (cmd->next)
+	{
+		cmd->out = pip[1];
+		cmd->next->in = pip[0];
+	}
+	return (1);
 }

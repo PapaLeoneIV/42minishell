@@ -6,7 +6,7 @@
 #    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/06/06 13:45:53 by fgori            ###   ########.fr        #
+#    Updated: 2024/06/07 11:30:26 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c) \
 				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c) \
 				$(addprefix $(SIGNALS)/, signals_helpers.c) \
 				$(addprefix $(HEREDOC_TOKENIZER)/, heredoc_tokenizer.c) \
-				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c)  \
+				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c exit_build.c)  \
 				$(addprefix $(REDIRECTION)/, redirection_parser.c redirection_parser_helpers.c)  \
 				$(addprefix $(CLEANING)/, tokenizer_cleaner.c env_cleaner.c cmd_cleaner.c)  \
 

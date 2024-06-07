@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 13:47:36 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/07 11:29:59 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	freeall(char **mat);
 int		list_of_out(t_redir **dir);
 int		list_of_in(t_redir **dir);
 int		heardoc_path(t_redir **redir, t_shell *shell);
-
-
+void	tm_close(int tm_in, int tm_out, int flag);
+int		set_pip(t_command *cmd, int *pip);
+int		open_redir(t_command *cmd, t_shell *shell);
+int		exit_path(t_command *cmd, t_shell *shell);
 
 #endif
