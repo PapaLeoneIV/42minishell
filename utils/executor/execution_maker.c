@@ -82,7 +82,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 			perror("ERROR\nunfinded path");
 			freeall(tmp_cmd);
 			freeall(tmp_env);
-			return((freeall(open_path), clean_all(shell, 1)), ERROR);
+			return(freeall(open_path), ERROR);
 		}
 		freeall(open_path);
 		clean_all(shell, 1);
@@ -90,7 +90,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 			perror("ERROR\n execve don't replies");
 		free(supp);
 	}
-	return (1);
+	return (ERROR);
 }
 
 int	is_a_biltin(char **tmp)
@@ -132,7 +132,14 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 		clean_all(shell, 1);
 	}
 	else
-		make_things(cmd->cmd, tmp, shell->env, shell);
+	{
+		if (make_things(cmd->cmd, tmp, shell->env, shell) == ERROR)
+		{
+			clean_all(shell, 1);
+			dup2(0, 0);
+			dup2(1, 1);
+		}
+	}
 	exit(0);
 }
 
@@ -196,7 +203,7 @@ int	execute_cmd(t_shell *shell)
 	while(cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
-			return (ERROR);
+			return (tm_close(tm_in,tm_out, 1), ERROR);
 		cmd = cmd->next;
 	}
 	while (waitpid(-1, &status, 0) > 0)
