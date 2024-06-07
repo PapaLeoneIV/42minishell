@@ -68,3 +68,53 @@ input:-echo "$U'SE'R"
 -
 input:-echo emm"a |><"
 -
+input:-ls | grep .txt
+-
+input:-cat file.txt | sort | uniq
+-
+input:-ps aux | grep nginx | awk '{print $2}'
+-
+input:-echo "hello world" | tr '[:lower:]' '[:upper:]'
+-
+input:-find . -type f | xargs grep "searchTerm"
+-
+input:-cat filedoesnotexist.txt | sort
+-
+input:-dmesg | grep hda | less
+-
+input:-netstat -tulpn | grep LISTEN
+-
+input:-df -h | grep /dev/sda1 | awk '{print $5}'
+-
+input:-ls -l | awk '{print $9}' | sort -r
+-
+input:-uptime | cut -d, -f1
+-
+input:-echo "This is a test" > test.txt; cat test.txt | wc -l
+-
+input:-ls | nonexistingcommand
+-
+input:-cat file1.txt file2.txt | sort | uniq -d
+-
+input:-ls -l | awk '{print $9}' | sort -r
+-
+input:-uptime | cut -d, -f1
+-
+input:-echo "This is a test" > test.txt; cat test.txt | wc -l
+-
+input:-ls | nonexistingcommand
+-
+input:-cat file1.txt file2.txt | sort | uniq -d
+-
+input:-ps aux | head -n 1; ps aux | tail -n +2 | sort -rnk 4
+-
+input:-who | sort | more
+-
+input:-find / -name "*.conf" | xargs grep "ServerName" 2> /dev/null
+-
+input:-echo "User input" | sudo tee userinput.txt
+-
+input:-grep 'pattern' file.txt | sed 's/pattern/replacement/' | awk '{print $1}'
+-
+input:-tail -f /var/log/messages | grep error | tee errors.log
+-
