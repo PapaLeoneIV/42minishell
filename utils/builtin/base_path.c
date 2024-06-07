@@ -37,6 +37,10 @@ void	cd_excanger(char *new, char *path, t_env **env)
 
 int	cd_path(char **mtx, t_env **env)
 {
+
+	/***BISOGNEREBBE GESTIRE QUANDO CD RICEVE MULTIPLI ARGOMENTI
+	 * OPPURE GESTIRLO SEMPLICEMENTE NON ACCETTANDO PIU DI DUE ARGOMENTI
+	*/
 	char	*old;
 	char	*new;
 	int		mtx_rows;

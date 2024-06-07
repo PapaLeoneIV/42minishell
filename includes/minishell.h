@@ -60,7 +60,7 @@ char **return_path_string_splitted(t_token **head, t_shell *shell);
 
 
 /**READ FUNCTION*/
-void read_from_stdin(t_shell *shell);
+void read_from_stdin(t_shell *shell, char **envp);
 
 
 

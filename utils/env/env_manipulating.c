@@ -45,6 +45,9 @@ int	export_path(t_env **lst, char **mtx)
 	}
 	while (mtx[i])
 	{
+		/***QUI BISOGNEREBBE FARE DEI CONTROLLI PER VEDER SE IL FORMATO DELLA STRINGA RICEVUTA
+			 * SIA VALIDA ESEMPIO:se io ti passo export ==dasd te lo prendi come valido
+			*/
 		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
 		{
 			tmp = find_node(lst, ft_substr(mtx[i], 0, ft_strchri(mtx[i], '+')));
@@ -57,7 +60,7 @@ int	export_path(t_env **lst, char **mtx)
 		else
 		{
 			add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
-			//free(str);
+			
 		}
 		i++;
 		return (1);

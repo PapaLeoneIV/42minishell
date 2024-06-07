@@ -12,7 +12,7 @@
 
 #include "../../../includes/lexer.h"
 
-char *get_key_envp(char *envp_string)
+/* char *get_key_envp(char *envp_string)
 {
 	char *key;
 	int end;
@@ -21,7 +21,7 @@ char *get_key_envp(char *envp_string)
 	key = ft_substr(envp_string, 0, end);
 	return (key);
 }
-
+ */
 
 char *set_token_value_post_expansion(char *envp_string)
 {
@@ -36,7 +36,7 @@ char *set_token_value_post_expansion(char *envp_string)
 		return (NULL);
 	return (out);
 }
-void expand_env_var(char **token_value, t_shell *shell)
+/* void expand_env_var(char **token_value, t_shell *shell)
 {
 	int envp_len;
 	int i;
@@ -61,6 +61,29 @@ void expand_env_var(char **token_value, t_shell *shell)
 		i++;
 	}
     free(*token_value);
+    *token_value = NULL;
+	return ;
+} */
+
+
+void expand_env_var(char **token_value, t_shell *shell)
+{
+	char *tmp;
+	t_env *ptr;
+
+	ptr = shell->env[0];
+	while(ptr)
+	{
+		if(!strncmp(ptr->head, (*token_value + 1), ft_strlen(ptr->head)))
+		{
+			tmp = *token_value;		
+			*token_value = ft_strdup(ptr->body);
+			free(tmp);
+			return ; 
+		}
+		ptr = ptr->next;
+	}
+	free(*token_value);
     *token_value = NULL;
 	return ;
 }

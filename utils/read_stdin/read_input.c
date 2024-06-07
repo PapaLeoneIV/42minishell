@@ -53,7 +53,7 @@ void print_shell_info(t_shell *shell)
 }
 
 
-void read_from_stdin(t_shell *shell)
+void read_from_stdin(t_shell *shell, char **envp)
 {
 	t_token     *head;
 	char		*input;
@@ -63,6 +63,7 @@ void read_from_stdin(t_shell *shell)
 	set_signal_handler(&signal_g);
 	while (true)
 	{
+		shell->env = get_env_info(envp);
 		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
 		if (!input)
@@ -83,8 +84,8 @@ void read_from_stdin(t_shell *shell)
 		free_tokens(head);
  		if (execute_cmd(shell) == ERROR)
 		{
-		} 
-		clean_all(shell, 0);
+		}
+		clean_all(shell, 1);
 	}
 }
 

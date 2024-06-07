@@ -1,0 +1,72 @@
+input:-echo "ciao"
+-
+input:-echo "$USER"
+-
+expect:-echo 
+-
+input:-echo '"$USER"'
+-
+input:-echo "ciao" | grep x
+-
+input:-echo grep "test" $HOME/$PWD_ird
+-
+input:-echo "cat $HOME/testfile > $USER/output"
+-
+input:-echo "$PATH > " path contents.txt""| dsasdasda | dasdasdas| dsadsad 
+-
+input:-echo mkdir $HOME/"new dir"
+-
+input:-echo 'x'"echo "    echo "$USER"cat"$USER"
+-
+input:-echo cat "'avc'     c"
+-
+input:-echo '"''"'
+-
+input:-echo $SDASS
+-
+input:-echo "'$USE'R"
+-
+input:-echo "Nested > "$USE'"R"'q"uote"
+-
+input:-echo cat $HOME'/'config | grep "setting=" > $USER/config_backup
+-
+input:-echo grep "test" >$HOME/$PWD_ird
+-
+input:-echo "This is a line break\nNew line"
+-
+input:-echo "Empty var: $UNSET_VAR"
+-
+input:-echo "Listing $HOME/*.txt"
+-
+input:-echo 'The missing variable $MISSING_VAR is here'
+-
+input:-echo "Unknown path: $UNSET_PATH/$UNDEFINED_DIR"
+-
+input:-echo 'The missing variable $MISSING_VAR is here'
+-
+input:-echo "No vars: $VOID1, $VOID2, and $VOID3"
+-
+input:-echo 'Why would "$NON_EXISTENT" even show up?'
+-
+input:-echo "It's '$NOT_THERE' fault"
+-
+input:-echo "'    "          b          'casa'
+-
+input:-echo$
+-
+input:-echo$USER
+-
+input:-echo $ $ $
+-
+input:-echo $PWD $ $
+-
+input:-echo ">|"
+-
+input:-echo "$'USER'"
+-
+input:-echo $'USE'R
+-
+input:-echo "$U'SE'R"
+-
+input:-echo emm"a |><"
+-

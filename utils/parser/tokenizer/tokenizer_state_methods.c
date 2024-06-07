@@ -74,6 +74,8 @@ void quoted_state_handler(char *stringa, t_parser *pars)
 void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
 	/**TODO, $? viene espanso a NULL*/
+	char *status;
+
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
 	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
 	{
@@ -86,7 +88,12 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 			pars->token->value = ft_strdup("minishell");
 		}
 		else if (strcmp(pars->token->value, "$?") == 0)
-			pars->token->value = ft_strdup(ft_itoa(shell->status));
+		{
+			status = ft_itoa(shell->status);
+			free(pars->token->value);
+			pars->token->value = ft_strdup(status);
+			free(status);
+		}
 		else 
 			pars->token->value = NULL;
 		token_add_back(&pars->head, pars->token);
@@ -136,8 +143,7 @@ void general_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		}
 		if (pars->char_type == TILDE_CHAR && (prev == WHITESPACE_CHAR || !prev) && next == WHITESPACE_CHAR)
 		{
-			slice_single_char_token(stringa, pars, shell);
-			return;
+			return(slice_single_char_token(stringa, pars, shell));
 		}
 		if (pars->count > pars->start && pars->char_type != TILDE_CHAR)
 			slice_token_string(stringa, pars);
