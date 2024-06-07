@@ -2,8 +2,6 @@ input:-echo "ciao"
 -
 input:-echo "$USER"
 -
-expect:-echo 
--
 input:-echo '"$USER"'
 -
 input:-echo "ciao" | grep x

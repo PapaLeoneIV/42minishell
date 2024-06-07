@@ -68,14 +68,13 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 	char	**tmp_env;
 	
 	signal(SIGQUIT, SIG_DFL);
-	ft_putendl_fd("sono qui", 1);
-	tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
-	tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
 	/**se il comando e' sbagliato al momento ritorniamo uno da questa funzione senza
 	 * gestire l errore.(minishell/tester/LEAK_test_outputs/memory_leak_report_7.txt)
 	*/
 	if (ft_biltin(cmd, env) == -1)
 	{
+		tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
+		tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
 		open_path = ft_split(path->body, ':');
 		supp = ft_access(open_path, tmp_cmd[0]);
 		if (!supp)
@@ -127,9 +126,13 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	if (cmd->prev)
 		close(cmd->pip[1]);
 	tmp = find_node(shell->env, "PATH");
-	/**se non trovi il path non devi eseguire il comando ma devi dare errore 
-	 *  minishell/tester/LEAK_test_outputs/memory_leak_report_15.txt)*/
-	make_things(cmd->cmd, tmp, shell->env, shell);
+	if (tmp == NULL && access(cmd->cmd[0], F_OK | X_OK) != 0)
+	{
+		perror("unvalid Path\n");
+		clean_all(shell, 1);
+	}
+	else
+		make_things(cmd->cmd, tmp, shell->env, shell);
 	exit(0);
 }
 

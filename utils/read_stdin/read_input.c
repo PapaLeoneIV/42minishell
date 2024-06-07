@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 10:04:12 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/07 12:05:19 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void read_from_stdin(t_shell *shell, char **envp)
 
 	memset(&signal_g, 0, sizeof(signal_g));
 	set_signal_handler(&signal_g);
+	shell->env = get_env_info(envp);
 	while (true)
 	{
-		shell->env = get_env_info(envp);
 		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
 		if (!input)
@@ -85,7 +85,7 @@ void read_from_stdin(t_shell *shell, char **envp)
  		if (execute_cmd(shell) == ERROR)
 		{
 		}
-		clean_all(shell, 1);
+		clean_all(shell, 0);
 	}
 }
 

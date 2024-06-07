@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/06 11:00:16 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/07 12:07:08 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	clean_all(t_shell *shell, int flag)
 {
 	if(flag)
 	{
-		rl_clear_history();
 		clean_env_lst(shell->env);
+		rl_cleanup_after_signal();
 	}
 	if (shell->line)
 		free(shell->line);
