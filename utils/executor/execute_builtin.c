@@ -1,0 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
+/*   Updated: 2024/06/11 15:04:35 by fgori            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
+{
+	int i;
+
+	i = -1;
+	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
+	{
+		i = cd_path(tmp, lst);
+	}
+	else if (ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0)
+	{
+		i = pwd_path();
+	}
+	else if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0)
+		i = echo_path(tmp);
+	else if (ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0)
+		i = env_path(lst);
+	else if (ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0)
+		i = export_path(lst, tmp);
+	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
+		i = unset_path(lst, tmp);
+	if (i == 0)
+		shell->status = 255;
+	return (i);
+}
+
+int	is_a_biltin(char **tmp)
+{
+	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0
+			|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
+			return (1);
+	return (0);
+}

@@ -1,0 +1,10 @@
+ignore_readline.txt
+includes
+libft
+Makefile
+minishell
+sgnng
+src
+tester
+user
+utils

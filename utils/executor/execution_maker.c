@@ -14,29 +14,6 @@
 #include "../../includes/minishell.h"
 
 
-int	ft_biltin(char **tmp, t_env **lst)
-{
-	int i;
-
-	i = -1;
-	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
-	{
-		i = cd_path(tmp, lst);
-	}
-	else if (ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0)
-	{
-		i = pwd_path();
-	}
-	else if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0)
-		i = echo_path(tmp);
-	else if (ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0)
-		i = env_path(lst);
-	else if (ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0)
-		i = export_path(lst, tmp);
-	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
-		i = unset_path(lst, tmp);
-	return (i);
-}
 
 char	*ft_access(char **open_path, char *cmd)
 {
@@ -68,10 +45,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 	char	**tmp_env;
 	
 	signal(SIGQUIT, SIG_DFL);
-	/**se il comando e' sbagliato al momento ritorniamo uno da questa funzione senza
-	 * gestire l errore.(minishell/tester/LEAK_test_outputs/memory_leak_report_7.txt)
-	*/
-	if (ft_biltin(cmd, env) == -1)
+	if (ft_biltin(cmd, env, shell) == -1)
 	{
 		tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
 		tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
@@ -81,29 +55,15 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		{
 			perror("ERROR\nunfinded path");
 			freeall(tmp_cmd);
-			freeall(tmp_env);
-			return(freeall(open_path), ERROR);
+			return(freeall(open_path),freeall(tmp_env) , ERROR);
 		}
 		freeall(open_path);
 		clean_all(shell, 1);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
-			perror("ERROR\n execve don't replies");
+			return(perror("ERROR\n execve don't replies"), ERROR);
 		free(supp);
 	}
 	return (ERROR);
-}
-
-int	is_a_biltin(char **tmp)
-{
-	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0
-			|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
-			return (1);
-	return (0);
 }
 
 void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
@@ -120,7 +80,6 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 		dup2(cmd->out, 1);
 		close(cmd->out);
 	}
-	// Close unused pipe ends in the child process
 	if (cmd->next)
 		close(cmd->pip[0]);
 	if (cmd->prev)
@@ -134,11 +93,7 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	else
 	{
 		if (make_things(cmd->cmd, tmp, shell->env, shell) == ERROR)
-		{
 			clean_all(shell, 1);
-			dup2(0, 0);
-			dup2(1, 1);
-		}
 	}
 	exit(0);
 }
@@ -174,11 +129,11 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	if (set_pip(cmd, cmd->pip) == ERROR)
 		return (ERROR);
 	if (open_redir(cmd, shell) == ERROR)
-		return (ERROR);
+		return (perror("error in file opening"), ERROR);
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
-		return (ft_biltin(cmd->cmd, env));
+		return (ft_biltin(cmd->cmd, env, shell));
 	fork_and_ecseve(shell, cmd, tm_i, tm_ou);
 	return SUCCESS;
 }
@@ -207,7 +162,8 @@ int	execute_cmd(t_shell *shell)
 		cmd = cmd->next;
 	}
 	while (waitpid(-1, &status, 0) > 0)
-		printf("-----%d", status);
+		if (WIFEXITED(status))
+        	shell->status = WEXITSTATUS(status);
 	tm_close(tm_in,tm_out, 1);
 	return (SUCCESS);
 }

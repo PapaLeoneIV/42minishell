@@ -6,7 +6,7 @@
 #    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/06/07 11:30:26 by fgori            ###   ########.fr        #
+#    Updated: 2024/06/11 15:06:23 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c) \
                 $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \
                 $(addprefix $(SYNTAX_HANDLER)/, syntax_analizer.c syntax_analizer_helpers.c) \
                 $(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
-				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c) \
+				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c) \
 				$(addprefix $(SIGNALS)/, signals_helpers.c) \
 				$(addprefix $(HEREDOC_TOKENIZER)/, heredoc_tokenizer.c) \
 				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c exit_build.c)  \

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/07 11:24:54 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/11 10:56:32 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	cd_path(char **mtx, t_env **env)
 
 	mtx_rows = mtx_count_rows(mtx);
 	if (mtx_rows > 2)
-		return (perror("ERROR\ntoo many arguments"), -1);
+		return (perror("ERROR\ntoo many arguments"), 0);
 	old = getcwd(NULL, 0);
 	if (mtx_rows == 2)
 		result = chdir(mtx[1]);
