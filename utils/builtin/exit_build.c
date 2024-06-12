@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/11 15:01:25 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/12 13:43:50 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 		{
 			if (!ft_isdigit(cmd->cmd[1][i]))
 				exit_status = 2;
-			if (!ft_isdigit(cmd->cmd[1][i]))
+			if (!ft_isdigit(cmd->cmd[1][i]) && exit_status != 2)
 				perror("Alpha in exit status");
 		}
 		if (exit_status != 2)
