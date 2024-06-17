@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:36:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 11:07:26 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/12 17:10:38 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int syntax_error_handler(t_token *head)
     t_token *ptr;
 
     ptr = head;
-    if (check_for_non_valid_char_list(ptr, "{}();\\&*") == 1)
+    if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1) //provato ad escludere * dalla lista di errore
     {
        printf("Invalid character found!\n");
        return (ERROR);
