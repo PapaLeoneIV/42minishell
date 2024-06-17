@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/11 15:04:35 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/17 17:41:07 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,26 @@ int	is_a_biltin(char **tmp)
 			|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
 			return (1);
 	return (0);
+}
+
+char	*ft_access(char **open_path, char *cmd)
+{
+	char	*tmp;
+	char	*supp;
+	int		i;
+
+	i = 0;
+	if (access(cmd, F_OK | X_OK) == 0)
+			return (cmd);
+	while (open_path[i])
+	{
+		tmp = ft_strjoin(open_path[i], "/");
+		supp = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (access(supp, F_OK | X_OK) == 0)
+			return (supp);
+		free (supp);
+		i++;
+	}
+	return (NULL);
 }
