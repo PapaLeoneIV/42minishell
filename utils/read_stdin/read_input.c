@@ -6,26 +6,25 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/07 12:05:19 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 12:16:02 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 struct sigaction signal_g;
 
 // Function to print the contents of the t_command and t_redir structures
-void print_shell_info(t_shell *shell)
+/*void	print_shell_info(t_shell *shell)
 {
-    if (shell == NULL || shell->cmd_info == NULL) {
-        printf("No command information available.\n");
-        return;
-    }
+	if (shell == NULL || shell->cmd_info == NULL) {
+		printf("No command information available.\n");
+		return;
+	}
 
-    t_command *cmd_info = *shell->cmd_info;
-    while (cmd_info != NULL) {
+	t_command *cmd_info = *shell->cmd_info;
+	while (cmd_info != NULL) {
         printf("Command ID: %d\n", cmd_info->cmd_id);
-        
         printf("Command: ");
         if (cmd_info->cmd != NULL) {
             for (int j = 0; cmd_info->cmd[j] != NULL; j++) {
@@ -51,7 +50,7 @@ void print_shell_info(t_shell *shell)
         cmd_info = cmd_info->next;
     }
 }
-
+*/
 
 void read_from_stdin(t_shell *shell, char **envp)
 {

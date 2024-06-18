@@ -6,24 +6,23 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/12 13:43:50 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 10:36:58 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 int	exit_path(t_command *cmd, t_shell *shell)
 {
 	unsigned int	exit_status;
-	int 			i;
+	int				i;
 
 	i = 0;
 	exit_status = 0;
 	open_redir(cmd, shell);
 	(void)(close(cmd->in) + close(cmd->out));
 	if (mtx_count_rows(cmd->cmd) > 2)
-		return(perror("exit\nexit: too many argument"), 300);
+		return (perror("exit\nexit: too many argument"), 300);
 	if (cmd->cmd[1])
 	{
 		while (cmd->cmd[1][i++])

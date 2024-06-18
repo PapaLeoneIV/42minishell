@@ -6,14 +6,14 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:41:05 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 11:16:48 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 12:19:02 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 
-void handle_signal(int signum)
+void	handle_signal(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -24,7 +24,7 @@ void handle_signal(int signum)
 	}	
 }
 
-void handle_ctrl_d(t_shell *shell, char *input, char *path)
+void	handle_ctrl_d(t_shell *shell, char *input, char *path)
 {
 	clean_env_lst(shell->env);
 	if (shell->line)
@@ -36,7 +36,7 @@ void handle_ctrl_d(t_shell *shell, char *input, char *path)
 	exit(1);
 }
 
-void set_signal_handler(struct sigaction *signal_g)
+void	set_signal_handler(struct sigaction *signal_g)
 {
 	signal_g->sa_handler = handle_signal;
 	sigaction(SIGINT, signal_g, NULL);

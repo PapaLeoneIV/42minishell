@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/11 10:56:32 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 10:36:01 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,11 @@ void	cd_excanger(char *new, char *path, t_env **env)
 	free(new);
 }
 
-int	cd_path(char **mtx, t_env **env)
-{
-
 	/***BISOGNEREBBE GESTIRE QUANDO CD RICEVE MULTIPLI ARGOMENTI
 	 * OPPURE GESTIRLO SEMPLICEMENTE NON ACCETTANDO PIU DI DUE ARGOMENTI
 	*/
+int	cd_path(char **mtx, t_env **env)
+{
 	char	*old;
 	char	*new;
 	int		mtx_rows;
@@ -91,7 +90,7 @@ int	echo_path(char **str)
 		{
 			i++;
 			n_flag = false;
-		}	
+		}
 		while (str[i])
 		{
 			printf("%s", str[i]);

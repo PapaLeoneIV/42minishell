@@ -6,11 +6,11 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/07 10:15:26 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 10:33:54 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
 int	gnl2(char **line)
 {
@@ -38,19 +38,19 @@ int	gnl2(char **line)
 	return (n);
 }
 
-char **mtx_dup(char **mtx, int len)
+char	**mtx_dup(char **mtx, int len)
 {
-	char **out;
-	int i;
+	char	**out;
+	int		i;
 
 	i = 0;
-	out = ft_calloc(len + 1 , sizeof(char *));
-	while(i < len)
+	out = ft_calloc(len + 1, sizeof(char *));
+	while (i < len)
 	{
 		out[i] = ft_strdup(mtx[i]);
 		i++;
 	}
-	return out;
+	return (out);
 }
 
 void	freeall(char **mat)
@@ -82,7 +82,7 @@ int	set_pip(t_command *cmd, int *pip)
 {
 	if ((cmd->cmd_id == 0 && cmd->next != NULL) || cmd->cmd_id != 0)
 		if (pipe(pip) < 0)
-			return(perror ("ERROR while opening the pipe\n"), ERROR);
+			return (perror ("ERROR while opening the pipe\n"), ERROR);
 	if (cmd->next)
 	{
 		cmd->out = pip[1];

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/07 12:07:08 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 10:45:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	clean_redir(t_redir **redir)
 
 void	clean_cmd_node(t_command **cmd)
 {
-	t_command *tmp;
+	t_command	*tmp;
 
 	while ((*cmd))
 	{
@@ -45,12 +45,11 @@ void	clean_cmd_node(t_command **cmd)
 		free(tmp);
 	}
 	free(cmd);
-	
 }
 
 void	clean_all(t_shell *shell, int flag)
 {
-	if(flag)
+	if (flag)
 	{
 		clean_env_lst(shell->env);
 		rl_cleanup_after_signal();

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:23:54 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/07 14:14:29 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 10:53:15 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_env	*lst_new_env(char *envp_line, char **en)
 		if (ft_strncmp(new->head, "_", ft_strlen(new->head)) == 0)
 			new->esistence = -1;
 	}
-	else 
+	else
 	{
 		new->head = ft_strdup(envp_line);
 		new->esistence = 1;

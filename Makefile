@@ -6,7 +6,7 @@
 #    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/06/11 15:06:23 by fgori            ###   ########.fr        #
+#    Updated: 2024/06/18 11:06:59 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -I./$(INCLUDES)
 COMPILE = $(CC) $(CFLAGS)
 ARCHIVE = ar rcs
-SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c) \
+SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c export_path.c) \
                 $(addprefix $(READ_SDTIN)/, read_input.c ) \
                 $(addprefix $(TOKENIZER)/, tokenizer_state_methods.c tokenizer.c tokenizer_utils.c tokenizer_helpers.c tokenizer_slice_methods.c) \
                 $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \

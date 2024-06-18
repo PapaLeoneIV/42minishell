@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/10 18:13:00 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 10:30:10 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	list_of_out(t_redir **dir)
 	while ((*dir))
 	{
 		if ((*dir)->type_of_redirection == GREATER_TOKEN)
-			fd = open((*dir)->filename,  O_TRUNC | O_CREAT | O_RDWR, 0777);
+			fd = open((*dir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
 		else
-			fd = open((*dir)->filename,  O_APPEND | O_CREAT | O_RDWR, 0777);
+			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
 			printf("impossible to open: %s\n", (*dir)->filename);
@@ -39,7 +39,7 @@ int	list_of_out(t_redir **dir)
 int	list_of_in(t_redir **dir)
 {
 	int	fd;
-	
+
 	while ((*dir) && (*dir)->type_of_redirection == LESSER_TOKEN)
 	{
 		fd = open((*dir)->filename, O_RDONLY, 0777);
@@ -47,26 +47,27 @@ int	list_of_in(t_redir **dir)
 		{
 			printf("%s: No such file or directory\n", (*dir)->filename);
 			(*dir) = (*dir)->next;
-			return(-1);
+			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == LESSER_TOKEN)
 			close(fd);
-		(*dir) = (*dir)->next;   
+		(*dir) = (*dir)->next;
 	}
 	return (fd);
 }
 
-int prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
+int	prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
 {
 	char	*tmp;
 
 	ft_putchar_fd('>', 1);
 	if (gnl2(&line) && line[ft_strlen((*redir)->filename)] == '\n'
-		&& ft_strncmp(line, (*redir)->filename, ft_strlen((*redir)->filename)) == 0)
-		{
-			free(line);
-			return (0);
-		}
+		&& ft_strncmp(line, (*redir)->filename,
+			ft_strlen((*redir)->filename)) == 0)
+	{
+		free(line);
+		return (0);
+	}
 	if ((*redir)->heredoc_expansion)
 	{
 		tmp = heredoc_tokenizer(line, shell);
@@ -87,7 +88,7 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 
 	ex = 1;
 	line = NULL;
-	fd = open((*redir)->filename, O_TRUNC| O_CREAT | O_RDWR, 0777);
+	fd = open((*redir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
 	if (fd < 0)
 		return (perror("ERROR"), ERROR);
 	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
@@ -106,7 +107,7 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 int	open_redir(t_command *cmd, t_shell *shell)
 {
 	t_redir	*tmp;
-	
+
 	if (!cmd->redirection_info)
 		return (1);
 	tmp = (*cmd->redirection_info);
@@ -114,12 +115,12 @@ int	open_redir(t_command *cmd, t_shell *shell)
 	{
 		if (!tmp)
 			break ;
-		if (tmp->type_of_redirection  == GREATER_TOKEN
-			|| tmp->type_of_redirection  == REDIR_OUT_TOKEN)
+		if (tmp->type_of_redirection == GREATER_TOKEN
+			|| tmp->type_of_redirection == REDIR_OUT_TOKEN)
 			cmd->out = list_of_out(&tmp);
-		else if (tmp->type_of_redirection  == LESSER_TOKEN)
+		else if (tmp->type_of_redirection == LESSER_TOKEN)
 			cmd->in = list_of_in(&tmp);
-		else if (tmp->type_of_redirection  == HEREDOC_TOKEN)
+		else if (tmp->type_of_redirection == HEREDOC_TOKEN)
 		{
 			if (cmd->here)
 				unlink(cmd->here);
