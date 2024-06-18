@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/17 18:01:38 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 13:52:13 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 		if (make_things(cmd->cmd, tmp, shell->env, shell) == ERROR)
 			clean_all(shell, 1);
 	}
-	exit(0);
+	exit(127);
 }
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
@@ -104,7 +104,10 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	if (set_pip(cmd, cmd->pip) == ERROR)
 		return (ERROR);
 	if (open_redir(cmd, shell) == ERROR)
+	{
+		shell->status = -1;
 		return (perror("error in file opening"), ERROR);
+	}
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)

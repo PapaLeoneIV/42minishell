@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 10:32:05 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:14:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
 	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
 		i = unset_path(lst, tmp);
 	if (i == 0)
-		shell->status = 255;
+		shell->status = i;
 	return (i);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 10:36:01 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:14:51 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	cd_path(char **mtx, t_env **env)
 
 	mtx_rows = mtx_count_rows(mtx);
 	if (mtx_rows > 2)
-		return (perror("ERROR\ntoo many arguments"), 0);
+		return (perror("ERROR\ntoo many arguments"), 1);
 	old = getcwd(NULL, 0);
 	if (mtx_rows == 2)
 		result = chdir(mtx[1]);
@@ -62,7 +62,7 @@ int	cd_path(char **mtx, t_env **env)
 		perror(mtx[1]);
 	cd_excanger(old, "OLDPWD", env);
 	cd_excanger(new, "PWD", env);
-	return (1);
+	return (0);
 }
 
 int	pwd_path(void)
@@ -72,7 +72,7 @@ int	pwd_path(void)
 	path = getcwd(NULL, 0);
 	printf("%s\n", path);
 	free(path);
-	return (1);
+	return (0);
 }
 
 int	echo_path(char **str)
@@ -83,7 +83,7 @@ int	echo_path(char **str)
 	i = 1;
 	n_flag = true;
 	if (!str)
-		return (-1);
+		return (1);
 	if (mtx_count_rows(str) > 1)
 	{
 		if (ft_strncmp(str[1], "-n", ft_strlen(str[1])) == 0)
@@ -101,7 +101,7 @@ int	echo_path(char **str)
 	}
 	if (n_flag)
 		printf("\n");
-	return (1);
+	return (0);
 }
 
 int	env_path(t_env	**env)
@@ -115,6 +115,6 @@ int	env_path(t_env	**env)
 			printf("%s=%s\n", tmp->head, tmp->body);
 		tmp = tmp->next;
 	}
-	return (1);
+	return (0);
 }
 //cd comand funtion end//
