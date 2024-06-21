@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/21 12:41:23 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:34:47 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void read_from_stdin(t_shell *shell, char **envp)
 	 	if (syntax_error_handler(head) == ERROR)
 		{
 			free_tokens(head);
+			shell->status = 2;
 			continue;
 		}
      	if(parse_redirections(head, shell) == ERROR)

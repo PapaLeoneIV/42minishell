@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 14:43:31 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:44:24 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	red_st = open_redir(cmd, shell);
 	if (red_st == ERROR || red_st == -2)
 	{
-		shell->status = -1;
+		shell->status = 1;
 		if (red_st == -2)
 			return (ERROR);
 		return (perror("ERROR file opening\n"), ERROR);
