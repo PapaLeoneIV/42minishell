@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
- struct sigaction signal_h;
 
 int	list_of_out(t_redir **dir)
 {
@@ -45,7 +44,7 @@ int	list_of_in(t_redir **dir)
 	{
 		fd = open((*dir)->filename, O_RDONLY, 0777);
 		if (fd < 0)
-		{	
+		{
 			write(2, &(*dir)->filename, ft_strlen((*dir)->filename));
 			write(2, "No such file or directory\n", 27);
 			(*dir) = (*dir)->next;
@@ -58,18 +57,17 @@ int	list_of_in(t_redir **dir)
 	return (fd);
 }
 
-int check_valid_line(char *line)
+int	check_valid_line(char *line)
 {
-	if(line && *line == '\0')
-		return 0;
-	return 1;
+	if (line && *line == '\0')
+		return (ERROR);
+	return (SUCCESS);
 }
 
 int	prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
 {
 	char	*tmp;
 
-	set_signal_handler(&signal_h, 0);
 	ft_putchar_fd('>', 1);
 	if (gnl2(&line) && check_valid_line(line) && line[ft_strlen((*redir)->filename)] == '\n'
 		&& ft_strncmp(line, (*redir)->filename,
