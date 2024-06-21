@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 13:54:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:40:40 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ int	list_of_in(t_redir **dir)
 	{
 		fd = open((*dir)->filename, O_RDONLY, 0777);
 		if (fd < 0)
-		{
-			printf("%s: No such file or directory\n", (*dir)->filename);
+		{	
+			write(2, &(*dir)->filename, ft_strlen((*dir)->filename));
+			write(2, "No such file or directory\n", 27);
 			(*dir) = (*dir)->next;
 			return (-1);
 		}
