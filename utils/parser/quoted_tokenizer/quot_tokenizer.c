@@ -68,8 +68,22 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 
 void general_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 {
+	char next;
+	char prev;
+	
+	prev = -1;
+	next = -1;
 	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR)
 	{
+		if (stringa[pars->count + 1])
+			next = get_char_type(stringa, pars, pars->count + 1);
+		if (pars->count > 0 && stringa[pars->count - 1])
+			prev = get_char_type(stringa, pars, pars->count - 1);
+		if (pars->char_type == DOLLAR_CHAR && next == WHITESPACE_CHAR)
+		{
+			slice_token_string_doll_spec_case(stringa, pars);
+			return ;
+		}
 		if (pars->count > pars->start)  																									//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
 		if (pars->char_type == WHITESPACE_CHAR)
@@ -82,7 +96,7 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 {
 	/***qui dipende se voglio gestire $1 $2 $3 $? ....*/
 
-
+	char *status;
 	/***per il momento $? viene espanso e risulta uguale a NULL (ERRORE)*/
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
 	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
@@ -94,6 +108,13 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 		{
 			free(pars->token->value);
 			pars->token->value = ft_strdup("minishell");
+		}
+		else if (strcmp(pars->token->value, "$?") == 0)
+		{
+			status = ft_itoa(shell->status);
+			free(pars->token->value);
+			pars->token->value = ft_strdup(status);
+			free(status);
 		}
 		else
 			pars->token->value = NULL;
