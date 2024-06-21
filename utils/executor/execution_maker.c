@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 13:52:13 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/21 14:43:31 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		supp = ft_access(open_path, tmp_cmd[0]);
 		if (!supp)
 		{
+			shell->status = 127;
 			perror("ERROR\nunfinded path");
 			freeall(tmp_cmd);
 			return (freeall(open_path), freeall(tmp_env), ERROR);
@@ -35,7 +36,10 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		freeall(open_path);
 		clean_all(shell, 1);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
-			return (perror("ERROR\n execve don't replies"), ERROR);
+		{
+			shell->status = 126;
+			return (perror("ERROR\nexecve don't replies"), ERROR);
+		}
 		free(supp);
 	}
 	return (ERROR);
@@ -56,7 +60,7 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 		close(cmd->out);
 	}
 	tmp = find_node(shell->env, "PATH");
-	if (tmp == NULL && access(cmd->cmd[0], F_OK | X_OK) != 0)
+	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0)
 	{
 		perror("unvalid Path\n");
 		clean_all(shell, 1);
@@ -64,9 +68,12 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	else
 	{
 		if (make_things(cmd->cmd, tmp, shell->env, shell) == ERROR)
-			clean_all(shell, 1);
+		{
+			printf("status = %d", shell->status);
+			//clean_all(shell, 1);
+		}
 	}
-	exit(127);
+	exit(shell->status);
 }
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
@@ -98,15 +105,19 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
 	int		tm_i;
 	int		tm_ou;
+	int		red_st;
 
 	tm_i = cmd->in;
 	tm_ou = cmd->out;
 	if (set_pip(cmd, cmd->pip) == ERROR)
 		return (ERROR);
-	if (open_redir(cmd, shell) == ERROR)
+	red_st = open_redir(cmd, shell);
+	if (red_st == ERROR || red_st == -2)
 	{
 		shell->status = -1;
-		return (perror("error in file opening"), ERROR);
+		if (red_st == -2)
+			return (ERROR);
+		return (perror("ERROR file opening\n"), ERROR);
 	}
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);

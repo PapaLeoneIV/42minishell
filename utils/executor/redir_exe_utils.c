@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 10:30:10 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/21 13:54:00 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+ struct sigaction signal_h;
 
 int	list_of_out(t_redir **dir)
 {
@@ -56,15 +57,31 @@ int	list_of_in(t_redir **dir)
 	return (fd);
 }
 
+int check_valid_line(char *line)
+{
+	if(line && *line == '\0')
+		return 0;
+	return 1;
+}
+
 int	prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
 {
 	char	*tmp;
 
+	set_signal_handler(&signal_h, 0);
 	ft_putchar_fd('>', 1);
-	if (gnl2(&line) && line[ft_strlen((*redir)->filename)] == '\n'
+	if (gnl2(&line) && check_valid_line(line) && line[ft_strlen((*redir)->filename)] == '\n'
 		&& ft_strncmp(line, (*redir)->filename,
 			ft_strlen((*redir)->filename)) == 0)
 	{
+		free(line);
+		return (0);
+	}
+	if (line == NULL)
+		return (-1);
+	if (line && line[0] == '\0')
+	{
+		write(2, "\nminishell: warning: here-document delimited by end-of-file\n", 61);
 		free(line);
 		return (0);
 	}
@@ -75,7 +92,9 @@ int	prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
 		free (tmp);
 	}
 	else
+	{
 		ft_putstr_fd(line, fd);
+	}
 	free(line);
 	return (1);
 }
@@ -96,6 +115,8 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 		while (ex)
 		{
 			ex = prompt_here(line, fd, redir, shell);
+			if (ex == -1)
+				return (close(fd), -2);
 		}
 		close(fd);
 		(*redir)->type_of_redirection = LESSER_TOKEN;
@@ -129,6 +150,8 @@ int	open_redir(t_command *cmd, t_shell *shell)
 		}
 		if (cmd->out == -1 || cmd->in == -1)
 			return (ERROR);
+		else if (cmd->in == -2)
+			return (-2);
 	}
 	return (1);
 }

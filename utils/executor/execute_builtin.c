@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 14:14:57 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/21 14:47:15 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
 		i = export_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
 		i = unset_path(lst, tmp);
-	if (i == 0)
+	if (i >= 0)
 		shell->status = i;
 	return (i);
 }
@@ -58,14 +58,14 @@ char	*ft_access(char **open_path, char *cmd)
 	int		i;
 
 	i = 0;
-	if (access(cmd, F_OK | X_OK) == 0)
+	if (access(cmd, F_OK) == 0)
 		return (cmd);
 	while (open_path[i])
 	{
 		tmp = ft_strjoin(open_path[i], "/");
 		supp = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(supp, F_OK | X_OK) == 0)
+		if (access(supp, F_OK) == 0)
 			return (supp);
 		free (supp);
 		i++;

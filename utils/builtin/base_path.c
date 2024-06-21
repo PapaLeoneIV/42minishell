@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 14:14:51 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/21 14:46:37 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	cd_path(char **mtx, t_env **env)
 
 	mtx_rows = mtx_count_rows(mtx);
 	if (mtx_rows > 2)
-		return (perror("ERROR\ntoo many arguments"), 1);
+		return (perror("ERROR\ntoo many arguments"), 2);
 	old = getcwd(NULL, 0);
 	if (mtx_rows == 2)
 		result = chdir(mtx[1]);
@@ -83,7 +83,7 @@ int	echo_path(char **str)
 	i = 1;
 	n_flag = true;
 	if (!str)
-		return (1);
+		return (2);
 	if (mtx_count_rows(str) > 1)
 	{
 		if (ft_strncmp(str[1], "-n", ft_strlen(str[1])) == 0)

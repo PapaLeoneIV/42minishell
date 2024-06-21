@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 12:02:13 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/21 14:56:03 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,16 @@ static void	plus_n_equal(t_env **lst, char *str)
 int	export_path(t_env **lst, char **mtx)
 {
 	int	i;
+	int	x;
 
 	i = 1;
 	if (mtx_count_rows(mtx) == 1)
 		solo_export(lst);
-	while (mtx[i] && check_head(mtx[i]))
+	while (mtx[i])
 	{
+		x = check_head(mtx[i]);
+		if (!x)
+			return(1);
 		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
 		{
 			plus_n_equal(lst, mtx[i]);
@@ -76,5 +80,5 @@ int	export_path(t_env **lst, char **mtx)
 			normal_equal(lst, mtx[i]);
 		i++;
 	}
-	return ((mtx[i] == NULL));
+	return (0);
 }

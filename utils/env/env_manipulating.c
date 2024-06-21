@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 12:02:01 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/21 14:48:25 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ int	unset_path(t_env **lst, char **mtx)
 	if (!mtx[1])
 	{
 		perror("ERROR\n");
-		return (0);
+		return (2);
 	}
 	tmp = find_node(lst, mtx[1]);
 	if (!tmp)
 	{
 		perror("ERROR\n");
-		return (0);
+		return (2);
 	}
 	if (!tmp->next)
 	{
@@ -74,5 +74,5 @@ int	unset_path(t_env **lst, char **mtx)
 		tmp->next->prev = tmp->prev;
 		clean_env_node(&tmp);
 	}
-	return (1);
+	return (0);
 }

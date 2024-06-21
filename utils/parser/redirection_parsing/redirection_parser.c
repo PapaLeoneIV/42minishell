@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 15:53:21 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/21 11:36:17 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int parse_redirections(t_token *head, t_shell *shell)
 	{
 		check = -1;
 		cmd_node = new_command(i);
-		tmp_list = split_command_based_on_pipes(&ptr);  
+		tmp_list = split_command_based_on_pipes(&ptr);
 		node = tmp_list;
 		while (node != NULL && node->type != PIPE_TOKEN)
 		{
