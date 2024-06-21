@@ -69,16 +69,12 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 void general_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 {
 	char next;
-	char prev;
-	
-	prev = -1;
+
 	next = -1;
 	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR)
 	{
 		if (stringa[pars->count + 1])
 			next = get_char_type(stringa, pars, pars->count + 1);
-		if (pars->count > 0 && stringa[pars->count - 1])
-			prev = get_char_type(stringa, pars, pars->count - 1);
 		if (pars->char_type == DOLLAR_CHAR && next == WHITESPACE_CHAR)
 		{
 			slice_token_string_doll_spec_case(stringa, pars);

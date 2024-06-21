@@ -12,16 +12,16 @@
 
 
 #ifndef SIGNALS_H
-#define SIGNALS_H
+# define SIGNALS_H
 
 #include "./minishell.h"
 
-extern struct sigaction signal_g; 
+extern struct sigaction signal_g;
 typedef struct s_shell t_shell;
 
-void set_signal_handler(struct sigaction *signal_g, int flag);
-void handle_signal(int signum);
-void handle_ctrl_d(t_shell *shell, char *input,  char *path);
+void	set_signal_handler(struct sigaction *signal_g, int flag);
+void	handle_signal(int signum);
+void	handle_ctrl_d(t_shell *shell, char *input);
 
 
 #endif

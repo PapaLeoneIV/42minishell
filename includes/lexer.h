@@ -189,7 +189,7 @@ void		redirection_clear(t_token **head);
 
 /**REDIRECTION PARSING*/
 int			parse_redirections(t_token *head, t_shell *shell);
-int			handle_redirection_logic(t_token *node, t_shell *shell, t_command *cmd_node);
+int			handle_redirection_logic(t_token *node, t_command *cmd_node);
 int			remove_redir(t_token **redir);
 t_token		*split_command_based_on_pipes(t_token **ptr);
 int			count_pipes(t_token *head);

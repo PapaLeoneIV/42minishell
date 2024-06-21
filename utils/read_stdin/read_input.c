@@ -12,41 +12,52 @@
 
 #include "minishell.h"
 
- struct sigaction signal_g;
+struct sigaction signal_g;
 
-void read_from_stdin(t_shell *shell, char **envp)
+
+static int	tokenizer(t_shell *shell, char *input, t_token	**head)
 {
-	t_token     *head;
-	char		*input;
-	char		*prompt_path;
+	*head = tokenize_input(input, shell);
+	if (*head == NULL)
+		return (ERROR);
+	return (SUCCESS);
+}
 
+static int	lexer(t_token *head, t_shell *shell)
+{
+	if (syntax_error_handler(head) == ERROR)
+	{
+		free_tokens(head);
+		shell->status = 2;
+		return (ERROR) ;
+	}
+	if (parse_redirections(head, shell) == ERROR)
+		write(1, "Redirection error\n", 19);
+	return (SUCCESS);
+}
+
+void	read_from_stdin(t_shell *shell, char **envp)
+{
+	t_token		*head;
+	char		*input;
+
+	head = NULL;
 	memset(&signal_g, 0, sizeof(signal_g));
 	set_signal_handler(&signal_g, 1);
 	shell->env = get_env_info(envp);
 	while (true)
 	{
-		prompt_path = get_directory_path();
 		input = readline("(MINISHELL)$ ");
 		if (!input)
-			handle_ctrl_d(shell, input, prompt_path);
-		free(prompt_path); 
-		head = tokenize_input(input, shell);
+			handle_ctrl_d(shell, input);
+		if (tokenizer(shell, input, &head) == ERROR)
+			continue ;
 		add_history(input);
 		free(input);
-  		if (head == NULL)
-			continue; 
-	 	if (syntax_error_handler(head) == ERROR)
-		{
-			free_tokens(head);
-			shell->status = 2;
-			continue;
-		}
-     	if(parse_redirections(head, shell) == ERROR)
-			printf("Redirection error\n");
+		if (lexer(head, shell) == ERROR)
+			continue ;
 		free_tokens(head);
- 		if (execute_cmd(shell) == ERROR)
-		{
-		}
+		execute_cmd(shell);
 		clean_all(shell, 0);
 	}
 }

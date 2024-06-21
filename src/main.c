@@ -12,19 +12,17 @@
 
 #include "../includes/minishell.h"
 
-
-
-int main(int argc, char **argv , char **envp)
+int	main(int argc, char **argv , char **envp)
 {
-    t_shell shell;
-    
-    shell = (t_shell){0}; 
-    (void)argv;
-    if(argc != 1)
-        perror("Wrong number of arguments my boi!");
-    read_from_stdin(&shell, envp);
-    return (0);
-}
+	t_shell	shell;
 
-// il singolo ' comprime gli spazi nelle parentesi vedi echo '    dkjb    vhb    ', gli unici spazi a restare sono quelli fra due parole
-//il programma rivela * come invalid caracter ma in funzione expr fa da moltiplicazione
+	shell = (t_shell){0};
+	(void)argv;
+	if (argc != 1)
+	{
+		perror("Wrong number of arguments my boi!");
+		/*qui bisogna capire cosa vogliamo fare quando */
+	}
+	read_from_stdin(&shell, envp);
+	return (EXIT_SUCCESS);
+}

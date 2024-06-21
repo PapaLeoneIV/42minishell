@@ -89,18 +89,16 @@ int	syntax_error_handler(t_token *head)
 	t_token	*ptr;
 
 	ptr = head;
-	if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1) //provato ad escludere * dalla lista di errore
-	{
-		write(2, "Invalid character found!\n", 26);
-		return (ERROR);
-	}
+	if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1)
+		return (write(2, "Invalid character found!\n", 26), ERROR);
 	change_non_special_tokens_to_word_tokens(head);
 	remove_whitespaces(head);
 	ptr = head;
 	while (ptr)
 	{
 		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '|'\n", 40), ERROR);
+			return (write(2, "Syntax error near unexpected token '|'\n", 40),
+			ERROR);
 		else if (ptr->type == GREATER_TOKEN && !handle_greater_synt_error_tokens(ptr))
 			return (write(2, "Syntax error near unexpected token '>'\n", 40), ERROR);
 		else if (ptr->type == LESSER_TOKEN && !handle_lesser_synt_error_tokens(ptr))
