@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 14:56:03 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 16:04:10 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ static void	solo_export(t_env **lst)
 	while (tmp)
 	{
 		if (tmp->esistence > -1)
-			printf("declare -x %s=%s\n", tmp->head, tmp->body);
+		{
+			if(tmp->body)
+				ft_printf("declare -x %s=%s\n", tmp->head, tmp->body);
+			else
+				ft_printf("declare -x %s\n", tmp->head);
+		}
 		tmp = tmp->next;
 	}
 }
@@ -30,7 +35,10 @@ static void	normal_equal(t_env **lst, char *str)
 	char	*sup;
 	t_env	*tmp;
 
-	sup = ft_substr(str, 0, ft_strchri(str, '='));
+	if (ft_strchri(str, '=') > 0)
+		sup = ft_substr(str, 0, ft_strchri(str, '='));
+	else
+		sup = ft_substr(str, 0, ft_strlen(str));
 	tmp = find_node(lst, sup);
 	if (!tmp)
 		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
@@ -51,8 +59,7 @@ static void	plus_n_equal(t_env **lst, char *str)
 	tmp = find_node(lst, sup);
 	free(sup);
 	if (!tmp)
-		add_node_to_env_struct(lst,
-			lst_new_env(str, (*lst)->env_mtx));
+		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
 	tmp->body = ft_strjoin(tmp->body, ft_substr(str,
 				ft_strchri(str, '=') + 1, ft_strlen(str)));
 	if (tmp->esistence == 1)

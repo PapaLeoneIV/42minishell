@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 14:46:37 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 16:20:22 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ void	cd_excanger(char *new, char *path, t_env **env)
 	free(new);
 }
 
-	/***BISOGNEREBBE GESTIRE QUANDO CD RICEVE MULTIPLI ARGOMENTI
-	 * OPPURE GESTIRLO SEMPLICEMENTE NON ACCETTANDO PIU DI DUE ARGOMENTI
-	*/
 int	cd_path(char **mtx, t_env **env)
 {
 	char	*old;
@@ -48,7 +45,7 @@ int	cd_path(char **mtx, t_env **env)
 
 	mtx_rows = mtx_count_rows(mtx);
 	if (mtx_rows > 2)
-		return (perror("ERROR\ntoo many arguments"), 2);
+		return (write(2, "\ntoo many arguments", 20), 1);
 	old = getcwd(NULL, 0);
 	if (mtx_rows == 2)
 		result = chdir(mtx[1]);
@@ -59,7 +56,10 @@ int	cd_path(char **mtx, t_env **env)
 	}
 	new = getcwd(NULL, 0);
 	if (result == -1)
-		perror(mtx[1]);
+	{
+		g_status_code = 1;
+		return (1);
+	}
 	cd_excanger(old, "OLDPWD", env);
 	cd_excanger(new, "PWD", env);
 	return (0);
