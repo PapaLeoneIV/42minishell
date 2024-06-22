@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 14:48:25 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 16:08:13 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,11 @@ int	unset_path(t_env **lst, char **mtx)
 	t_env	*tmp;
 
 	if (!mtx[1])
-	{
-		perror("ERROR\n");
-		return (2);
-	}
+		return (0);
 	tmp = find_node(lst, mtx[1]);
 	if (!tmp)
 	{
-		perror("ERROR\n");
-		return (2);
+		return (0);
 	}
 	if (!tmp->next)
 	{
