@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 16:40:40 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 15:36:35 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	list_of_in(t_redir **dir)
 		fd = open((*dir)->filename, O_RDONLY, 0777);
 		if (fd < 0)
 		{
-			write(2, &(*dir)->filename, ft_strlen((*dir)->filename));
-			write(2, "No such file or directory\n", 27);
+			write(2, (*dir)->filename, ft_strlen((*dir)->filename));
+			write(2, " : No such file or directory\n", 30);
 			(*dir) = (*dir)->next;
 			return (-1);
 		}
@@ -67,32 +67,36 @@ int	check_valid_line(char *line)
 int	prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
 {
 	char	*tmp;
+	char	*input_here;
 
-	ft_putchar_fd('>', 1);
-	if (gnl2(&line) && check_valid_line(line) && line[ft_strlen((*redir)->filename)] == '\n'
-		&& ft_strncmp(line, (*redir)->filename,
-			ft_strlen((*redir)->filename)) == 0)
+	signal(SIGINT, handle_signal);
+	input_here = readline(">");
+	if (input_here == NULL || g_status_code == 130)
 	{
-		free(line);
-		return (0);
-	}
-	if (line == NULL)
+		free(input_here);
 		return (-1);
-	if (line && line[0] == '\0')
+	}
+	if (ft_strncmp(input_here, (*redir)->filename, ft_strlen(input_here)) == 0)
 	{
-		write(2, "\nminishell: warning: here-document delimited by end-of-file\n", 61);
-		free(line);
+		free(input_here);
 		return (0);
 	}
 	if ((*redir)->heredoc_expansion)
 	{
-		tmp = heredoc_tokenizer(line, shell);
-		ft_putstr_fd(tmp, fd);
-		free (tmp);
+		char	*temp;
+		tmp = heredoc_tokenizer(input_here, shell);
+		temp = ft_strjoin(tmp, "\n");
+		free(tmp);
+		ft_putstr_fd(temp, fd);
+		free (temp);
 	}
 	else
 	{
-		ft_putstr_fd(line, fd);
+		char	*temp;
+		temp = ft_strjoin(line, "\n");
+		free(line);
+		ft_putstr_fd(temp, fd);
+		free (temp);
 	}
 	free(line);
 	return (1);
@@ -114,7 +118,9 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 		while (ex)
 		{
 			ex = prompt_here(line, fd, redir, shell);
-			if (ex == -1)
+			if (ex == -1 && g_status_code != 130)
+				write(2, "\nminishell: warning: here-document delimited by end-of-file\n", 61);
+			if (ex == -1 || g_status_code == 130)
 				return (close(fd), -2);
 		}
 		close(fd);
