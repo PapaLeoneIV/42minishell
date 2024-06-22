@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/21 16:34:47 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 10:21:26 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	read_from_stdin(t_shell *shell, char **envp)
 	char		*input;
 
 	head = NULL;
-	memset(&signal_g, 0, sizeof(signal_g));
-	set_signal_handler(&signal_g, 1);
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, SIG_IGN);
 	shell->env = get_env_info(envp);
 	while (true)
 	{
@@ -61,4 +61,3 @@ void	read_from_stdin(t_shell *shell, char **envp)
 		clean_all(shell, 0);
 	}
 }
-

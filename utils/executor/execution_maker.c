@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 16:44:24 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 10:20:03 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 	char	**tmp_cmd;
 	char	**tmp_env;
 
-	signal(SIGQUIT, SIG_DFL);
+
 	if (ft_biltin(cmd, env, shell) == -1)
 	{
 		tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
@@ -35,6 +35,8 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		}
 		freeall(open_path);
 		clean_all(shell, 1);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
 			shell->status = 126;
