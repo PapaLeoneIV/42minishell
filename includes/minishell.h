@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 14:33:25 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/22 14:49:15 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 #include <signal.h>
+#include <sys/ioctl.h>
 
 #include "signals.h"
 #include "./lexer.h"
@@ -31,6 +32,7 @@ typedef struct s_command t_command;
 typedef struct s_shell t_shell;
 typedef struct s_redir t_redir;
 
+extern int g_status_code;
 
 typedef struct s_env
 {
@@ -45,10 +47,10 @@ typedef struct s_env
 typedef struct s_shell
 {
     char        *line;
-	int			shell_pip[2];				//provato ad aggiungere qui questa pipe, l'intezione è di usarla come principale
+	int			shell_pip[2];
     t_command   **cmd_info;
     t_env       **env;
-	int			status;
+	int			*status;
 }   t_shell;
 
 /**ENV FUNCTIONS*/

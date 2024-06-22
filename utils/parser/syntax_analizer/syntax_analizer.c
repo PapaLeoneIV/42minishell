@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 16:36:27 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 10:27:16 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,7 @@ int	syntax_error_handler(t_token *head)
 	while (ptr)
 	{
 		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '|'\n", 40),
-			ERROR);
+			return (write(2, "Syntax error near unexpected token '|'\n", 40), ERROR);
 		else if (ptr->type == GREATER_TOKEN && !handle_greater_synt_error_tokens(ptr))
 			return (write(2, "Syntax error near unexpected token '>'\n", 40), ERROR);
 		else if (ptr->type == LESSER_TOKEN && !handle_lesser_synt_error_tokens(ptr))
