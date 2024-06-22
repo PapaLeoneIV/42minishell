@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/21 11:36:17 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 10:57:18 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	remove_redir(t_token **redir)
 	int		i;
 	t_token	*tmp;
 
-	i =0;
+	i = 0;
 	tmp = (*redir);
 	if ((*redir)->prev && (*redir)->next->next)
 	{
@@ -125,7 +125,7 @@ int	remove_redir(t_token **redir)
 	}
 	else if ((*redir)->prev && !(*redir)->next->next)
 	{
-		(*redir)->prev->next = NULL;	
+		(*redir)->prev->next = NULL;
 		*redir = (*redir)->prev;
 	}
 	return (redirection_clear(&tmp->next), redirection_clear(&tmp), i);
@@ -146,6 +146,22 @@ void	redirector(t_command **cmd_node, t_token **tmp_list,
 	*check = -1;
 }
 
+int token_list_len(t_token *list)
+{
+	t_token	*ptr;
+	int		len;
+
+	ptr = list;
+	len = 0;
+	if (!ptr)
+		return (0);
+	while (ptr)
+	{
+		len++;
+		ptr = ptr->next;
+	}
+	return (len);
+}
 
 int	parse_redirections(t_token *head, t_shell *shell)
 {
@@ -164,11 +180,13 @@ int	parse_redirections(t_token *head, t_shell *shell)
 		check = -1;
 		cmd_node = new_command(i);
 		tmp_list = split_command_based_on_pipes(&ptr);
+		int len = token_list_len(tmp_list);
 		node = tmp_list;
 		while (node != NULL && node->type != PIPE_TOKEN)
 			redirector(&cmd_node, &tmp_list, &node, &check);
 		cmd_node->cmd = from_lst_to_mtx(tmp_list);
-		free_tokens(tmp_list);
+		if (len > 2)
+			free_tokens(tmp_list);
 		add_back_commands(shell->cmd_info, cmd_node);
 		i++;
 	}
