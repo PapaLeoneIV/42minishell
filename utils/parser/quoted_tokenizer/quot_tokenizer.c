@@ -107,7 +107,7 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 		}
 		else if (strcmp(pars->token->value, "$?") == 0)
 		{
-			status = ft_itoa(shell->status);
+			status = ft_itoa(g_status_code);
 			free(pars->token->value);
 			pars->token->value = ft_strdup(status);
 			free(status);

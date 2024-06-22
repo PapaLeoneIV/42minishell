@@ -6,13 +6,14 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/22 10:21:26 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 14:02:50 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 struct sigaction signal_g;
+
 
 
 static int	tokenizer(t_shell *shell, char *input, t_token	**head)
@@ -28,7 +29,7 @@ static int	lexer(t_token *head, t_shell *shell)
 	if (syntax_error_handler(head) == ERROR)
 	{
 		free_tokens(head);
-		shell->status = 2;
+		g_status_code = 2;
 		return (ERROR) ;
 	}
 	if (parse_redirections(head, shell) == ERROR)

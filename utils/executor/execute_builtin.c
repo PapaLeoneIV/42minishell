@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 14:47:15 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 16:08:33 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
 {
 	int	i;
-
+	
+	(void)shell;
 	i = -1;
 	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
 	{
@@ -33,8 +34,7 @@ int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
 		i = export_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
 		i = unset_path(lst, tmp);
-	if (i >= 0)
-		shell->status = i;
+	g_status_code = i;
 	return (i);
 }
 

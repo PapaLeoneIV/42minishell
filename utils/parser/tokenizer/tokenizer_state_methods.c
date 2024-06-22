@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/21 15:58:10 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 13:58:28 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		}
 		else if (strcmp(pars->token->value, "$?") == 0)
 		{
-			status = ft_itoa(shell->status);
+			status = ft_itoa(g_status_code);
 			free(pars->token->value);
 			pars->token->value = ft_strdup(status);
 			free(status);

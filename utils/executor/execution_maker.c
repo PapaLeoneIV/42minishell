@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 10:20:03 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/22 16:14:37 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		supp = ft_access(open_path, tmp_cmd[0]);
 		if (!supp)
 		{
-			shell->status = 127;
+			g_status_code = 127;
 			perror("ERROR\nunfinded path");
 			freeall(tmp_cmd);
 			return (freeall(open_path), freeall(tmp_env), ERROR);
@@ -39,7 +39,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
-			shell->status = 126;
+			g_status_code = 126;
 			return (perror("ERROR\nexecve don't replies"), ERROR);
 		}
 		free(supp);
@@ -71,11 +71,11 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	{
 		if (make_things(cmd->cmd, tmp, shell->env, shell) == ERROR)
 		{
-			printf("status = %d", shell->status);
+			printf("status = %d", g_status_code);
 			//clean_all(shell, 1);
 		}
 	}
-	exit(shell->status);
+	exit(g_status_code);
 }
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
@@ -116,7 +116,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	red_st = open_redir(cmd, shell);
 	if (red_st == ERROR || red_st == -2)
 	{
-		shell->status = 1;
+		g_status_code = 1;
 		if (red_st == -2)
 			return (ERROR);
 		return (perror("ERROR file opening\n"), ERROR);
@@ -125,7 +125,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	dup2(cmd->out, 1);
 	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
 		return (ft_biltin(cmd->cmd, env, shell));
-	fork_and_ecseve(shell, cmd, tm_i, tm_ou);
+fork_and_ecseve(shell, cmd, tm_i, tm_ou);
 	return (SUCCESS);
 }
 
@@ -154,6 +154,6 @@ int	execute_cmd(t_shell *shell)
 	}
 	while (waitpid(-1, &status, 0) > 0)
 		if (WIFEXITED(status))
-			shell->status = WEXITSTATUS(status);
+			g_status_code = WEXITSTATUS(status);
 	return (tm_close(tm_in, tm_out, 1), SUCCESS);
 }
