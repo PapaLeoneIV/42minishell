@@ -6,34 +6,48 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/06/24 17:28:20 by fgori            ###   ########.fr       */
+=======
+/*   Updated: 2024/06/24 12:38:45 by rileone          ###   ########.fr       */
+>>>>>>> 86a4b11... modifica builtin exit
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exit_path(t_command *cmd, t_shell *shell)
+int	exit_path(t_command *cmd, t_shell* shell)
 {
-	unsigned int	exit_status;
-	int				i;
+	int	argsc;
+	int	counter;
 
-	i = 0;
-	exit_status = 0;
-	open_redir(cmd, shell);
-	(void)(close(cmd->in) + close(cmd->out));
-	if (mtx_count_rows(cmd->cmd) > 2)
-		return (perror("exit\nexit: too many argument"), 300);
-	while (cmd->cmd[1] && cmd->cmd[1][i]) // qui ho spostato la prima condizione del while da un if esterno a dentro al while
+	argsc = mtx_count_rows(cmd->cmd);
+	counter = 0;
+	write(1, "exit\n", 5);
+	if (argsc == 1)
+		exit(g_status_code);
+	else if (argsc == 2)
 	{
-		if (!ft_isnumber(cmd->cmd[1]) 
-			|| cmd->cmd[1][i] == '+' || cmd->cmd[1][i] == '-')
-			g_status_code = 2;
-		i++;
+		if (cmd->cmd[1][0] == '+' || cmd->cmd[1][0] == '-')
+			counter++;
+		while (cmd->cmd[1][counter])
+		{
+			if (!ft_isdigit(cmd->cmd[1][counter]))
+			{
+				g_status_code = 2;
+				exit(g_status_code);
+			}
+			counter++;
+		}
+		g_status_code = (unsigned char)ft_atoi(cmd->cmd[1]); // atoi ritorna non 0 perr indicare errore
 	}
-	if (g_status_code == 2)
-		g_status_code = (unsigned int)ft_atoi(cmd->cmd[1]);
-	if (g_status_code > 255)
-		g_status_code %= 256;
+	else
+	{
+		write(2, "Too many arguments!", 20);
+		g_status_code = 1;
+	}
 	clean_all(shell, 1);
+	// printf("status %d\n", g_status_code);
 	exit(g_status_code);
 }
+
