@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/22 10:57:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/24 18:35:40 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,11 +128,13 @@ int	remove_redir(t_token **redir)
 		(*redir)->prev->next = NULL;
 		*redir = (*redir)->prev;
 	}
+	else
+		return (redirection_clear(&tmp->next), redirection_clear(&tmp), -3);	
 	return (redirection_clear(&tmp->next), redirection_clear(&tmp), i);
 }
 
 
-void	redirector(t_command **cmd_node, t_token **tmp_list,
+int	redirector(t_command **cmd_node, t_token **tmp_list,
 	t_token **node, int *check)
 {
 	if (handle_redirection_logic(*node, *cmd_node) == SUCCESS)
@@ -141,9 +143,16 @@ void	redirector(t_command **cmd_node, t_token **tmp_list,
 		if (*check == 2)
 			*tmp_list = *node;
 	}
-	if (*check != 2)
+	if (*check == -3)
+	{
+		//free(tmp_list);
+		tmp_list = NULL;
+		return ERROR;
+	}
+	else if (*check != 2)
 		*node = (*node)->next;
 	*check = -1;
+	return SUCCESS;
 }
 
 int token_list_len(t_token *list)
@@ -180,13 +189,17 @@ int	parse_redirections(t_token *head, t_shell *shell)
 		check = -1;
 		cmd_node = new_command(i);
 		tmp_list = split_command_based_on_pipes(&ptr);
-		int len = token_list_len(tmp_list);
 		node = tmp_list;
 		while (node != NULL && node->type != PIPE_TOKEN)
-			redirector(&cmd_node, &tmp_list, &node, &check);
+		{
+			if (redirector(&cmd_node, &tmp_list, &node, &check) == ERROR)
+			{
+				tmp_list = NULL;
+				node = NULL;
+			}
+		}
 		cmd_node->cmd = from_lst_to_mtx(tmp_list);
-		if (len > 2)
-			free_tokens(tmp_list);
+		free_tokens(tmp_list);
 		add_back_commands(shell->cmd_info, cmd_node);
 		i++;
 	}

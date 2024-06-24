@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 13:32:41 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/24 18:54:33 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	freeall(char **mat)
 	int	n;
 
 	n = 0;
-	while (mat[n])
+	while (mat && mat[n])
 	{
 		free(mat[n]);
 		mat[n] = NULL;

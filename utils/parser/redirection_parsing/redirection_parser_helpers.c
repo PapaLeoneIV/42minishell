@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 13:41:26 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/24 18:51:56 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_command *new_command(int counter)
 	cmd_node = ft_calloc(1, sizeof(t_command));
 	cmd_node->cmd = NULL;
 	cmd_node->cmd_id = counter;
-	cmd_node->fork_id = 0;
+	cmd_node->fork_id = 1;
 	cmd_node->in = dup(STDIN_FILENO);
 	cmd_node->here = NULL;
 	cmd_node->out = dup(STDOUT_FILENO);
@@ -92,6 +92,8 @@ char **from_lst_to_mtx(t_token *head)
 		ptr = ptr->next;
 		len++;
 	}
+	if (len == 0)
+		return NULL;
 	ptr = head;	
 	mtx = ft_calloc(len + 1, sizeof(char *));
 	while(i < len)

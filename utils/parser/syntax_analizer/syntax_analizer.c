@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 10:27:16 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:39:14 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,45 @@ int	syntax_error_handler(t_token *head)
 
 	ptr = head;
 	if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1)
-		return (write(2, "Invalid character found!\n", 26), ERROR);
+	{
+		write(2, "Invalid character found!\n", 26);
+		return (ERROR);
+	}
 	change_non_special_tokens_to_word_tokens(head);
 	remove_whitespaces(head);
 	ptr = head;
 	while (ptr)
 	{
 		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '|'\n", 40), ERROR);
+		{
+			write(2, "Syntax error near unexpected token '|'\n", 40);
+			return (ERROR);
+		}	
+			
 		else if (ptr->type == GREATER_TOKEN && !handle_greater_synt_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '>'\n", 40), ERROR);
+		{
+			write(2, "Syntax error near unexpected token '>'\n", 40);
+			return  (ERROR);
+		}	
+			
 		else if (ptr->type == LESSER_TOKEN && !handle_lesser_synt_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '<'\n", 40), ERROR);
+		{
+			write(2, "Syntax error near unexpected token '<'\n", 40);
+			return ( ERROR);
+		}	
+
 		else if (ptr->type == HEREDOC_TOKEN && !headle_heredoc_syntax_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '<<'\n", 40), ERROR);
+		{
+			write(2, "Syntax error near unexpected token '<<'\n", 40);
+			return (ERROR);
+		}	
+			
 		else if (ptr->type == REDIR_OUT_TOKEN && !handle_redirout_synt_error_tokens(ptr))
-			return (write(2, "Syntax error near unexpected token '>'\n", 40), ERROR);
+		{
+			write(2, "Syntax error near unexpected token '>'\n", 40);
+			return (ERROR);
+		}	
+			
 		ptr = ptr->next;
 	}
 	return (SUCCESS);

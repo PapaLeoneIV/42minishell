@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_build.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 17:27:05 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:28:20 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 		return (perror("exit\nexit: too many argument"), 300);
 	while (cmd->cmd[1] && cmd->cmd[1][i]) // qui ho spostato la prima condizione del while da un if esterno a dentro al while
 	{
-		if (!ft_isnumber(cmd->cmd[1][i]) 
+		if (!ft_isnumber(cmd->cmd[1]) 
 			|| cmd->cmd[1][i] == '+' || cmd->cmd[1][i] == '-')
 			g_status_code = 2;
 		i++;

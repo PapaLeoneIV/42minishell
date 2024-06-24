@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 16:14:37 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/24 19:10:55 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 			g_status_code = 127;
 			perror("ERROR\nunfinded path");
 			freeall(tmp_cmd);
-			return (freeall(open_path), freeall(tmp_env), ERROR);
+			return (freeall(open_path), freeall(tmp_env), clean_all(shell, 1), ERROR);
 		}
 		freeall(open_path);
 		clean_all(shell, 1);
@@ -44,6 +44,7 @@ int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
 		}
 		free(supp);
 	}
+	clean_all(shell, 1);
 	return (ERROR);
 }
 
@@ -80,7 +81,8 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 {
-	cmd->fork_id = fork();
+	if (cmd->cmd)
+		cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
 	{
 		if (cmd->next)
@@ -123,9 +125,9 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	}
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
-	if (is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
+	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
 		return (ft_biltin(cmd->cmd, env, shell));
-fork_and_ecseve(shell, cmd, tm_i, tm_ou);
+	fork_and_ecseve(shell, cmd, tm_i, tm_ou);
 	return (SUCCESS);
 }
 
@@ -139,13 +141,13 @@ int	execute_cmd(t_shell *shell)
 	cmd = (*shell->cmd_info);
 	tm_in = dup(0);
 	tm_out = dup(1);
-	if (!(cmd->next) && ft_strncmp(cmd->cmd[0],
-			"exit", ft_strlen(cmd->cmd[0])) == 0)
+	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0],
+			"exit", 5) == 0)
 	{
 		tm_close(tm_in, tm_out, 0);
 		if (exit_path(cmd, shell) == 300)
 			return (ERROR);
-	}
+	}	
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
