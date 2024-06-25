@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/24 17:37:14 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 10:37:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int	cd_path(char **mtx, t_env **env)
 	if (result == -1)
 	{
 		g_status_code = 1;
+		free(old);
+		free(new);
 		return (1);
 	}
 	cd_excanger(old, "OLDPWD", env);
