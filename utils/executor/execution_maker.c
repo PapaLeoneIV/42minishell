@@ -5,24 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/17 17:55:26 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/24 19:10:55 by fgori            ###   ########.fr       */
+/*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
+/*   Updated: 2024/06/25 14:00:09 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	make_things(char **cmd, t_env *path, t_env **env, t_shell *shell)
+int	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {
 	char	**open_path;
 	char	*supp;
+	char	**mtx;
 	char	**tmp_cmd;
 	char	**tmp_env;
 
-
+	mtx = cmd->cmd;
 	if (ft_biltin(cmd, env, shell) == -1)
 	{
-		tmp_cmd = mtx_dup(cmd, mtx_count_rows(cmd));
+		tmp_cmd = mtx_dup(mtx, mtx_count_rows(mtx));
 		tmp_env = mtx_dup(path->env_mtx, mtx_count_rows(path->env_mtx));
 		open_path = ft_split(path->body, ':');
 		supp = ft_access(open_path, tmp_cmd[0]);
@@ -70,17 +71,17 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	}
 	else
 	{
-		if (make_things(cmd->cmd, tmp, shell->env, shell) == ERROR)
-		{
-			printf("status = %d", g_status_code);
-			//clean_all(shell, 1);
-		}
+		if (make_things(cmd, tmp, shell->env, shell) == ERROR)
+			//printf("status = %d", g_status_code)
+			;
 	}
 	exit(g_status_code);
 }
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 {
+	if (cmd && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
+		waitpid(-1, NULL, 0);
 	if (cmd->cmd)
 		cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
@@ -126,7 +127,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
-		return (ft_biltin(cmd->cmd, env, shell));
+		return (ft_biltin(cmd, env, shell));
 	fork_and_ecseve(shell, cmd, tm_i, tm_ou);
 	return (SUCCESS);
 }
@@ -145,7 +146,7 @@ int	execute_cmd(t_shell *shell)
 			"exit", 5) == 0)
 	{
 		tm_close(tm_in, tm_out, 0);
-		if (exit_path(cmd, shell) == 300)
+		if (exit_path(cmd, shell) == 1)
 			return (ERROR);
 	}	
 	while (cmd)

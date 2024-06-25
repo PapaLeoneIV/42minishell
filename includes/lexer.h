@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 12:57:41 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 10:34:36 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_command
 	int					pip[2];
 	int					in;
 	int					out;
+	int					fd_change;
 	char				*here;
 	int					cmd_id;
 	int					fork_id;

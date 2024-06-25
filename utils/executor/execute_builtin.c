@@ -6,18 +6,19 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/24 18:04:20 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:46:09 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
+int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 {
-	int	i;
+	int		i;
+	char	**tmp;
 	
-	(void)shell;
 	i = -1;
+	tmp = cmd->cmd;
 	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
 	{
 		i = cd_path(tmp, lst);
@@ -34,6 +35,8 @@ int	ft_biltin(char **tmp, t_env **lst, t_shell *shell)
 		i = export_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
 		i = unset_path(lst, tmp);
+	else if (ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
+		i = exit_path(cmd , shell);
 	g_status_code = i;
 	return (i);
 }

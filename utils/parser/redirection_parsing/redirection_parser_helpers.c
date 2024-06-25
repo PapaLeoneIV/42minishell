@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/24 18:51:56 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 10:36:00 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_command *new_command(int counter)
 	cmd_node->in = dup(STDIN_FILENO);
 	cmd_node->here = NULL;
 	cmd_node->out = dup(STDOUT_FILENO);
+	cmd_node->fd_change = 0;
 	//cmd_node->redirection_info = ft_calloc(1, sizeof(t_redir*));
 	cmd_node->redirection_info = NULL;
 	cmd_node->next = NULL;
