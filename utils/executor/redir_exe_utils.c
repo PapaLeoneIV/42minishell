@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 15:36:35 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/26 15:12:46 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	list_of_out(t_redir **dir)
 			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
-			printf("impossible to open: %s\n", (*dir)->filename);
+			perror("impossible to open file\n");
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == redir)

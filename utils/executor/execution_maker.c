@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/26 14:45:16 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/26 15:16:46 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,29 +108,34 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 
 int	make_redir(t_shell *shell, t_command *cmd)
 {
-	int		tm_i;
-	int		tm_ou;
-	int		red_st;
+	int			tm_i;
+	int			tm_ou;
+	int			red_st;
+	t_command	*tmp;
 
 	tm_i = cmd->in;
+	tmp = cmd;
 	tm_ou = cmd->out;
-	while (cmd)
+	while (tmp)
 	{
-		if (set_pip(cmd, cmd->pip) == ERROR)
+		if (set_pip(tmp, tmp->pip) == ERROR)
 			return (ERROR);
-		red_st = open_redir(cmd, shell);
+		red_st = open_redir(tmp, shell);
 		if (red_st == ERROR || red_st == -2)
 		{
 			g_status_code = 1;
+			tmp->fd_change = -1;
 			if (red_st == -2)
 				return (ERROR);
-			return (perror("ERROR file opening\n"), ERROR);
 		}
-		if (cmd->in != tm_i)
-			cmd->fd_change++;
-		if (tm_ou != cmd->out)
-			cmd->fd_change += 2;
-		cmd = cmd->next;
+		else
+		{
+			if (tmp->in != tm_i)
+				tmp->fd_change++;
+			if (tm_ou != tmp->out)
+				tmp->fd_change += 2;
+		}
+		tmp = tmp->next;
 	}
 	return (SUCCESS);
 }
@@ -139,9 +144,12 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
-	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
-		return (ft_biltin(cmd, env, shell));
-	fork_and_ecseve(shell, cmd);
+	if (cmd->fd_change >= 0)
+	{
+		if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
+			return (ft_biltin(cmd, env, shell));
+		fork_and_ecseve(shell, cmd);
+	}
 	return (SUCCESS);
 }
 
@@ -162,8 +170,7 @@ int	execute_cmd(t_shell *shell)
 		if (exit_path(cmd, shell) == 1)
 			return (ERROR);
 	}
-	if (make_redir(shell, cmd) == ERROR)
-		return (ERROR);
+	make_redir(shell, cmd);
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
