@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/18 12:03:06 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:47:21 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	tm_close(int tm_in, int tm_out, int flag);
 int		set_pip(t_command *cmd, int *pip);
 int		open_redir(t_command *cmd, t_shell *shell);
 int		exit_path(t_command *cmd, t_shell *shell);
-int		ft_biltin(char **tmp, t_env **lst, t_shell *shell);
+int		ft_biltin(t_command *cmd, t_env **lst, t_shell *shell);
 int		is_a_biltin(char **tmp);
 char	*ft_access(char **open_path, char *cmd);
 int		check_head(char *str);
