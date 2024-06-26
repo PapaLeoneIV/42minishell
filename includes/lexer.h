@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 12:57:41 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 14:20:07 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,15 +164,15 @@ void		dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 t_token		*check_prev(t_token *token);
 void		join_tokens(t_token **node, t_token **prev);
 void		join_tokens_values_when_no_space_between(t_parser *pars);
-void		unpack_quoted_tokens(t_parser *pars, t_shell *shell);
+void		unpack_quoted_tokens(t_token **head, t_shell *shell);
 
 /**EXPANSION HELPERS*/
 char		*get_key_envp(char *envp_string);
 char		*set_token_value_post_expansion(char *envp_string);
-void		expand_env_var(char **token_value,t_shell *shell);
+void		expand_env_var(t_token **token, char **token_value,t_shell *shell);
 
 /*SYNTAX ANALIZER*/
-int 		syntax_error_handler(t_token *head);
+int 		syntax_error_handler(t_token **head);
 void 		change_non_special_tokens_to_word_tokens(t_token *head);
 
 /*SYNTAX ANALIZER*/

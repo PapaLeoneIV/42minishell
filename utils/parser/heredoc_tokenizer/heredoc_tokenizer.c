@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_tokenizer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:46:48 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/18 12:10:05 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:23:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ static int	slice_end_token_heredoc(char *stringa,
 	}
 	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$", ft_strlen(pars->token->value)))
 	{
-		expand_env_var(&pars->token->value, shell);
-		if (pars->token->value)
+		expand_env_var(&pars->token, &pars->token->value, shell);
+		if (pars->token && pars->token->value)
 			token_add_back(&pars->head, pars->token);
 		else
 		{

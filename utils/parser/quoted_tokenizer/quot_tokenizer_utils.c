@@ -5,6 +5,8 @@ t_token *check_prev(t_token *token)
 {
 	t_token *prev;
 
+	if (!token->prev)
+		return NULL;
 	prev = token->prev;
 	if (prev == NULL || prev->type == WHITESPACE_TOKEN)
 		return NULL;
@@ -76,31 +78,41 @@ char *join_quoted_token_expansion(t_token *head)
 	}
 	return out;
 }
+void unpack_quoted_tokens(t_token **head, t_shell *shell) {
+    t_token *ptr = *head;
+	t_parser *list; 
+	 t_token *tmp = NULL;
 
-void unpack_quoted_tokens(t_parser *pars, t_shell *shell)
-{
-	t_token *ptr;
-	t_parser *list;
-
-	ptr = pars->head;
-	while(ptr != NULL)
+    while (ptr != NULL) 
 	{
-		if (ptr->type == DOUBLE_QUOTES_TOKEN)
+		tmp = ptr->next;
+        if (ptr->type == DOUBLE_QUOTES_TOKEN) 
 		{
-  			list = tokenize_quoted_values(ptr, shell);
-			if (list == NULL)
+			list = tokenize_quoted_values(ptr, shell);
+            if (list == NULL) 
 			{
-				ptr = ptr->next;
-				continue;
-			}
-			else
-			{
+				if (!ptr->prev)
+				{
+					(*head) = ptr->next;
+					ptr->next->prev = NULL;
+				}
+				else
+				{
+					(*head) = ptr->prev;
+					ptr->prev->next = ptr->next;
+				}
 				free(ptr->value);
-				ptr->value = join_quoted_token_expansion(list->head);
-				free_tokens(list->head);
-				free(list);
-			}
-		}
-  		ptr = ptr->next;
-	}
+				free(ptr);
+				ptr = NULL;
+            } 
+			else 
+			{
+                free(ptr->value);
+                ptr->value = join_quoted_token_expansion(list->head);
+                free_tokens(list->head);
+                free(list);
+            }
+        }
+        ptr = tmp;
+    }
 }

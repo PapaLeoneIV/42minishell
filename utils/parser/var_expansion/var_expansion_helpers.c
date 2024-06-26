@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_helpers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:50:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 12:02:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 11:22:57 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,24 +66,26 @@ char *set_token_value_post_expansion(char *envp_string)
 } */
 
 
-void expand_env_var(char **token_value, t_shell *shell)
+void	expand_env_var(t_token **token, char **token_value, t_shell *shell)
 {
-	char *tmp;
-	t_env *ptr;
+	char	*tmp;
+	t_env	*ptr;
 
 	ptr = shell->env[0];
-	while(ptr)
+	while (ptr)
 	{
-		if(!strncmp(ptr->head, (*token_value + 1), ft_strlen(ptr->head)))
+		if (!strncmp(ptr->head, (*token_value + 1), ft_strlen(ptr->head)))
 		{
-			tmp = *token_value;		
+			tmp = *token_value;
 			*token_value = ft_strdup(ptr->body);
 			free(tmp);
-			return ; 
+			return ;
 		}
 		ptr = ptr->next;
 	}
 	free(*token_value);
-    *token_value = NULL;
+	*token_value = NULL;
+	free(*token);
+	*token = NULL;
 	return ;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/24 17:39:14 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 12:14:14 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void	change_non_special_tokens_to_word_tokens(t_token *head)
 /**Ugly lo so, ma mi serve per rimuovere i whitespace dalla
  * lista di token*/
 
-void	remove_whitespaces(t_token *head)
+void	remove_whitespaces(t_token **head)
 {
 	t_token	*ptr;
 	t_token	*tmp;
 
-	ptr = head;
+	ptr = *head;
 	tmp = NULL;
 	while (ptr)
 	{
@@ -73,10 +73,12 @@ void	remove_whitespaces(t_token *head)
 				ptr->prev->next = ptr->next;
 			if (ptr->next)
 				ptr->next->prev = ptr->prev;
-			if (ptr == head)
-				head = tmp;
+			if (ptr == *head)
+				*head = tmp;
 			free(ptr->value);
+			ptr->value = NULL;
 			free(ptr);
+			ptr = NULL;
 			ptr = tmp;
 		}
 		else
@@ -84,19 +86,19 @@ void	remove_whitespaces(t_token *head)
 	}
 }
 
-int	syntax_error_handler(t_token *head)
+int	syntax_error_handler(t_token **head)
 {
 	t_token	*ptr;
 
-	ptr = head;
+	ptr = *head;
 	if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1)
 	{
 		write(2, "Invalid character found!\n", 26);
 		return (ERROR);
 	}
-	change_non_special_tokens_to_word_tokens(head);
+	change_non_special_tokens_to_word_tokens(*head);
 	remove_whitespaces(head);
-	ptr = head;
+	ptr = *head;
 	while (ptr)
 	{
 		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))

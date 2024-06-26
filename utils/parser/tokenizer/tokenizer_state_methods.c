@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/22 13:58:28 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/25 11:29:50 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,14 @@ void dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		set_token_values(pars->token, &pars->info);
 		if (pars->token->value)
 		{
+			expand_env_var(&pars->token, &pars->token->value, shell);		
 			token_add_back(&pars->head, pars->token);
-			expand_env_var(&pars->token->value, shell);		
 		}
 		else
+		{
 			free(pars->token);
+			pars->token = NULL;
+		}
 		pars->start = pars->count;
 		pars->count--;
 	}

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/22 14:02:50 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/25 12:15:01 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ static int	tokenizer(t_shell *shell, char *input, t_token	**head)
 	return (SUCCESS);
 }
 
-static int	lexer(t_token *head, t_shell *shell)
+static int	lexer(t_token **head, t_shell *shell)
 {
 	if (syntax_error_handler(head) == ERROR)
 	{
-		free_tokens(head);
+		free_tokens(*head);
 		g_status_code = 2;
 		return (ERROR) ;
 	}
-	if (parse_redirections(head, shell) == ERROR)
+	if (parse_redirections(*head, shell) == ERROR)
 		write(1, "Redirection error\n", 19);
 	return (SUCCESS);
 }
@@ -55,7 +55,7 @@ void	read_from_stdin(t_shell *shell, char **envp)
 			continue ;
 		add_history(input);
 		free(input);
-		if (lexer(head, shell) == ERROR)
+		if (lexer(&head, shell) == ERROR)
 			continue ;
 		free_tokens(head);
 		execute_cmd(shell);

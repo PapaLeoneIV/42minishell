@@ -63,6 +63,11 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 		}
 		parser->count++;
 	}
+	if (parser->head == NULL)
+	{
+		free(parser);
+		return NULL;
+	}
 	return parser;
 }
 
@@ -124,11 +129,15 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 		set_token_values(pars->token, &pars->info);
 		if (pars->token->value)
 		{
-			token_add_back(&pars->head, pars->token);
-			expand_env_var(&pars->token->value, shell);		
+			expand_env_var(&pars->token, &pars->token->value, shell);
+			if(pars->token && pars->token->value)
+				token_add_back(&pars->head, pars->token);
 		}
 		else
+		{
 			free(pars->token);
+			pars->token = NULL;
+		}
 		pars->start = pars->count;
 		pars->count--;
 	}

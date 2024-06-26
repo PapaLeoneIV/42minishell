@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 12:02:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 14:20:26 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_token	*tokenize_input(char *input, t_shell *shell)
 	pars = (t_parser){0};
 	if (create_token_list(input, shell, &pars) == ERROR)
 		return (free_tokens(pars.head), NULL);
-	unpack_quoted_tokens(&pars, shell);
+	unpack_quoted_tokens(&(pars.head), shell);
 	join_tokens_values_when_no_space_between(&pars);
 	trim_middleline_whitespaces(&pars);
 	remove_null_tokens(&pars);

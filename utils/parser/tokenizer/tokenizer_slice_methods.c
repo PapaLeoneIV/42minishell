@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_slice_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/04 15:10:22 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/25 12:25:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,13 @@ int slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	}
 	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$", ft_strlen(pars->token->value)))
 	{
-		expand_env_var(&pars->token->value, shell);
-		if(pars->token->value)
+		expand_env_var(&pars->token, &pars->token->value, shell);
+		if(pars->token && pars->token->value)
 			token_add_back(&pars->head, pars->token);
 		else
 		{
-			free(pars->token->value);
+			if(pars->token)
+				free(pars->token->value);
 			free(pars->token);
 		}
 	}
