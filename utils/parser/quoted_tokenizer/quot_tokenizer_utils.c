@@ -100,7 +100,9 @@ void unpack_quoted_tokens(t_token **head, t_shell *shell) {
 				{
 					(*head) = ptr->prev;
 					ptr->prev->next = ptr->next;
-				}
+					if(ptr->next)
+						ptr->next->prev = ptr->prev;
+ 			}
 				free(ptr->value);
 				free(ptr);
 				ptr = NULL;
@@ -115,4 +117,6 @@ void unpack_quoted_tokens(t_token **head, t_shell *shell) {
         }
         ptr = tmp;
     }
+	while((*head)->prev != NULL)
+		*head = (*head)->prev;
 }
