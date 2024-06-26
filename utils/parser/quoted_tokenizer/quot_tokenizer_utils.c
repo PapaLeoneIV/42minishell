@@ -80,9 +80,11 @@ char *join_quoted_token_expansion(t_token *head)
 }
 void unpack_quoted_tokens(t_token **head, t_shell *shell) {
     t_token *ptr = *head;
+	t_token *tempo;
 	t_parser *list; 
-	 t_token *tmp = NULL;
+	t_token *tmp = NULL;
 
+	tempo = *head;
     while (ptr != NULL) 
 	{
 		tmp = ptr->next;
@@ -117,6 +119,5 @@ void unpack_quoted_tokens(t_token **head, t_shell *shell) {
         }
         ptr = tmp;
     }
-	while((*head)->prev != NULL)
-		*head = (*head)->prev;
+	*head = tempo;
 }
