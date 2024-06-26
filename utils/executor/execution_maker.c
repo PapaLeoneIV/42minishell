@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 14:00:09 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/26 14:45:16 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ int	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 	return (ERROR);
 }
 
-void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
+void	child_process(t_shell *shell, t_command *cmd)
 {
 	t_env	*tmp;
 
-	if (cmd->in != tm_i)
+	if (cmd->fd_change == 1 || cmd->fd_change == 3)
 	{
 		dup2(cmd->in, 0);
 		close(cmd->in);
 	}
-	if (cmd->out != tm_ou)
+	if (cmd->fd_change == 2 || cmd->fd_change == 3)
 	{
 		dup2(cmd->out, 1);
 		close(cmd->out);
@@ -78,19 +78,20 @@ void	child_process(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	exit(g_status_code);
 }
 
-void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
+void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 {
 	if (cmd && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 		waitpid(-1, NULL, 0);
 	if (cmd->cmd)
 		cmd->fork_id = fork();
+
 	if (cmd->fork_id == 0)
 	{
 		if (cmd->next)
 			close(cmd->pip[0]);
 		if (cmd->prev)
 			close(cmd->pip[1]);
-		child_process(shell, cmd, tm_i, tm_ou);
+		child_process(shell, cmd);
 	}
 	else
 	{
@@ -105,8 +106,7 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd, int tm_i, int tm_ou)
 	}
 }
 
-// da lavorare non completa!!!!!
-int	execution(t_command *cmd, t_env **env, t_shell *shell)
+int	make_redir(t_shell *shell, t_command *cmd)
 {
 	int		tm_i;
 	int		tm_ou;
@@ -114,21 +114,34 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 
 	tm_i = cmd->in;
 	tm_ou = cmd->out;
-	if (set_pip(cmd, cmd->pip) == ERROR)
-		return (ERROR);
-	red_st = open_redir(cmd, shell);
-	if (red_st == ERROR || red_st == -2)
+	while (cmd)
 	{
-		g_status_code = 1;
-		if (red_st == -2)
+		if (set_pip(cmd, cmd->pip) == ERROR)
 			return (ERROR);
-		return (perror("ERROR file opening\n"), ERROR);
+		red_st = open_redir(cmd, shell);
+		if (red_st == ERROR || red_st == -2)
+		{
+			g_status_code = 1;
+			if (red_st == -2)
+				return (ERROR);
+			return (perror("ERROR file opening\n"), ERROR);
+		}
+		if (cmd->in != tm_i)
+			cmd->fd_change++;
+		if (tm_ou != cmd->out)
+			cmd->fd_change += 2;
+		cmd = cmd->next;
 	}
+	return (SUCCESS);
+}
+// da lavorare non completa!!!!!
+int	execution(t_command *cmd, t_env **env, t_shell *shell)
+{
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0)
 		return (ft_biltin(cmd, env, shell));
-	fork_and_ecseve(shell, cmd, tm_i, tm_ou);
+	fork_and_ecseve(shell, cmd);
 	return (SUCCESS);
 }
 
@@ -148,7 +161,9 @@ int	execute_cmd(t_shell *shell)
 		tm_close(tm_in, tm_out, 0);
 		if (exit_path(cmd, shell) == 1)
 			return (ERROR);
-	}	
+	}
+	if (make_redir(shell, cmd) == ERROR)
+		return (ERROR);
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
