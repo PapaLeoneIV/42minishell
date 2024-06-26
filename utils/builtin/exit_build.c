@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/26 12:53:27 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:48:33 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int	exit_path(t_command *cmd, t_shell* shell)
 			{
 				g_status_code = 2;
 				clean_all(shell, 1);
-				perror("only numeric argument required\n");
+				write(2, "bash: exit: ", 13);
+				write(2, cmd->cmd[1], ft_strlen(cmd->cmd[1]));
+				write(2, "numeric argument required\n", 27);
 				exit(g_status_code);
 			}
 			counter++;
@@ -42,7 +44,7 @@ int	exit_path(t_command *cmd, t_shell* shell)
 	}
 	else
 	{
-		write(2, "Too many arguments!\n", 21);
+		write(2, "bash: exit: too many arguments\n", 32);
 		g_status_code = 1;
 		return (1);
 	}
