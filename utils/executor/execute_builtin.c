@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 11:46:09 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:26:07 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,23 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 	
 	i = -1;
 	tmp = cmd->cmd;
-	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
+	if (ft_strncmp(tmp[0], "cd", 3) == 0)
 	{
 		i = cd_path(tmp, lst);
 	}
-	else if (ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0)
+	else if (ft_strncmp(tmp[0], "pwd", 4) == 0)
 	{
 		i = pwd_path();
 	}
-	else if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0)
+	else if (ft_strncmp(tmp[0], "echo", 5) == 0)
 		i = echo_path(tmp);
-	else if (ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0)
+	else if (ft_strncmp(tmp[0], "env", 4) == 0)
 		i = env_path(lst);
-	else if (ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0)
+	else if (ft_strncmp(tmp[0], "export", 7) == 0)
 		i = export_path(lst, tmp);
-	else if (ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0)
+	else if (ft_strncmp(tmp[0], "unset", 6) == 0)
 		i = unset_path(lst, tmp);
-	else if (ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
+	else if (ft_strncmp(tmp[0], "exit", 5) == 0)
 		i = exit_path(cmd , shell);
 	g_status_code = i;
 	return (i);
@@ -43,13 +43,13 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 
 int	is_a_biltin(char **tmp)
 {
-	if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0
-		|| ft_strncmp(tmp[0], "pwd", ft_strlen(tmp[0])) == 0
-		|| ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0
-		|| ft_strncmp(tmp[0], "env", ft_strlen(tmp[0])) == 0
-		|| ft_strncmp(tmp[0], "export", ft_strlen(tmp[0])) == 0
-		|| ft_strncmp(tmp[0], "unset", ft_strlen(tmp[0])) == 0
-		|| ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
+	if (ft_strncmp(tmp[0], "cd", 3) == 0
+		|| ft_strncmp(tmp[0], "pwd", 4) == 0
+		|| ft_strncmp(tmp[0], "echo", 5) == 0
+		|| ft_strncmp(tmp[0], "env", 4) == 0
+		|| ft_strncmp(tmp[0], "export", 7) == 0
+		|| ft_strncmp(tmp[0], "unset", 6) == 0
+		|| ft_strncmp(tmp[0], "exit", 5) == 0)
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/26 15:16:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:26:40 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	child_process(t_shell *shell, t_command *cmd)
 		close(cmd->out);
 	}
 	tmp = find_node(shell->env, "PATH");
-	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0)
+	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 	{
 		perror("unvalid Path\n");
 		clean_all(shell, 1);
