@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/22 16:04:10 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 14:00:16 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	solo_export(t_env **lst)
 	{
 		if (tmp->esistence > -1)
 		{
-			if(tmp->body)
-				ft_printf("declare -x %s=%s\n", tmp->head, tmp->body);
+			if (tmp->body)
+				ft_printf("declare -x %s=\"%s\"\n", tmp->head, tmp->body);
 			else
 				ft_printf("declare -x %s\n", tmp->head);
 		}
@@ -46,6 +46,7 @@ static void	normal_equal(t_env **lst, char *str)
 	{
 		free(tmp->body);
 		tmp->body = ft_substr(str, ft_strchri(str, '=') + 1, ft_strlen(str));
+		tmp->esistence = 0;
 	}
 	free(sup);
 }
@@ -78,7 +79,7 @@ int	export_path(t_env **lst, char **mtx)
 	{
 		x = check_head(mtx[i]);
 		if (!x)
-			return(1);
+			return (1);
 		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
 		{
 			plus_n_equal(lst, mtx[i]);

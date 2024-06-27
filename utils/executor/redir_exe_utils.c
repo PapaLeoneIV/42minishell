@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/26 15:12:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:35:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	list_of_out(t_redir **dir)
 	int	redir;
 
 	redir = (*dir)->type_of_redirection;
-	while ((*dir))
+	while ((*dir) && ((*dir)->type_of_redirection == GREATER_TOKEN || (*dir)->type_of_redirection == REDIR_OUT_TOKEN))
 	{
 		if ((*dir)->type_of_redirection == GREATER_TOKEN)
 			fd = open((*dir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
@@ -26,7 +26,7 @@ int	list_of_out(t_redir **dir)
 			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
-			perror("impossible to open file\n");
+			write(2, "Permission denied\n", 18);
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == redir)
@@ -63,6 +63,8 @@ int	check_valid_line(char *line)
 		return (ERROR);
 	return (SUCCESS);
 }
+
+void	here_expansion();
 
 int	prompt_here(char *line, int fd, t_redir **redir, t_shell *shell)
 {
@@ -119,7 +121,8 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 		{
 			ex = prompt_here(line, fd, redir, shell);
 			if (ex == -1 && g_status_code != 130)
-				write(2, "\nminishell: warning: here-document delimited by end-of-file\n", 61);
+				write_exit("minishell:", "warning: ",
+					"here-document delimited by end-of-file\n");
 			if (ex == -1 || g_status_code == 130)
 				return (close(fd), -2);
 		}
@@ -139,8 +142,6 @@ int	open_redir(t_command *cmd, t_shell *shell)
 	tmp = (*cmd->redirection_info);
 	while (tmp)
 	{
-		if (!tmp)
-			break ;
 		if (tmp->type_of_redirection == GREATER_TOKEN
 			|| tmp->type_of_redirection == REDIR_OUT_TOKEN)
 			cmd->out = list_of_out(&tmp);

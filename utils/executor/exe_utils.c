@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 10:47:37 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 10:09:41 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	set_pip(t_command *cmd, int *pip)
 	{
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
+		cmd->next->fd_change++;
 	}
 	return (1);
 }
