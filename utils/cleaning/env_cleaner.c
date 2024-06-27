@@ -27,7 +27,7 @@ void	clean_env_lst(t_env **lst)
 
 	while ((*lst))
 	{
-		tmp = (*lst)-> next;
+		tmp = (*lst)->next;
 		clean_env_node(lst);
 		*lst = tmp;
 	}

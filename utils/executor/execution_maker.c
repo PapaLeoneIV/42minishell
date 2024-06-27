@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 15:07:41 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:16:31 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
+void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {
 	char	**open_path;
 	char	*supp;
@@ -34,9 +34,10 @@ int	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 				g_status_code = 127;
 				perror("ERROR\nunfinded path");
 				freeall(tmp_cmd);
-				return (freeall(open_path), freeall(tmp_env), clean_all(shell, 1), ERROR);
+				return (freeall(open_path), freeall(tmp_env), clean_all(shell,
+						1));
 			}
-			freeall(open_path);	
+			freeall(open_path);
 		}
 		else
 			supp = ft_strdup(cmd->cmd[0]);
@@ -49,12 +50,12 @@ int	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 			free(supp);
 			freeall(tmp_cmd);
 			freeall(tmp_env);
-			return (ERROR);
+			return ;
 		}
 		free(supp);
 	}
 	clean_all(shell, 1);
-	return (ERROR);
+	return ;
 }
 
 void	child_process(t_shell *shell, t_command *cmd)
@@ -73,13 +74,12 @@ void	child_process(t_shell *shell, t_command *cmd)
 	}
 	tmp = find_node(shell->env, "PATH");
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
-	{
 		write_exit("bash: ", "cmd->cmd[0]: ", ": No such file or directory\n");
-	}
 	else if (cmd->fd_change >= 0)
-		if (make_things(cmd, tmp, shell->env, shell) == ERROR)
-			;
-	else 
+		// <---qui quando non trovi la redirection input(cmd->in == -1) e
+		make_things(cmd, tmp, shell->env, shell);
+	//non scriviamo niente dentro la pipe
+	else
 		clean_all(shell, 1);
 	exit(g_status_code);
 }
@@ -130,7 +130,8 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		{
 			g_status_code = 1;
 			tmp->fd_change = -1;
-			if (red_st == -2)
+			//<-----nel caso di "cat < missing | cat"/"cat < missing | grep hi"
+			if (red_st == -2) //qui lo setti a -1 da dentro linea:126
 				return (ERROR);
 		}
 		else
@@ -145,13 +146,12 @@ int	make_redir(t_shell *shell, t_command *cmd)
 	return (SUCCESS);
 }
 
-// da lavorare non completa!!!!!
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
-	if (cmd->cmd && is_a_biltin(cmd->cmd)
-		&& !cmd->next && cmd->cmd_id == 0 && cmd->fd_change >= 0)
+	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0
+		&& cmd->fd_change >= 0)
 		return (ft_biltin(cmd, env, shell));
 	fork_and_ecseve(shell, cmd);
 	return (SUCCESS);
@@ -159,16 +159,15 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 
 int	execute_cmd(t_shell *shell)
 {
-	t_command	*cmd;
-	int			status;
-	int			tm_in;
-	int			tm_out;
+	t_command *cmd;
+	int status;
+	int tm_in;
+	int tm_out;
 
 	cmd = (*shell->cmd_info);
 	tm_in = dup(0);
 	tm_out = dup(1);
-	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0],
-			"exit", 5) == 0)
+	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 	{
 		if (exit_path(cmd, shell) == 1)
 			return (tm_close(tm_in, tm_out, 0), ERROR);

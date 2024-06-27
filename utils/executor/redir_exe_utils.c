@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 14:57:49 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:36:18 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int	open_redir(t_command *cmd, t_shell *shell)
 			cmd->here = tmp->filename;
 			cmd->in = heardoc_path(&tmp, shell);
 		}
-		if (cmd->out == -1 || cmd->in == -1)
-			return (ERROR);
+		if (cmd->out == -1 || cmd->in == -1) //
+			return (ERROR);                  //qui poi fd->change diventa (-1)
 		else if (cmd->in == -2)
 			return (-2);
 	}

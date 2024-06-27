@@ -23,13 +23,13 @@ void	here_expansion(t_redir **redir, t_shell *shell, char *input, int fd)
 		temp = ft_strjoin(tmp, "\n");
 		free(tmp);
 		ft_putstr_fd(temp, fd);
-		free (temp);
+		free(temp);
 	}
 	else
 	{
 		temp = ft_strjoin(input, "\n");
 		ft_putstr_fd(temp, fd);
-		free (temp);
+		free(temp);
 	}
 }
 
@@ -55,8 +55,8 @@ int	prompt_here(int fd, t_redir **redir, t_shell *shell)
 
 int	heardoc_path(t_redir **redir, t_shell *shell)
 {
-	int		fd;
-	int		ex;
+	int	fd;
+	int	ex;
 
 	ex = 1;
 	fd = open((*redir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
@@ -69,7 +69,7 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 			ex = prompt_here(fd, redir, shell);
 			if (ex == -1 && g_status_code != 130)
 				write_exit("minishell:", "warning: ",
-					"here-document delimited by end-of-file\n");
+						"here-document delimited by end-of-file\n");
 			if (ex == -1 || g_status_code == 130)
 				return (close(fd), -2);
 		}

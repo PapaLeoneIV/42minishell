@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
 #include "../../includes/lexer.h"
+#include "../../includes/minishell.h"
 
 void	set_token_values(t_token *token, t_token_info *info)
 {
@@ -21,8 +21,7 @@ void	set_token_values(t_token *token, t_token_info *info)
 	len = info->end - info->start;
 	token->type = info->type;
 	tmp_not_trimmed = ft_substr(info->string, info->start, len);
-	if (token->type != SING_QUOTES_TOKEN
-		&& token->type != DOUBLE_QUOTES_TOKEN
+	if (token->type != SING_QUOTES_TOKEN && token->type != DOUBLE_QUOTES_TOKEN
 		&& token->type != WHITESPACE_TOKEN)
 		token->value = ft_strtrim(tmp_not_trimmed, " ");
 	else
@@ -77,7 +76,7 @@ void	token_print(t_token *head)
 
 void	redirection_clear(t_token **head)
 {
-	t_token	*temp;
+	t_token *temp;
 
 	temp = *head;
 	free(temp->value);

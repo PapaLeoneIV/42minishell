@@ -82,7 +82,7 @@ int	set_pip(t_command *cmd, int *pip)
 {
 	if ((cmd->cmd_id == 0 && cmd->next != NULL) || cmd->cmd_id != 0)
 		if (pipe(pip) < 0)
-			return (perror ("ERROR while opening the pipe\n"), ERROR);
+			return (perror("ERROR while opening the pipe\n"), ERROR);
 	if (cmd->next)
 	{
 		cmd->out = pip[1];

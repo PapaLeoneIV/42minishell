@@ -61,8 +61,8 @@ static void	plus_n_equal(t_env **lst, char *str)
 	free(sup);
 	if (!tmp)
 		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
-	tmp->body = ft_strjoin(tmp->body, ft_substr(str,
-				ft_strchri(str, '=') + 1, ft_strlen(str)));
+	tmp->body = ft_strjoin(tmp->body, ft_substr(str, ft_strchri(str, '=') + 1,
+				ft_strlen(str)));
 	if (tmp->esistence == 1)
 		tmp->esistence = 0;
 }

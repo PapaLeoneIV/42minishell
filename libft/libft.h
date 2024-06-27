@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/05 11:45:29 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:41:11 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 
 # include "./gnl/get_next_line_bonus.h"
 # include "./printf/ft_printf.h"
+# include <limits.h>
+# include <pthread.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
-# include <limits.h>
-# include <pthread.h>
 # include <sys/time.h>
+# include <unistd.h>
 
 typedef struct s_lis_var
 {
@@ -61,16 +61,16 @@ typedef struct s_hash_map
 
 typedef struct s_dictNode
 {
-    char *key;
-    char *value;
-    struct s_dictNode *next;
-} t_dictNode;
+	char				*key;
+	char				*value;
+	struct s_dictNode	*next;
+}						t_dictnode;
 
 typedef struct s_dictionary
 {
-    int dict_size;
-    t_dictNode *dict_head;
-} t_dict;
+	int					dict_size;
+	t_dictnode			*dict_head;
+}						t_dict;
 
 typedef enum e_errors
 {
@@ -78,16 +78,13 @@ typedef enum e_errors
 	ALLOCATION_ERROR,
 	EXEC_ERROR,
 	INVALID_INPUT,
-}	t_errors;
+}						t_errors;
 
+int						ft_charchar(char s, int c);
+char					*ft_strnstr(char *big, char *little, size_t len);
+int						ft_strchri(const char *s, int c);
 
-
-
-int ft_charchar(char s, int c);
-char	*ft_strnstr(char *big, char *little, size_t len);
-int		ft_strchri(const char *s, int c);
-
-char *ft_strjoinchar(char *str, char c);
+char					*ft_strjoinchar(char *str, char c);
 
 /**
  * Creates a new dictionary with the specified size.
@@ -95,14 +92,14 @@ char *ft_strjoinchar(char *str, char c);
  * @param size The size of the dictionary.
  * @return The created dictionary.
  */
-t_dict createDict(int size);
-
+/* t_dict createDict(int size);
+ */
 /**
  * Creates a new dictionary node.
  *
  * @return The created dictionary node.
  */
-t_dictNode *newNode(void);
+/* t_dictnode *newNode(void); */
 
 /**
  * Sets the key of the specified dictionary node.
@@ -110,16 +107,16 @@ t_dictNode *newNode(void);
  * @param node The dictionary node.
  * @param key The key to set.
  */
-void setNodeKey(t_dictNode **node, char *key);
-
+/* void setNodeKey(t_dictNode **node, char *key);
+ */
 /**
  * Sets the value of the specified dictionary node.
  *
  * @param node The dictionary node.
  * @param value The value to set.
  */
-void setNodeValue(t_dictNode **node, char *value);
-
+/* void setNodeValue(t_dictNode **node, char *value);
+ */
 /**
  * Adds a new node with the specified key and value to the dictionary.
  *
@@ -127,8 +124,8 @@ void setNodeValue(t_dictNode **node, char *value);
  * @param key The key of the new node.
  * @param value The value of the new node.
  */
-void addNode(t_dictNode **node, char *key, char *value);
-
+/* void addNode(t_dictNode **node, char *key, char *value);
+ */
 /**
  * Retrieves the value associated with the specified key from the dictionary.
  *
@@ -136,8 +133,8 @@ void addNode(t_dictNode **node, char *key, char *value);
  * @param key The key to search for.
  * @return The value associated with the key, or NULL if not found.
  */
-char *getNodeValWithKey(t_dictNode *node, char *key);
-
+/* char *getNodeValWithKey(t_dictNode *node, char *key);
+ */
 /**
  * Retrieves the key associated with the specified value from the dictionary.
  *
@@ -145,15 +142,15 @@ char *getNodeValWithKey(t_dictNode *node, char *key);
  * @param value The value to search for.
  * @return The key associated with the value, or NULL if not found.
  */
-char *getNodeKeyWithValue(t_dictNode *node, char *value);
-
+/* char *getNodeKeyWithValue(t_dictNode *node, char *value);
+ */
 /**
  * Prints the contents of the dictionary.
  *
  * @param dict The dictionary to print.
  */
-void printDictionary(t_dictNode *dict);
-
+/* void printDictionary(t_dictNode *dict);
+ */
 /**
  * @brief function used to sleep for sleep_time milliseconds
  * 
@@ -368,7 +365,7 @@ size_t					ft_strlcpy(char *dest, char *src, size_t size);
  * @param len The length of the substring.
  * @return The created substring.
  */
-char	*ft_substr(char *s, int start, int len);
+char					*ft_substr(char *s, int start, int len);
 
 /**
  * @brief Concatenates two strings.
@@ -425,7 +422,7 @@ char					*ft_strdup(const char *s);
  * @param set The set of characters to be trimmed.
  * @return The trimmed string.
  */
-char	*ft_strtrim(char  *s1, char  *set);
+char					*ft_strtrim(char *s1, char *set);
 
 /**
  * @brief Splits a string into an array of substrings.
@@ -434,7 +431,7 @@ char	*ft_strtrim(char  *s1, char  *set);
  * @param c The delimiter character.
  * @return The array of substrings.
  */
-char	**ft_split(char *s, char c);
+char					**ft_split(char *s, char c);
 
 /**
  * @brief Applies a function to each character of a string.
@@ -837,5 +834,5 @@ int						*ft_findminmax(t_dll_list *stack_a);
  */
 int						ft_find_min(t_dll_list *a);
 
-char	*ft_itoa(int n);
+char					*ft_itoa(int n);
 #endif

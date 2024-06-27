@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "lexer.h"
+#include "minishell.h"
 
 void	clean_redir(t_redir **redir)
 {

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:37:47 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/22 22:38:32 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 16:38:08 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_strchri(const char *s, int c)
 	int		i;
 	int		n;
 
-	i = ft_strlen((char *) s) + 1;
+	i = ft_strlen((char *)s) + 1;
 	n = 0;
 	str = (char *)s;
 	if (c > 127)

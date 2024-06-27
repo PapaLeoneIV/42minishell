@@ -14,7 +14,7 @@
 
 static t_env	*ft_lstlast_(t_env *lst)
 {
-	while (lst && lst-> next != NULL)
+	while (lst && lst->next != NULL)
 		lst = lst->next;
 	return (lst);
 }
@@ -79,7 +79,7 @@ t_env	**get_env_info(char *envp_mtx[])
 		if (node == NULL)
 		{
 			clean_env_lst(env_struct);
-			exit (-1);
+			exit(-1);
 		}
 		add_node_to_env_struct(env_struct, node);
 		counter++;

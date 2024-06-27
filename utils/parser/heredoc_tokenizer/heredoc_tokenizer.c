@@ -30,7 +30,8 @@ static int	get_char_type_heredoc(char *str, t_parser *pars, int count)
 }
 
 static void	general_state_handler_heredoc(char *input,
-		t_parser *pars, t_shell *shell)
+											t_parser *pars,
+											t_shell *shell)
 {
 	char	next;
 
@@ -56,23 +57,28 @@ static void	general_state_handler_heredoc(char *input,
 }
 
 static int	slice_end_token_heredoc(char *stringa,
-		t_parser *pars, t_shell *shell)
+									t_parser *pars,
+									t_shell *shell)
 {
 	if (stringa[pars->count] == '\0')
 		return (0);
 	else if (pars->state == STATE_DOLLAR)
-		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
+			pars->count + 1};
 	else
-		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start, pars->count + 1};
+		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start,
+			pars->count + 1};
 	pars->token = token_new(NULL);
 	set_token_values(pars->token, &pars->info);
-	if (pars->token->type == WORD_TOKEN && !ft_strncmp(pars->token->value, "", ft_strlen(pars->token->value)))
+	if (pars->token->type == WORD_TOKEN && !ft_strncmp(pars->token->value, "",
+			ft_strlen(pars->token->value)))
 	{
 		free(pars->token->value);
-		free(pars->token); 
-		return SUCCESS;
+		free(pars->token);
+		return (SUCCESS);
 	}
-	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$", ft_strlen(pars->token->value)))
+	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$",
+			ft_strlen(pars->token->value)))
 	{
 		expand_env_var(&pars->token, &pars->token->value, shell);
 		if (pars->token && pars->token->value)
@@ -117,13 +123,13 @@ char	*heredoc_tokenizer(char *input, t_shell *shell)
 		pars.char_type = get_char_type_heredoc(input, &pars, pars.count);
 		if (pars.state == STATE_GENERAL)
 			general_state_handler_heredoc(input, &pars, shell);
-		else if (pars.state == STATE_DOLLAR
-			&& ((pars.char_type != REG_CHAR && pars.char_type != DIGIT_CHAR)
-				|| (pars.char_type == DIGIT_CHAR
-					&& input[pars.count - 1] == '$')))
+		else if (pars.state == STATE_DOLLAR && ((pars.char_type != REG_CHAR
+						&& pars.char_type != DIGIT_CHAR)
+					|| (pars.char_type == DIGIT_CHAR && input[pars.count
+						- 1] == '$')))
 			dollar_state_handler(input, &pars, shell);
-		if (input[pars.count + 1] == '\0'
-			&& !slice_end_token_heredoc(input, &pars, shell))
+		if (input[pars.count + 1] == '\0' && !slice_end_token_heredoc(input,
+				&pars, shell))
 		{
 			free_tokens(pars.head);
 			return (NULL);

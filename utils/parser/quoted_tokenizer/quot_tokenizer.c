@@ -1,24 +1,24 @@
 
 #include "../../includes/lexer.h"
 
-int valid_regchar_quoted(char c)
+int	valid_regchar_quoted(char c)
 {
-	char *valid_char;
-	int len;
-	int i;
+	char	*valid_char;
+	int		len;
+	int		i;
 
 	i = 0;
 	valid_char = "_";
 	len = ft_strlen(valid_char);
-	while(i < len)
+	while (i < len)
 	{
-		if(ft_charchar(c, valid_char[i]))
+		if (ft_charchar(c, valid_char[i]))
 			return (1);
 		i++;
 	}
 	return (0);
 }
-int get_char_type_quoted(char c)
+int	get_char_type_quoted(char c)
 {
 	if (c == ' ')
 		return (WHITESPACE_CHAR);
@@ -33,9 +33,9 @@ int get_char_type_quoted(char c)
 	return (DOLLAR_SPECIAL_CHAR);
 }
 
-t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
-{	
-	t_parser *parser;
+t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
+{
+	t_parser	*parser;
 
 	if (node && !(node->value))
 		return (NULL);
@@ -44,21 +44,25 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 	parser->start = 0;
 	parser->count = 0;
 	parser->head = NULL;
-	while(node->value[parser->count])
+	while (node->value[parser->count])
 	{
 		parser->char_type = get_char_type_quoted(node->value[parser->count]);
 		if (parser->state == STATE_GENERAL)
 			general_state_handler_quoted(node->value, parser, shell);
-		else if (parser->state == STATE_DOLLAR && ((parser->char_type != REG_CHAR && parser->char_type != DIGIT_CHAR)
-		|| (parser->char_type == DIGIT_CHAR && node->value[parser->count - 1] == '$')))
-			dollar_state_handler_quoted(node->value, parser, shell);												//DOLLAR STATE
+		else if (parser->state == STATE_DOLLAR
+				&& ((parser->char_type != REG_CHAR
+						&& parser->char_type != DIGIT_CHAR)
+					|| (parser->char_type == DIGIT_CHAR
+						&& node->value[parser->count - 1] == '$')))
+			dollar_state_handler_quoted(node->value, parser, shell);
+				//DOLLAR STATE
 		if (node->value[parser->count + 1] == '\0')
 		{
 			if (!slice_end_token(node->value, parser, shell))
 			{
 				free_tokens(parser->head);
 				free(parser);
-				return (NULL);																			//SLICE END TOKEN						
+				return (NULL); //SLICE END TOKEN
 			}
 		}
 		parser->count++;
@@ -66,14 +70,15 @@ t_parser *tokenize_quoted_values(t_token *node, t_shell *shell)
 	if (parser->head == NULL)
 	{
 		free(parser);
-		return NULL;
+		return (NULL);
 	}
-	return parser;
+	return (parser);
 }
 
-void general_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
+void	general_state_handler_quoted(char *stringa, t_parser *pars,
+		t_shell *shell)
 {
-	char next;
+	char	next;
 
 	next = -1;
 	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == DOLLAR_CHAR)
@@ -85,25 +90,31 @@ void general_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 			slice_token_string_doll_spec_case(stringa, pars);
 			return ;
 		}
-		if (pars->count > pars->start)  																									//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
+		if (pars->count > pars->start)
+		//se ho incontrato uno dei carattere nell if precedente posso tagliare la stringa
 			slice_token_string(stringa, pars);
 		if (pars->char_type == WHITESPACE_CHAR)
 			slice_single_char_token(stringa, pars, shell);
-		if (pars->char_type == DOLLAR_CHAR)  						//cambio lo state machine per gestire le virgolette
+		if (pars->char_type == DOLLAR_CHAR)
+		//cambio lo state machine per gestire le virgolette
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}
 }
-void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
+void	dollar_state_handler_quoted(char *stringa, t_parser *pars,
+		t_shell *shell)
 {
 	/***qui dipende se voglio gestire $1 $2 $3 $? ....*/
 
 	char *status;
 	/***per il momento $? viene espanso e risulta uguale a NULL (ERRORE)*/
-	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR && stringa[pars->count - 1] == '$') ||
-	(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR && stringa[pars->count - 1] == '$'))
+	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR
+			&& stringa[pars->count - 1] == '$') ||
+		(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
+				&& stringa[pars->count - 1] == '$'))
 	{
 		pars->token = token_new(NULL);
-		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count + 1};
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
+			pars->count + 1};
 		set_token_values(pars->token, &pars->info);
 		if (strcmp(pars->token->value, "$0") == 0)
 		{
@@ -125,12 +136,13 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 	if (pars->count > pars->start)
 	{
 		pars->token = token_new(NULL);
-		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start, pars->count}; 
+		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
+			pars->count};
 		set_token_values(pars->token, &pars->info);
 		if (pars->token->value)
 		{
 			expand_env_var(&pars->token, &pars->token->value, shell);
-			if(pars->token && pars->token->value)
+			if (pars->token && pars->token->value)
 				token_add_back(&pars->head, pars->token);
 		}
 		else
@@ -141,6 +153,6 @@ void dollar_state_handler_quoted(char *stringa, t_parser *pars, t_shell *shell)
 		pars->start = pars->count;
 		pars->count--;
 	}
-	
+
 	pars->state = STATE_GENERAL;
 }

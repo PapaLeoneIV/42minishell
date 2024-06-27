@@ -6,24 +6,21 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:41:05 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/22 16:14:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 17:12:17 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
 
 void	handle_signal(int signum)
 {
 	if (signum == SIGINT)
 	{
 		g_status_code = 130;
-		
 		ioctl(0, TIOCSTI, "\n");
-		rl_on_new_line(); 
+		rl_on_new_line();
 		rl_replace_line("", 0);
-/*  		rl_redisplay();
- */	}
+	}
 }
 
 void	handle_ctrl_d(t_shell *shell, char *input)

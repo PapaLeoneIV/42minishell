@@ -15,11 +15,11 @@
 char	*ft_substr(char *s, int start, int len)
 {
 	char	*res;
-	int	s_len;
+	int		s_len;
 
 	s_len = ft_strlen(s);
-	if(s_len == 0)
-		return NULL;
+	if (s_len == 0)
+		return (NULL);
 	if (len > s_len)
 		len = s_len;
 	if (start > s_len)

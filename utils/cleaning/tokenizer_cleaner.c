@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 /**Se l espansione di una variabile non e' stata trovata, 
  * il token->value viene settato a NULL. Questa funzione 
  * serve una volta individuati a rimuoverli dalla lista

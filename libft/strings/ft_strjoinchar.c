@@ -12,21 +12,21 @@
 
 #include "libft.h"
 
-char *ft_strjoinchar(char *str, char c)
+char	*ft_strjoinchar(char *str, char c)
 {
-	int len;
-	char *out;
-	int i;
+	int		len;
+	char	*out;
+	int		i;
 
 	i = 0;
 	len = ft_strlen(str);
 	out = ft_calloc(len + 2, sizeof(char));
-	while(i < len)
+	while (i < len)
 	{
 		out[i] = str[i];
-		i++;		
+		i++;
 	}
 	out[i++] = c;
 	free(str);
-	return out;
+	return (out);
 }

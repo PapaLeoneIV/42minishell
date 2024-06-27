@@ -18,18 +18,18 @@
  * file, nomi di variabili, env ...)
 */
 
-int valid_regchar(char *str, t_parser *pars)
+int	valid_regchar(char *str, t_parser *pars)
 {
-	char *valid_char;
-	int len;
-	int i;
+	char	*valid_char;
+	int		len;
+	int		i;
 
 	i = 0;
 	valid_char = "_";
 	len = ft_strlen(valid_char);
-	while(i < len)
+	while (i < len)
 	{
-		if(ft_charchar(str[pars->count], valid_char[i]))
+		if (ft_charchar(str[pars->count], valid_char[i]))
 			return (1);
 		i++;
 	}
@@ -41,7 +41,7 @@ int valid_regchar(char *str, t_parser *pars)
  * 
 */
 
-int look_for_another_redirect(char *stringa, t_parser *pars)
+int	look_for_another_redirect(char *stringa, t_parser *pars)
 {
 	if (stringa[pars->count + 1] == '>')
 		return (REDIR_OUTPUT_CHAR);
@@ -56,7 +56,7 @@ int look_for_another_redirect(char *stringa, t_parser *pars)
  * numeri sono inseriti in un char piu generico 
 */
 
-int get_char_type(char *str, t_parser *pars, int count)
+int	get_char_type(char *str, t_parser *pars, int count)
 {
 	if (str[count] == ' ')
 		return (WHITESPACE_CHAR);
@@ -86,7 +86,7 @@ int get_char_type(char *str, t_parser *pars, int count)
  * lo state generale. Serve per cambiare lo STATE della machine.
 */
 
-void check_and_change_status(int *state, int c, t_parser *pars)
+void	check_and_change_status(int *state, int c, t_parser *pars)
 {
 	if (c == SQUOTES_CHAR)
 		*state = STATE_SQUOTE;
@@ -94,6 +94,5 @@ void check_and_change_status(int *state, int c, t_parser *pars)
 		*state = STATE_DQUOTE;
 	else if (c == DOLLAR_CHAR)
 		*state = STATE_DOLLAR;
-	
-	pars->start = pars->count; 
+	pars->start = pars->count;
 }

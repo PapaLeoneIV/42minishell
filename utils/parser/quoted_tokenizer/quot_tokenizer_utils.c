@@ -1,29 +1,29 @@
 
 #include "../../includes/lexer.h"
 
-t_token *check_prev(t_token *token)
+t_token	*check_prev(t_token *token)
 {
-	t_token *prev;
+	t_token	*prev;
 
 	if (!token->prev)
-		return NULL;
+		return (NULL);
 	prev = token->prev;
 	if (prev == NULL || prev->type == WHITESPACE_TOKEN)
-		return NULL;
+		return (NULL);
 	if (prev->type == WORD_TOKEN || prev->type == DOUBLE_QUOTES_TOKEN
-	|| prev->type == SING_QUOTES_TOKEN || prev->type == DOLLAR_TOKEN
-	|| prev->type == HERDOC_FILENAME_WITHQUOTES)
-		return prev; 
-	return NULL;
+		|| prev->type == SING_QUOTES_TOKEN || prev->type == DOLLAR_TOKEN
+		|| prev->type == HERDOC_FILENAME_WITHQUOTES)
+		return (prev);
+	return (NULL);
 }
 
-void join_tokens(t_token **node, t_token **prev)
+void	join_tokens(t_token **node, t_token **prev)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = (*prev)->value;
 	(*prev)->value = ft_strjoin((*prev)->value, (*node)->value);
-	if((*node)->next)
+	if ((*node)->next)
 		(*node)->next->prev = (*prev);
 	else
 		(*prev)->next = NULL;
@@ -35,27 +35,29 @@ void join_tokens(t_token **node, t_token **prev)
 	*node = *prev;
 }
 
-void join_tokens_values_when_no_space_between(t_parser *pars)
+void	join_tokens_values_when_no_space_between(t_parser *pars)
 {
+	t_token	*prev;
+	t_token	*ptr;
+
 	/**qui devo aggiungere una logica per cui se il primo dei token che 
-	 * viene joinato e' un token di tipo heredoc_quotes devo mantenere questo datatype
-	 * e non convertirlo nel type del token successivo 
-	 * 
+		* viene joinato e' un token di tipo heredoc_quotes devo mantenere questo datatype
+		* e non convertirlo nel type del token successivo 
+		* 
 	*/
-	t_token *prev;
-	t_token *ptr;
 	ptr = pars->head;
-	while(ptr != NULL)
+	while (ptr != NULL)
 	{
 		prev = check_prev(ptr);
-		if (!prev || (prev && prev->type != HERDOC_FILENAME_WITHQUOTES 
-		&& prev->value && prev->value[0] == '\0'))
+		if (!prev || (prev && prev->type != HERDOC_FILENAME_WITHQUOTES
+				&& prev->value && prev->value[0] == '\0'))
 		{
 			ptr = ptr->next;
-			continue;
+			continue ;
 		}
-		if (ptr && (ptr->type == WORD_TOKEN || ptr->type == SING_QUOTES_TOKEN 
-		|| ptr->type == DOUBLE_QUOTES_TOKEN || ptr->type == DOLLAR_TOKEN ) && prev)
+		if (ptr && (ptr->type == WORD_TOKEN || ptr->type == SING_QUOTES_TOKEN
+				|| ptr->type == DOUBLE_QUOTES_TOKEN
+				|| ptr->type == DOLLAR_TOKEN) && prev)
 		{
 			join_tokens(&ptr, &prev);
 		}
@@ -63,35 +65,38 @@ void join_tokens_values_when_no_space_between(t_parser *pars)
 	}
 }
 
-char *join_quoted_token_expansion(t_token *head)
+char	*join_quoted_token_expansion(t_token *head)
 {
-	char *out;
-	char *tmp;
-	
+	char	*out;
+	char	*tmp;
+
 	out = NULL;
-	while(head)
+	while (head)
 	{
 		tmp = out;
 		out = ft_strjoin(out, head->value);
 		free(tmp);
-		head = head->next; 
+		head = head->next;
 	}
-	return out;
+	return (out);
 }
-void unpack_quoted_tokens(t_token **head, t_shell *shell) {
-    t_token *ptr = *head;
-	t_token *tempo;
-	t_parser *list; 
-	t_token *tmp = NULL;
+void	unpack_quoted_tokens(t_token **head, t_shell *shell)
+{
+	t_token		*ptr;
+	t_token		*tempo;
+	t_parser	*list;
+	t_token		*tmp;
 
+	ptr = *head;
+	tmp = NULL;
 	tempo = *head;
-    while (ptr != NULL) 
+	while (ptr != NULL)
 	{
 		tmp = ptr->next;
-        if (ptr->type == DOUBLE_QUOTES_TOKEN) 
+		if (ptr->type == DOUBLE_QUOTES_TOKEN)
 		{
 			list = tokenize_quoted_values(ptr, shell);
-            if (list == NULL) 
+			if (list == NULL)
 			{
 				if (!ptr->prev)
 				{
@@ -102,22 +107,22 @@ void unpack_quoted_tokens(t_token **head, t_shell *shell) {
 				{
 					(*head) = ptr->prev;
 					ptr->prev->next = ptr->next;
-					if(ptr->next)
+					if (ptr->next)
 						ptr->next->prev = ptr->prev;
- 			}
+				}
 				free(ptr->value);
 				free(ptr);
 				ptr = NULL;
-            } 
-			else 
+			}
+			else
 			{
-                free(ptr->value);
-                ptr->value = join_quoted_token_expansion(list->head);
-                free_tokens(list->head);
-                free(list);
-            }
-        }
-        ptr = tmp;
-    }
+				free(ptr->value);
+				ptr->value = join_quoted_token_expansion(list->head);
+				free_tokens(list->head);
+				free(list);
+			}
+		}
+		ptr = tmp;
+	}
 	*head = tempo;
 }

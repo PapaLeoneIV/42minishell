@@ -6,17 +6,13 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/26 18:34:00 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 16:55:33 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-struct sigaction signal_g;
-
-
-
-static int	tokenizer(t_shell *shell, char *input, t_token	**head)
+static int	tokenizer(t_shell *shell, char *input, t_token **head)
 {
 	*head = tokenize_input(input, shell);
 	if (*head == NULL)
@@ -30,19 +26,17 @@ static int	lexer(t_token **head, t_shell *shell)
 	{
 		free_tokens(*head);
 		g_status_code = 2;
-		return (ERROR) ;
+		return (ERROR);
 	}
 	if (parse_redirections(*head, shell) == ERROR)
 		;
 	return (SUCCESS);
 }
 
-
-
 void	read_from_stdin(t_shell *shell, char **envp)
 {
-	t_token		*head;
-	char		*input;
+	t_token	*head;
+	char	*input;
 
 	head = NULL;
 	signal(SIGINT, handle_signal);

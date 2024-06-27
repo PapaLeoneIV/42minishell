@@ -12,22 +12,22 @@
 
 #include "../../../includes/lexer.h"
 
-t_redir *new_redir_node(int type, char *value, int flag)
+t_redir	*new_redir_node(int type, char *value, int flag)
 {
-	t_redir *redir_node;
+	t_redir	*redir_node;
 
 	redir_node = ft_calloc(1, sizeof(t_redir));
 	redir_node->filename = ft_strdup(value);
 	redir_node->type_of_redirection = type;
 	if (!flag)
 		redir_node->heredoc_expansion = 0;
-	else	
+	else
 		redir_node->heredoc_expansion = 1;
 	redir_node->next = NULL;
-	return redir_node;
+	return (redir_node);
 }
 
-void add_back_redirections(t_redir **lst, t_redir *node)
+void	add_back_redirections(t_redir **lst, t_redir *node)
 {
 	t_redir	*ptrlst;
 
@@ -42,10 +42,9 @@ void add_back_redirections(t_redir **lst, t_redir *node)
 	ptrlst->next = node;
 }
 
-
-t_command *new_command(int counter)
+t_command	*new_command(int counter)
 {
-	t_command *cmd_node;
+	t_command	*cmd_node;
 
 	cmd_node = ft_calloc(1, sizeof(t_command));
 	cmd_node->cmd = NULL;
@@ -59,10 +58,10 @@ t_command *new_command(int counter)
 	cmd_node->redirection_info = NULL;
 	cmd_node->next = NULL;
 	cmd_node->prev = NULL;
-	return cmd_node;
+	return (cmd_node);
 }
 
-void add_back_commands(t_command **lst, t_command *node)
+void	add_back_commands(t_command **lst, t_command *node)
 {
 	t_command	*ptrlst;
 
@@ -78,7 +77,7 @@ void add_back_commands(t_command **lst, t_command *node)
 	node->prev = ptrlst;
 }
 
-char **from_lst_to_mtx(t_token *head)
+char	**from_lst_to_mtx(t_token *head)
 {
 	int i;
 	int len;
@@ -88,20 +87,20 @@ char **from_lst_to_mtx(t_token *head)
 	ptr = head;
 	i = 0;
 	len = 0;
-	while(ptr)
+	while (ptr)
 	{
 		ptr = ptr->next;
 		len++;
 	}
 	if (len == 0)
-		return NULL;
-	ptr = head;	
+		return (NULL);
+	ptr = head;
 	mtx = ft_calloc(len + 1, sizeof(char *));
-	while(i < len)
+	while (i < len)
 	{
 		mtx[i] = ft_strdup(ptr->value);
 		i++;
 		ptr = ptr->next;
 	}
-	return mtx;
+	return (mtx);
 }

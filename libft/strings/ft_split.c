@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/25 12:12:42 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 16:29:22 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 {
 	char	*arr;
 	int		j;
+	int		i;
+	int		res;
 
 	j = 0;
 	arr = (char *)malloc(sizeof(char) * (length + 1));
@@ -29,11 +31,10 @@
 	arr[j] = '\0';
 	return (arr);
 } */
-
 static int	count_words(const char *str, char c)
 {
-	int	i;
-	int	res;
+	int		i;
+	int		res;
 
 	res = 0;
 	i = 0;

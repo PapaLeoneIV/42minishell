@@ -14,8 +14,8 @@
 
 /* char *get_key_envp(char *envp_string)
 {
-	char *key;
-	int end;
+	char	*key;
+	int		end;
 
 	end = ft_strchri_gnl(envp_string, '=');;
 	key = ft_substr(envp_string, 0, end);
@@ -23,12 +23,12 @@
 }
  */
 
-char *set_token_value_post_expansion(char *envp_string)
+char	*set_token_value_post_expansion(char *envp_string)
 {
-	char *out;
-	int end;
-	int start;
-	
+	char	*out;
+	int		end;
+	int		start;
+
 	end = ft_strlen(envp_string);
 	start = ft_strchri_gnl(envp_string, '=');
 	out = ft_substr(envp_string, start + 1, end);
@@ -65,11 +65,10 @@ char *set_token_value_post_expansion(char *envp_string)
 	return ;
 } */
 
-
 void	expand_env_var(t_token **token, char **token_value, t_shell *shell)
 {
-	char	*tmp;
-	t_env	*ptr;
+	char *tmp;
+	t_env *ptr;
 
 	ptr = shell->env[0];
 	while (ptr)

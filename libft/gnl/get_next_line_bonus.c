@@ -70,9 +70,9 @@ char	*return_line(char **buffer, int bytes, char **tmp)
 
 char	*get_next_line(int fd)
 {
-	static char		*buffer[4096];
-	char			*tmp;
-	int				bytes;
+	static char	*buffer[4096];
+	char		*tmp;
+	int			bytes;
 
 	if (fd == -42)
 		return (free_everything(buffer));

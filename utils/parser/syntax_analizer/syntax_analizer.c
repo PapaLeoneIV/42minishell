@@ -6,11 +6,12 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 12:14:14 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 17:44:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
 /**Una volta aver tokenizzato ed espanso le variabili all interno delle
  * double quotes, posso rendere tutte i vari token dei WORD_TOKEN generici
  * per il momento.
@@ -46,8 +47,7 @@ void	change_non_special_tokens_to_word_tokens(t_token *head)
 	ptr = head;
 	while (ptr)
 	{
-		if (ptr->type == DOLLAR_TOKEN
-			|| ptr->type == SING_QUOTES_TOKEN
+		if (ptr->type == DOLLAR_TOKEN || ptr->type == SING_QUOTES_TOKEN
 			|| ptr->type == DOUBLE_QUOTES_TOKEN)
 			ptr->type = WORD_TOKEN;
 		ptr = ptr->next;
@@ -86,11 +86,8 @@ void	remove_whitespaces(t_token **head)
 	}
 }
 
-int	syntax_error_handler(t_token **head)
+static int refinement_list(t_token *ptr, t_token **head)
 {
-	t_token	*ptr;
-
-	ptr = *head;
 	if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1)
 	{
 		write(2, "Invalid character found!\n", 26);
@@ -98,39 +95,32 @@ int	syntax_error_handler(t_token **head)
 	}
 	change_non_special_tokens_to_word_tokens(*head);
 	remove_whitespaces(head);
+	return (SUCCESS);
+}
+
+int	syntax_error_handler(t_token **head)
+{
+	t_token	*ptr;
+
 	ptr = *head;
+	if (refinement_list(ptr, head) == ERROR)
+		return (ERROR);
 	while (ptr)
 	{
 		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))
-		{
-			write(2, "Syntax error near unexpected token '|'\n", 40);
 			return (ERROR);
-		}	
-			
-		else if (ptr->type == GREATER_TOKEN && !handle_greater_synt_error_tokens(ptr))
-		{
-			write(2, "Syntax error near unexpected token '>'\n", 40);
-			return  (ERROR);
-		}	
-			
-		else if (ptr->type == LESSER_TOKEN && !handle_lesser_synt_error_tokens(ptr))
-		{
-			write(2, "Syntax error near unexpected token '<'\n", 40);
-			return ( ERROR);
-		}	
-
-		else if (ptr->type == HEREDOC_TOKEN && !headle_heredoc_syntax_error_tokens(ptr))
-		{
-			write(2, "Syntax error near unexpected token '<<'\n", 40);
+		else if (ptr->type == GREATER_TOKEN
+			&& !handle_greater_synt_error_tokens(ptr))	
+				return (ERROR);
+		else if (ptr->type == LESSER_TOKEN
+			&& !handle_lesser_synt_error_tokens(ptr))
 			return (ERROR);
-		}	
-			
-		else if (ptr->type == REDIR_OUT_TOKEN && !handle_redirout_synt_error_tokens(ptr))
-		{
-			write(2, "Syntax error near unexpected token '>'\n", 40);
+		else if (ptr->type == HEREDOC_TOKEN
+			&& !headle_heredoc_syntax_error_tokens(ptr))
 			return (ERROR);
-		}	
-			
+		else if (ptr->type == REDIR_OUT_TOKEN
+			&& !handle_redirout_synt_error_tokens(ptr))
+			return (ERROR);
 		ptr = ptr->next;
 	}
 	return (SUCCESS);

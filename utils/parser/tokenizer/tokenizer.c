@@ -25,13 +25,14 @@ int	create_token_list(char *str, t_shell *shell, t_parser *pars)
 		if (pars->state == STATE_GENERAL)
 			general_state_handler(str, pars, shell);
 		else if ((pars->state == STATE_SQUOTE
-				&& pars->char_type == SQUOTES_CHAR)
-			|| (pars->state == STATE_DQUOTE && pars->char_type == DQUOTES_CHAR))
+					&& pars->char_type == SQUOTES_CHAR)
+				|| (pars->state == STATE_DQUOTE
+					&& pars->char_type == DQUOTES_CHAR))
 			quoted_state_handler(str, pars);
-		else if (pars->state == STATE_DOLLAR
-			&& ((pars->char_type != REG_CHAR && pars->char_type != DIGIT_CHAR)
-				|| (pars->char_type == DIGIT_CHAR
-					&& str[pars->count - 1] == '$')))
+		else if (pars->state == STATE_DOLLAR && ((pars->char_type != REG_CHAR
+						&& pars->char_type != DIGIT_CHAR)
+					|| (pars->char_type == DIGIT_CHAR && str[pars->count
+						- 1] == '$')))
 			dollar_state_handler(str, pars, shell);
 		if (str[pars->count + 1] == '\0' && !slice_end_token(str, pars, shell))
 			return (ERROR);
@@ -69,8 +70,8 @@ void	trim_middleline_whitespaces(t_parser *pars)
 
 t_token	*tokenize_input(char *input, t_shell *shell)
 {
-	t_parser	pars;
-	t_token		*head;
+	t_parser pars;
+	t_token *head;
 
 	pars = (t_parser){0};
 	if (create_token_list(input, shell, &pars) == ERROR)

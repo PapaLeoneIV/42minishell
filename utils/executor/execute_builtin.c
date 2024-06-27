@@ -40,13 +40,11 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 
 int	is_a_biltin(char **tmp)
 {
-	if (ft_strncmp(tmp[0], "cd", 3) == 0
-		|| ft_strncmp(tmp[0], "pwd", 4) == 0
-		|| ft_strncmp(tmp[0], "echo", 5) == 0
-		|| ft_strncmp(tmp[0], "env", 4) == 0
-		|| ft_strncmp(tmp[0], "export", 7) == 0
-		|| ft_strncmp(tmp[0], "unset", 6) == 0
-		|| ft_strncmp(tmp[0], "exit", 5) == 0)
+	if (ft_strncmp(tmp[0], "cd", 3) == 0 || ft_strncmp(tmp[0], "pwd", 4) == 0
+		|| ft_strncmp(tmp[0], "echo", 5) == 0 || ft_strncmp(tmp[0], "env",
+			4) == 0 || ft_strncmp(tmp[0], "export", 7) == 0
+		|| ft_strncmp(tmp[0], "unset", 6) == 0 || ft_strncmp(tmp[0], "exit",
+			5) == 0)
 		return (1);
 	return (0);
 }
@@ -67,7 +65,7 @@ char	*ft_access(char **open_path, char *cmd)
 		free(tmp);
 		if (access(supp, F_OK) == 0)
 			return (supp);
-		free (supp);
+		free(supp);
 		i++;
 	}
 	return (NULL);

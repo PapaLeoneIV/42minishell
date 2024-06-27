@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 13:51:11 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 17:12:02 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	check_head(char *str)
 		write_exit("bash: export: `", str, ": No such file or directory\n");
 		return (0);
 	}
-	while (str[i] != '\0' && str[i] != '='
-		&& !(str[i] == '+' && str[i + 1] == '='))
+	while (str[i] != '\0' && str[i] != '=' && !(str[i] == '+' && str[i
+				+ 1] == '='))
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 		{
