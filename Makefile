@@ -6,7 +6,7 @@
 #    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/06/18 11:06:59 by fgori            ###   ########.fr        #
+#    Updated: 2024/06/27 15:02:12 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,19 +43,20 @@ SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c export_path.
                 $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \
                 $(addprefix $(SYNTAX_HANDLER)/, syntax_analizer.c syntax_analizer_helpers.c) \
                 $(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
-				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c) \
+				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c here_path.c) \
 				$(addprefix $(SIGNALS)/, signals_helpers.c) \
 				$(addprefix $(HEREDOC_TOKENIZER)/, heredoc_tokenizer.c) \
 				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c exit_build.c)  \
 				$(addprefix $(REDIRECTION)/, redirection_parser.c redirection_parser_helpers.c)  \
 				$(addprefix $(CLEANING)/, tokenizer_cleaner.c env_cleaner.c cmd_cleaner.c)  \
+				$(addprefix $(SRCDIR)/, main.c) \
 
 all: $(NAME)
 
 
 $(NAME): $(SRC)
 	@$(MAKE) -C $(LIBFT_DIR)
-	@$(COMPILE) $(CFLAGS) $(SRCDIR)/main.c $(EVERY_INCLUDES) $(SRC) -L$(LIBFT_DIR) -lft -L$(GNL_DIR) -lgnl -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
+	@$(COMPILE) $(CFLAGS) $(EVERY_INCLUDES) $(SRC) -L$(LIBFT_DIR) -lft -L$(GNL_DIR) -lgnl -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
 clean:	
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
