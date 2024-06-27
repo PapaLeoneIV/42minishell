@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 10:37:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:50:10 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,14 @@ int	cd_path(char **mtx, t_env **env)
 	mtx_rows = mtx_count_rows(mtx);
 	if (mtx_rows > 2)
 	{
-		write(2, "\ntoo many arguments", 20);
+		write(2, "bash: cd: too many arguments\n", 30);
 		return (1);
 	}
 	
 	old = getcwd(NULL, 0);
 	if (mtx_rows == 2)
-		result = chdir(mtx[1]);
+			result = chdir(mtx[1]);
+	/*qui devi fare dei controlli  */
 	if (mtx_rows == 1)
 	{
 		tmp = find_node(env, "HOME");
@@ -61,6 +62,9 @@ int	cd_path(char **mtx, t_env **env)
 	new = getcwd(NULL, 0);
 	if (result == -1)
 	{
+		write(2, "bash: ", 7);
+		write(2, mtx[1], ft_strlen(mtx[1]));
+		write(2, ": No such file or directory\n", 29);
 		g_status_code = 1;
 		free(old);
 		free(new);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 14:39:29 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:55:51 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,28 @@ int	check_head(char *str)
 	i = 1;
 	if (ft_strchri(str, '=') == 0)
 	{
-		perror("invalid operetion\n");
+        write(2, "bash: export: `", 16);
+		write(2, str, ft_strlen(str));
+		write(2, ": No such file or directory\n", 29);
 		return (0);
 	}
 	if (ft_isdigit(str[0]))
-		return (perror("number in top of variable"), 0);
+    {
+        write(2, "bash: export: `", 16);
+		write(2, str, ft_strlen(str));
+		write(2, ": No such file or directory\n", 29);
+        return (0);
+    }
 	while (str[i] != '\0' && str[i] != '='
 		&& !(str[i] == '+' && str[i + 1] == '='))
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (perror("invalid character in variable name\n"), 0);
+        {
+            write(2, "bash: export: `", 16);
+		    write(2, str, ft_strlen(str));
+		    write(2, ": No such file or directory\n", 29);
+            return (0);
+        }
 		i++;
 	}
 	return (1);
@@ -62,7 +74,7 @@ int unset_path(t_env **lst, char **mtx)
     {
         if (ft_isdigit(mtx[arg][0]))
         {
-            write(2, "minishell: unset: not a valid identifier\n", 42);
+            write(2, "bash: unset: not a valid identifier\n", 37);
             g_status_code = 1;
             return (1);
         }

@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 09:26:07 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:29:08 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 		i = unset_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "exit", 5) == 0)
 		i = exit_path(cmd , shell);
-	g_status_code = i;
+	if(g_status_code > -1)
+		g_status_code = i;
 	return (i);
 }
 
