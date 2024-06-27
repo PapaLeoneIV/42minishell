@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 16:55:33 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/27 22:10:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	lexer(t_token **head, t_shell *shell)
 		return (ERROR);
 	}
 	if (parse_redirections(*head, shell) == ERROR)
-		;
+		write(2, "redirection error", 18);
 	return (SUCCESS);
 }
 
