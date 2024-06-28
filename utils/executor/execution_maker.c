@@ -3,14 +3,100 @@
 /*                                                        :::      ::::::::   */
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*                                            	    +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/28 06:24:53 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 11:30:09 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// Funzione per stampare i file descriptors con colori
+// Funzione per stampare i file descriptors con colori
+void print_fd(int fd)
+{
+    printf("\033[1;34m%d\033[0m", fd); // Colore blu per i file descriptors
+}
+
+// Funzione per stampare le informazioni di t_redir
+void print_redir_info(t_redir *redir)
+{
+    while (redir != NULL)
+    {
+        printf("Redirection In: ");
+        print_fd(redir->in);
+        printf("\nRedirection Out: ");
+        print_fd(redir->out);
+        printf("\nType of Redirection: %d\n", redir->type_of_redirection);
+        printf("Heredoc Expansion: %d\n", redir->heredoc_expansion);
+        printf("Filename: %s\n", redir->filename ? redir->filename : "NULL");
+        redir = redir->next;
+    }
+}
+
+// Funzione per stampare le informazioni di t_command
+void print_command_info(t_command *cmd)
+{
+    while (cmd != NULL)
+    {
+        printf("Command ID: %d\n", cmd->cmd_id);
+        printf("Fork ID: %d\n", cmd->fork_id);
+        printf("Command: ");
+        if (cmd->cmd != NULL)
+        {
+            for (int i = 0; cmd->cmd[i] != NULL; i++)
+            {
+                printf("%s ", cmd->cmd[i]);
+            }
+        }
+        else
+        {
+            printf("NULL");
+        }
+        printf("\nPipe: ");
+        print_fd(cmd->pip[0]);
+        printf(" ");
+        print_fd(cmd->pip[1]);
+        printf("\nInput FD: ");
+        print_fd(cmd->in);
+        printf("\nOutput FD: ");
+        print_fd(cmd->out);
+        printf("\nFD Change: %d\n", cmd->fd_change);
+        printf("Here: %s\n", cmd->here ? cmd->here : "NULL");
+
+        if (cmd->redirection_info != NULL && *cmd->redirection_info != NULL)
+        {
+            printf("Redirection Info:\n");
+            print_redir_info(*cmd->redirection_info);
+        }
+
+        cmd = cmd->next;
+    }
+}
+
+// Funzione per stampare le informazioni di t_shell
+void print_shell_info(t_shell *shell)
+{
+    printf("Shell Line: %s\n", shell->line);
+    printf("Shell Pipe: ");
+    print_fd(shell->shell_pip[0]);
+    printf(" ");
+    print_fd(shell->shell_pip[1]);
+    printf("\n");
+
+    if (shell->cmd_info != NULL && *shell->cmd_info != NULL)
+    {
+        printf("Command Info:\n");
+        print_command_info(*shell->cmd_info);
+    }
+
+    if (shell->status != NULL)
+    {
+        printf("Shell Status: %d\n", *(shell->status));
+    }
+}
+
 
 void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {
@@ -31,7 +117,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 			supp = ft_access(open_path, tmp_cmd[0]);
 			if (!supp)
 			{
-				g_status_code = 127;
+				g_status_code = 126;
 				perror("ERROR\nunfinded path");
 				freeall(tmp_cmd);
 				return (freeall(open_path), freeall(tmp_env), clean_all(shell,
@@ -177,6 +263,7 @@ int	execute_cmd(t_shell *shell)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
 	make_redir(shell, cmd);
+	//print_shell_info(shell);
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
