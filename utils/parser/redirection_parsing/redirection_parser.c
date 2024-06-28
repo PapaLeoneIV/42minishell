@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 17:28:02 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 09:41:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,6 @@ int	parse_redirections(t_token *head, t_shell *shell)
 		free_tokens(pars->tmp_list);
 		add_back_commands(shell->cmd_info, pars->cmd_node);
 	}
+	free(pars);
 	return (SUCCESS);
 }
