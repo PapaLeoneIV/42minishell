@@ -103,8 +103,14 @@ void	unpack_quoted_tokens(t_token **head, t_shell *shell)
 				}
 				else
 				{
-					ptr->prev->next = ptr->next;
-					ptr->next->prev = ptr->prev;
+					if (ptr->next == NULL)
+						ptr->prev->next = NULL;
+					else
+					{
+						ptr->prev->next = ptr->next;
+						ptr->next->prev = ptr->prev;
+					}
+					
 				}
 				free(ptr->value);
 				free(ptr);

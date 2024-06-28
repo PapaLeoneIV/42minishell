@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/28 16:21:42 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 16:39:36 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,14 @@ void	remove_whitespaces(t_token **head)
 			}
 			else
 			{
-				ptr->next->prev = ptr->prev;
-				ptr->prev->next = ptr->next;
+				if(ptr->next == NULL)
+					ptr->prev->next = NULL;
+				else
+				{
+					ptr->next->prev = ptr->prev;
+					ptr->prev->next = ptr->next;	
+				}
+				
 			}
 			free(ptr->value);
 			free(ptr);
