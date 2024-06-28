@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 17:44:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 16:21:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,19 @@ void	remove_whitespaces(t_token **head)
 	while (ptr)
 	{
 		if (ptr->type == WHITESPACE_TOKEN)
-		{
+		{	
 			tmp = ptr->next;
-			if (ptr->prev)
-				ptr->prev->next = ptr->next;
-			if (ptr->next)
+			if(ptr->prev == NULL)
+			{
+				(*head) = ptr->next;
+				ptr->next->prev = NULL;
+			}
+			else
+			{
 				ptr->next->prev = ptr->prev;
-			if (ptr == *head)
-				*head = tmp;
+				ptr->prev->next = ptr->next;
+			}
 			free(ptr->value);
-			ptr->value = NULL;
 			free(ptr);
 			ptr = NULL;
 			ptr = tmp;
@@ -98,13 +101,8 @@ static int refinement_list(t_token *ptr, t_token **head)
 	return (SUCCESS);
 }
 
-int	syntax_error_handler(t_token **head)
+static int syn_err_core_logic(t_token	*ptr)
 {
-	t_token	*ptr;
-
-	ptr = *head;
-	if (refinement_list(ptr, head) == ERROR)
-		return (ERROR);
 	while (ptr)
 	{
 		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))
@@ -123,5 +121,18 @@ int	syntax_error_handler(t_token **head)
 			return (ERROR);
 		ptr = ptr->next;
 	}
+	return (SUCCESS);
+}
+
+int	syntax_error_handler(t_token **head)
+{
+	t_token	*ptr;
+
+	ptr = *head;
+	if (refinement_list(ptr, head) == ERROR)
+		return (ERROR);
+	ptr = *head;
+	if(syn_err_core_logic(ptr) == ERROR)
+		return (ERROR);	
 	return (SUCCESS);
 }

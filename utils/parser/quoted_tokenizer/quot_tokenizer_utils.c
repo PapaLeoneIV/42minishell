@@ -83,13 +83,11 @@ char	*join_quoted_token_expansion(t_token *head)
 void	unpack_quoted_tokens(t_token **head, t_shell *shell)
 {
 	t_token		*ptr;
-	t_token		*tempo;
 	t_parser	*list;
 	t_token		*tmp;
 
 	ptr = *head;
 	tmp = NULL;
-	tempo = *head;
 	while (ptr != NULL)
 	{
 		tmp = ptr->next;
@@ -105,14 +103,13 @@ void	unpack_quoted_tokens(t_token **head, t_shell *shell)
 				}
 				else
 				{
-					(*head) = ptr->prev;
 					ptr->prev->next = ptr->next;
-					if (ptr->next)
-						ptr->next->prev = ptr->prev;
+					ptr->next->prev = ptr->prev;
 				}
 				free(ptr->value);
 				free(ptr);
 				ptr = NULL;
+				ptr = tmp;
 			}
 			else
 			{
@@ -124,5 +121,4 @@ void	unpack_quoted_tokens(t_token **head, t_shell *shell)
 		}
 		ptr = tmp;
 	}
-	*head = tempo;
 }
