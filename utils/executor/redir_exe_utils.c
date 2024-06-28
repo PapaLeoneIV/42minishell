@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 16:36:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 13:13:56 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	list_of_out(t_redir **dir)
 			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
-			write(2, "Permission denied\n", 18);
+			write(2, " Permission denied\n", 18);
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == redir)
