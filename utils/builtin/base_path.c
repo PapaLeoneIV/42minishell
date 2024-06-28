@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 17:10:49 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 10:28:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ int	cd_path(char **mtx, t_env **env)
 	t_env	*tmp;
 
 	mtx_rows = mtx_count_rows(mtx);
+	if (mtx_rows == 1)
+	{
+		result = chdir("~/");
+	}
 	if (mtx_rows > 2)
 	{
 		write(2, "bash: cd: too many arguments\n", 30);
