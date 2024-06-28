@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 22:44:57 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 06:24:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	child_process(t_shell *shell, t_command *cmd)
 		write_exit("bash: ", "cmd->cmd[0]: ", ": No such file or directory\n");
 	else if (cmd->fd_change >= 0)
 		// <---qui quando non trovi la redirection input(cmd->in == -1) e
-	make_things(cmd, tmp, shell->env, shell);
+		make_things(cmd, tmp, shell->env, shell);
 	//non scriviamo niente dentro la pipe
 	else
 		clean_all(shell, 1);
@@ -104,6 +104,10 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 		{
 			unlink(cmd->here);
 		}
+		if (cmd->next)
+			close(cmd->pip[1]);
+		if (cmd->prev)
+			close(cmd->pip[0]);
 		if (cmd->in != 0 && cmd->in != -1)
 			close(cmd->in);
 		if (cmd->out != 1 && cmd->out != -1)
