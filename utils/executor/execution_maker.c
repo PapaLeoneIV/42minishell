@@ -117,7 +117,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 			supp = ft_access(open_path, tmp_cmd[0]);
 			if (!supp)
 			{
-				g_status_code = 126;
+				g_status_code = 127;
 				perror("ERROR\nunfinded path");
 				freeall(tmp_cmd);
 				return (freeall(open_path), freeall(tmp_env), clean_all(shell,
@@ -216,12 +216,14 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		if (set_pip(tmp, tmp->pip) == ERROR)
 			return (ERROR);
 		red_st = open_redir(tmp, shell);
-		if (red_st == ERROR || red_st == -2)
+		if (red_st == ERROR || red_st == -2) /*<----gestendoli insieme i due ritorni dell errore abbiamo problemi
+													quando non abbiamo i permessi per un file perche l exit status
+													viene settato ugualmente ad 1 invece che a 0 */
 		{
-			g_status_code = 1;
+			g_status_code = 1;  
 			tmp->fd_change = -1;
-			//<-----nel caso di "cat < missing | cat"/"cat < missing | grep hi"
-			if (red_st == -2) //qui lo setti a -1 da dentro linea:126
+								//<-----nel caso di "cat < missing | cat"/"cat < missing | grep hi"
+			if (red_st == -2)   //qui lo setti a -1 da dentro linea:126
 				return (ERROR);
 		}
 		else
