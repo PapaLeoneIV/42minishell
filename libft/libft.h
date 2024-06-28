@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 16:41:11 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 11:23:59 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ typedef struct s_dictionary
 typedef enum e_errors
 {
 	INITIALIZATION_ERROR,
+	INVALID_INPUT,
 	ALLOCATION_ERROR,
 	EXEC_ERROR,
-	INVALID_INPUT,
 }						t_errors;
 
 int						ft_charchar(char s, int c);

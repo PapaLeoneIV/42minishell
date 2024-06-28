@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 21:18:52 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/28 11:26:19 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void check_args(t_command *cmd)
 static void exit_num_error(t_command *cmd, t_shell *shell)
 {
 	g_status_code = 2;
-	write_exit("bash: exit: ", cmd->cmd[1], "numeric argument required\n");
+	write_exit("bash: exit: ", cmd->cmd[1], " :numeric argument required\n");
 	clean_all(shell, 1);
 	exit(g_status_code);
 } 
