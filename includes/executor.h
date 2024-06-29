@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 14:15:18 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/29 08:39:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ typedef struct s_redir t_redir;
 
 int		execute_cmd(t_shell *shell);
 int		execution(t_command *cmd, t_env **env,  t_shell *shell);
-int		list_of_in(t_redir **dir);
-int		list_of_out(t_redir **dir);
 void	freeall(char **mat);
 char	 *heredoc_tokenizer(char *input, t_shell *shell);
 int		gnl2(char **line);
