@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_build.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/28 11:26:19 by rileone          ###   ########.fr       */
+/*   Updated: 2024/06/29 09:23:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void handle_exit_wrong_args(void)
 	write(2, "bash: exit: too many arguments\n", 32);
 	g_status_code = 1;
 }
-int	exit_path(t_command *cmd, t_shell *shell)
+int	exit_path(t_command *cmd, t_shell *shell, int flag)
 {	
 	int	counter;
 	int argsc;
@@ -54,6 +54,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 	}
 	else
 		return (handle_exit_wrong_args(),1);
+	close_all_fd(flag);
 	clean_all(shell, 1);
 	exit(g_status_code);
 }

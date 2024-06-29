@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/29 08:39:33 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/29 09:25:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ int		heardoc_path(t_redir **redir, t_shell *shell);
 void	tm_close(int tm_in, int tm_out, int flag);
 int		set_pip(t_command *cmd, int *pip);
 int		open_redir(t_command *cmd, t_shell *shell);
-int		exit_path(t_command *cmd, t_shell *shell);
+int		exit_path(t_command *cmd, t_shell *shell, int flag);
 int		ft_biltin(t_command *cmd, t_env **lst, t_shell *shell);
 int		is_a_biltin(char **tmp);
 char	*ft_access(char **open_path, char *cmd);
 int		check_head(char *str);
 void	write_exit(char *str, char *cmd, char *finish);
+void	close_all_fd(int flag);
 
 #endif

@@ -192,8 +192,6 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 		}
 		if (cmd->next)
 			close(cmd->pip[1]);
-		if (cmd->prev)
-			close(cmd->pip[0]);
 		if (cmd->in != 0 && cmd->in != -1)
 			close(cmd->in);
 		if (cmd->out != 1 && cmd->out != -1)
@@ -261,7 +259,7 @@ int	execute_cmd(t_shell *shell)
 	tm_out = dup(1);
 	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 	{
-		if (exit_path(cmd, shell) == 1)
+		if (exit_path(cmd, shell, 1) == 1)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
 	make_redir(shell, cmd);

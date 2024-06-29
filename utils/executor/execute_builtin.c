@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 14:07:01 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/29 09:24:16 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 	else if (ft_strncmp(tmp[0], "unset", 6) == 0)
 		i = unset_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "exit", 5) == 0)
-		i = exit_path(cmd, shell);
+		i = exit_path(cmd, shell, 0);
 	if (g_status_code > -1)
 		g_status_code = i;
 	return (i);

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 22:10:33 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/29 09:28:43 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,23 @@ static int	lexer(t_token **head, t_shell *shell)
 	return (SUCCESS);
 }
 
+void	close_all_fd(int flag)
+{
+	int			i;
+	struct stat	statbuf;
+
+	i = 0;
+	if (flag)
+	{
+		while (i <= 1026)
+		{
+			if (fstat(i, &statbuf) != -1)
+				close(i);
+			i++;
+		}
+	}	
+}
+
 void	read_from_stdin(t_shell *shell, char **envp)
 {
 	t_token	*head;
@@ -57,4 +74,5 @@ void	read_from_stdin(t_shell *shell, char **envp)
 		execute_cmd(shell);
 		clean_all(shell, 0);
 	}
+	close_all_fd(1);
 }
