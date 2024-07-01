@@ -263,7 +263,7 @@ int	execute_cmd(t_shell *shell)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
 	make_redir(shell, cmd);
-	//print_shell_info(shell);
+	//print_shell_info(shell);// qui possiamo gestire il -2
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
