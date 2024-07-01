@@ -3,74 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/28 12:53:31 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:07:17 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//cd comand funtion//
-
-void	cd_excanger(char *new, char *path, t_env **env)
-{
-	t_env	*tmp;
-	char	*sup;
-	char	*sup_2;
-
-	tmp = find_node(env, path);
-	if (tmp == NULL)
-	{
-		sup = ft_strjoin(path, "=");
-		sup_2 = ft_strjoin(sup, new);
-		free(sup);
-		add_node_to_env_struct(env, lst_new_env(sup_2, tmp->env_mtx));
-		free(sup_2);
-		return ;
-	}
-	free(tmp->body);
-	tmp->body = ft_strdup(new);
-	free(new);
-}
-
-int	cd_path(char **mtx, t_env **env)
-{
-	char	*old;
-	char	*new;
-	int		mtx_rows;
-	int		result;
-	t_env	*tmp;
-
-	mtx_rows = mtx_count_rows(mtx);
-	if (mtx_rows > 2)
-	{
-		write(2, "bash: cd: too many arguments\n", 30);
-		return (1);
-	}
-	old = getcwd(NULL, 0);
-	if (mtx_rows == 2)
-		result = chdir(mtx[1]);
-	if (mtx_rows == 1)
-	{
-		tmp = find_node(env, "HOME");
-		/**SE QUALCUNO CI TOGLIE HOME DALLE ENV QUI VA IN SEGFAULT */
-		result = chdir(tmp->body);
-	}
-	new = getcwd(NULL, 0);
-	if (result == -1)
-	{
-		write_exit("bash: ",mtx[1], ": No such file or directory\n");
-		g_status_code = 1;
-		free(old);
-		free(new);
-		return (1);
-	}
-	cd_excanger(old, "OLDPWD", env);
-	cd_excanger(new, "PWD", env);
-	return (0);
-}
 
 int	pwd_path(void)
 {
@@ -124,4 +64,3 @@ int	env_path(t_env **env)
 	}
 	return (0);
 }
-//cd comand funtion end//

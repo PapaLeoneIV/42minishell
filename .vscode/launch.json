@@ -7,7 +7,7 @@
         "program": "${workspaceFolder}/minishell",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${fileDirname}",
+        "cwd": "./",
         "environment": [],
         "externalConsole": false,
         "MIMode": "gdb",

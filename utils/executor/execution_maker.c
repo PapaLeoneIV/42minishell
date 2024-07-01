@@ -78,7 +78,7 @@ void print_command_info(t_command *cmd)
 // Funzione per stampare le informazioni di t_shell
 void print_shell_info(t_shell *shell)
 {
-    printf("Shell Line: %s\n", shell->line);
+    printf("\n\nShell Line: %s\n", shell->line);
     printf("Shell Pipe: ");
     print_fd(shell->shell_pip[0]);
     printf(" ");
@@ -162,9 +162,7 @@ void	child_process(t_shell *shell, t_command *cmd)
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 		write_exit("bash: ", "cmd->cmd[0]: ", ": No such file or directory\n");
 	else if (cmd->fd_change >= 0)
-		// <---qui quando non trovi la redirection input(cmd->in == -1) e
 		make_things(cmd, tmp, shell->env, shell);
-	//non scriviamo niente dentro la pipe
 	else
 		clean_all(shell, 1);
 	exit(g_status_code);
@@ -190,8 +188,6 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 		{
 			unlink(cmd->here);
 		}
-		if (cmd->next)
-			close(cmd->pip[1]);
 		if (cmd->in != 0 && cmd->in != -1)
 			close(cmd->in);
 		if (cmd->out != 1 && cmd->out != -1)
@@ -214,14 +210,11 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		if (set_pip(tmp, tmp->pip) == ERROR)
 			return (ERROR);
 		red_st = open_redir(tmp, shell);
-		if (red_st == ERROR || red_st == -2) /*<----gestendoli insieme i due ritorni dell errore abbiamo problemi
-													quando non abbiamo i permessi per un file perche l exit status
-													viene settato ugualmente ad 1 invece che a 0 */
+		if (red_st == ERROR || red_st == -2)
 		{
 			g_status_code = 1;  
 			tmp->fd_change = -1;
-								//<-----nel caso di "cat < missing | cat"/"cat < missing | grep hi"
-			if (red_st == -2)   //qui lo setti a -1 da dentro linea:126
+			if (red_st == -2)
 				return (ERROR);
 		}
 		else
@@ -262,8 +255,9 @@ int	execute_cmd(t_shell *shell)
 		if (exit_path(cmd, shell, 1) == 1)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
-	make_redir(shell, cmd);
-	//print_shell_info(shell);// qui possiamo gestire il -2
+	if (make_redir(shell, cmd) == -2)
+		g_status_code = 0;
+	//print_shell_info(shell);
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)

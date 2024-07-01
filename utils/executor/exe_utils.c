@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/28 12:51:59 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:11:52 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,6 @@ int	set_pip(t_command *cmd, int *pip)
 		cmd->out = pip[1];
 		cmd->next->in = pip[0];
 		cmd->next->fd_change++;
-	}/* 
-	QUI SE NON ESISTE IL COMANDO SUCCESSIVO E NON CI SONO REDIRE
-	CTION C E BISOGNO CHE INDIRIZZI L OUTPUT VERSO STDOUT_FILENO	
-	
-	else if (!cmd->next)
-		cmd->out = dup(STDOUT_FILENO); */
+	}
 	return (1);
 }

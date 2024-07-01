@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/29 09:28:43 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/01 18:52:59 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	close_all_fd(int flag)
 	struct stat	statbuf;
 
 	i = 0;
+	if (flag == 2)
+		i = 3;
 	if (flag)
 	{
 		while (i <= 1026)
@@ -72,6 +74,7 @@ void	read_from_stdin(t_shell *shell, char **envp)
 			continue ;
 		free_tokens(head);
 		execute_cmd(shell);
+		close_all_fd(2);
 		clean_all(shell, 0);
 	}
 	close_all_fd(1);

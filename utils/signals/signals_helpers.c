@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:41:05 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 17:12:17 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/01 18:55:35 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	handle_ctrl_d(t_shell *shell, char *input)
 	if (shell->line)
 		free(shell->line);
 	free(input);
+	close_all_fd(1);
 	rl_clear_history();
 	write(1, "exit\n", 5);
 	exit(g_status_code);

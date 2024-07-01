@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_cleaner.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/29 09:11:11 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/01 19:11:28 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	clean_cmd_node(t_command **cmd)
 	}
 	free(cmd);
 }
-
 
 void	clean_all(t_shell *shell, int flag)
 {

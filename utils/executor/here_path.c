@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 14:58:37 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/01 19:12:27 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 			ex = prompt_here(fd, redir, shell);
 			if (ex == -1 && g_status_code != 130)
 				write_exit("minishell:", "warning: ",
-						"here-document delimited by end-of-file\n");
+					"here-document delimited by end-of-file\n");
 			if (ex == -1 || g_status_code == 130)
 				return (close(fd), -2);
 		}

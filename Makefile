@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/06/29 08:25:39 by codespace        ###   ########.fr        #
+#    Updated: 2024/07/01 19:08:08 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c export_path.
 				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c here_path.c) \
 				$(addprefix $(SIGNALS)/, signals_helpers.c) \
 				$(addprefix $(HEREDOC_TOKENIZER)/, heredoc_tokenizer.c) \
-				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c exit_build.c)  \
+				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c exit_build.c cd_path.c)  \
 				$(addprefix $(REDIRECTION)/, redirection_parser.c redirection_parser_helpers.c redirection_parser_utils.c)  \
 				$(addprefix $(CLEANING)/, tokenizer_cleaner.c env_cleaner.c cmd_cleaner.c)  \
 				$(addprefix $(SRCDIR)/, main.c) \
