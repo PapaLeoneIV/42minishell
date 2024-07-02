@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 14:49:37 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 22:35:06 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_command
 	int					out;
 	int					fd_change;
 	char				*here;
+	int					cat;
 	int					cmd_id;
 	int					fork_id;
 	struct s_command	*next;

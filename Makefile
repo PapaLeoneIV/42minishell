@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/07/02 11:26:44 by fgori            ###   ########.fr        #
+#    Updated: 2024/07/02 23:04:40 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c export_path.
                 $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \
                 $(addprefix $(SYNTAX_HANDLER)/, syntax_analizer.c syntax_analizer_helpers.c syntax_extra_utils.c) \
                 $(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
-				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c here_path.c) \
+				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c here_path.c cat_exeption.c) \
 				$(addprefix $(SIGNALS)/, signals_helpers.c) \
 				$(addprefix $(HEREDOC_TOKENIZER)/, heredoc_tokenizer.c) \
 				$(addprefix $(BUILTIN)/, base_path.c redline_utils.c exit_build.c cd_path.c)  \

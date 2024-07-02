@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 12:00:00 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 23:10:26 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,7 @@ char	*ft_access(char **open_path, char *cmd);
 void	tm_close(int tm_in, int tm_out, int flag);
 void	write_exit(char *str, char *cmd, char *finish);
 void	close_all_fd(int flag);
+void	write_line(int cat, t_shell *shell);
+int		cat_check(t_command *cmd);
+
 #endif

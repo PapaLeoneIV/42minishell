@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 11:14:34 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 22:35:49 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_command	*new_command(int counter)
 	cmd_node->here = NULL;
 	cmd_node->out = dup(STDOUT_FILENO);
 	cmd_node->fd_change = 0;
+	cmd_node->cat = 0;
 	cmd_node->redirection_info = NULL;
 	cmd_node->next = NULL;
 	cmd_node->prev = NULL;

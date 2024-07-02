@@ -14,7 +14,7 @@
 
 // Funzione per stampare i file descriptors con colori
 // Funzione per stampare i file descriptors con colori
-/*void print_fd(int fd)
+void print_fd(int fd)
 {
     printf("\033[1;34m%d\033[0m", fd); // Colore blu per i file descriptors
 }
@@ -62,7 +62,8 @@ void print_command_info(t_command *cmd)
         print_fd(cmd->in);
         printf("\nOutput FD: ");
         print_fd(cmd->out);
-        printf("\nFD Change: %d\n", cmd->fd_change);
+        printf("\nFD Change: %d\n", cmd->fd_change);\
+		printf("CAT is: %d\n", cmd->cat);
         printf("Here: %s\n", cmd->here ? cmd->here : "NULL");
 
         if (cmd->redirection_info != NULL && *cmd->redirection_info != NULL)
@@ -95,20 +96,6 @@ void print_shell_info(t_shell *shell)
     {
         printf("Shell Status: %d\n", *(shell->status));
     }
-}*/
-int	cat_check(t_command *cmd)
-{
-	char	*line;
-
-	if (cmd->cmd_id == 0 && cmd->fd_change == 2
-		&& ft_strncmp(cmd->cmd[0], "cat", 4) )
-	{
-		line = get_next_line(STDIN_FILENO);
-		if (line)
-			write(cmd->out, "\n", 2);
-		return (0);
-	}
-	return (1);
 }
 
 void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
@@ -129,7 +116,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		clean_all(shell, 1);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (execve(supp, tmp_cmd, tmp_env) < 0 &&)
+		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
 			g_status_code = 126;
 			return (multi_freeall(tmp_env, tmp_cmd, NULL));
@@ -139,7 +126,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 	return (clean_all(shell, 1));
 }
 
-void	child_process(t_shell *shell, t_command *cmd)
+void	child_process(t_shell *shell, t_command *cmd, int cat)
 {
 	t_env	*tmp;
 
@@ -156,15 +143,17 @@ void	child_process(t_shell *shell, t_command *cmd)
 	tmp = find_node(shell->env, "PATH");
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 		write_exit("bash: ", "cmd->cmd[0]: ", ": No such file or directory\n");
-	else if (cmd->fd_change >= 0)
+	else if (cmd->fd_change >= 0 && cmd->cat == 0)
 		make_things(cmd, tmp, shell->env, shell);
+	else if (cmd->fd_change >= 0 && cmd->cat == 1)
+		write_line(cat, shell);
 	else
 		clean_all(shell, 1);
 	close_all_fd(1);
 	exit(g_status_code);
 }
 
-void	fork_and_ecseve(t_shell *shell, t_command *cmd)
+void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 {
 	if (cmd && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 		waitpid(-1, NULL, 0);
@@ -176,7 +165,7 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 			close(cmd->pip[0]);
 		if (cmd->prev)
 			close(cmd->pip[1]);
-		child_process(shell, cmd);
+		child_process(shell, cmd, cat);
 	}
 	else
 	{
@@ -193,12 +182,15 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
+	int	cat;
+
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0
 		&& cmd->fd_change >= 0)
 		return (ft_biltin(cmd, env, shell));
-	fork_and_ecseve(shell, cmd);
+	cat = cat_check(cmd);
+	fork_and_ecseve(shell, cmd, cat);
 	return (SUCCESS);
 }
 
