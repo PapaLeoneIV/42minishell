@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_tokenizer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:46:48 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/25 11:23:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 10:53:24 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,8 @@ char	*heredoc_tokenizer(char *input, t_shell *shell)
 		if (pars.state == STATE_GENERAL)
 			general_state_handler_heredoc(input, &pars, shell);
 		else if (pars.state == STATE_DOLLAR && ((pars.char_type != REG_CHAR
-						&& pars.char_type != DIGIT_CHAR)
-					|| (pars.char_type == DIGIT_CHAR && input[pars.count
+					&& pars.char_type != DIGIT_CHAR)
+				|| (pars.char_type == DIGIT_CHAR && input[pars.count
 						- 1] == '$')))
 			dollar_state_handler(input, &pars, shell);
 		if (input[pars.count + 1] == '\0' && !slice_end_token_heredoc(input,

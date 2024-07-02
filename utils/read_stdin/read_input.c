@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/01 18:52:59 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:50:59 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	close_all_fd(int flag)
 				close(i);
 			i++;
 		}
-	}	
+	}
 }
 
 void	read_from_stdin(t_shell *shell, char **envp)

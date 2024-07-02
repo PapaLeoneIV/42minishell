@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/01 05:51:18 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/02 10:50:09 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	list_of_out(t_redir **dir)
 			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
-			write(2, " Permission denied\n", 18);
+			write(2, " Permission denied\n", 20);
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == redir)
@@ -58,13 +58,6 @@ int	list_of_in(t_redir **dir)
 	return (fd);
 }
 
-int	check_valid_line(char *line)
-{
-	if (line && *line == '\0')
-		return (ERROR);
-	return (SUCCESS);
-}
-
 int	open_redir(t_command *cmd, t_shell *shell)
 {
 	t_redir	*tmp;
@@ -92,4 +85,46 @@ int	open_redir(t_command *cmd, t_shell *shell)
 			return (-2);
 	}
 	return (1);
+}
+
+static int	set_change(t_command *tmp, int red_st, int tm_out, int tm_in)
+{
+	if (red_st == ERROR || red_st == -2)
+	{
+		g_status_code = 1;
+		tmp->fd_change = -1;
+		if (red_st == -2)
+			return (ERROR);
+	}
+	else
+	{
+		if (tmp->in != tm_in && tmp->fd_change == 0)
+			tmp->fd_change++;
+		if (tm_out != tmp->out)
+			tmp->fd_change += 2;
+		return (SUCCESS);
+	}
+	return (ERROR);
+}
+
+int	make_redir(t_shell *shell, t_command *cmd)
+{
+	int			tm_i;
+	int			tm_ou;
+	int			red_st;
+	t_command	*tmp;
+
+	tmp = cmd;
+	while (tmp)
+	{
+		tm_i = tmp->in;
+		tm_ou = tmp->out;
+		if (set_pip(tmp, tmp->pip) == ERROR)
+			return (ERROR);
+		red_st = open_redir(tmp, shell);
+		if (set_change(tmp, red_st, tm_ou, tm_i) == ERROR)
+			return (ERROR);
+		tmp = tmp->next;
+	}
+	return (SUCCESS);
 }

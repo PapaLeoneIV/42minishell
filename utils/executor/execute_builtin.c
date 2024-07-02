@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/01 18:27:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 10:45:59 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,27 @@ char	*ft_access(char **open_path, char *cmd)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*take_path(t_env *path, char **tmp_cmd, t_command *cmd)
+{
+	char	*supp;
+	char	**open_path;
+
+	if (path)
+	{
+		open_path = ft_split(path->body, ':');
+		supp = ft_access(open_path, tmp_cmd[0]);
+		if (!supp)
+		{
+			g_status_code = 127;
+			freeall(open_path);
+			perror("ERROR\nunfinded path");
+			return (NULL);
+		}
+		freeall(open_path);
+		return (supp);
+	}
+	else
+		return (ft_strdup(cmd->cmd[0]));
 }

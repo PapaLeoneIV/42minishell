@@ -4,7 +4,7 @@
 /*   execution_maker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
-/*                                            	    +#+#+#+#+#+   +#+           */
+/*                                            	    +#+#+#+#+#+   +#+         */
 /*   Created: 2024/06/25 11:20:59 by fgori             #+#    #+#             */
 /*   Updated: 2024/06/28 11:30:09 by rileone          ###   ########.fr       */
 /*                                                                            */
@@ -14,7 +14,7 @@
 
 // Funzione per stampare i file descriptors con colori
 // Funzione per stampare i file descriptors con colori
-void print_fd(int fd)
+/*void print_fd(int fd)
 {
     printf("\033[1;34m%d\033[0m", fd); // Colore blu per i file descriptors
 }
@@ -95,12 +95,10 @@ void print_shell_info(t_shell *shell)
     {
         printf("Shell Status: %d\n", *(shell->status));
     }
-}
-
+}*/
 
 void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {
-	char	**open_path;
 	char	*supp;
 	char	**mtx;
 	char	**tmp_cmd;
@@ -111,37 +109,20 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 	{
 		tmp_cmd = mtx_dup(mtx, mtx_count_rows(mtx));
 		tmp_env = mtx_dup((*env)->env_mtx, mtx_count_rows((*env)->env_mtx));
-		if (path)
-		{
-			open_path = ft_split(path->body, ':');
-			supp = ft_access(open_path, tmp_cmd[0]);
-			if (!supp)
-			{
-				g_status_code = 127;
-				perror("ERROR\nunfinded path");
-				freeall(tmp_cmd);
-				return (freeall(open_path), freeall(tmp_env), clean_all(shell,
-						1));
-			}
-			freeall(open_path);
-		}
-		else
-			supp = ft_strdup(cmd->cmd[0]);
+		supp = take_path(path, tmp_cmd, cmd);
+		if (supp == NULL)
+			return (multi_freeall(tmp_env, tmp_cmd, shell));
 		clean_all(shell, 1);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
 			g_status_code = 126;
-			free(supp);
-			freeall(tmp_cmd);
-			freeall(tmp_env);
-			return ;
+			return (multi_freeall(tmp_env, tmp_cmd, NULL));
 		}
 		free(supp);
 	}
-	clean_all(shell, 1);
-	return ;
+	return (clean_all(shell, 1));
 }
 
 void	child_process(t_shell *shell, t_command *cmd)
@@ -165,6 +146,7 @@ void	child_process(t_shell *shell, t_command *cmd)
 		make_things(cmd, tmp, shell->env, shell);
 	else
 		clean_all(shell, 1);
+	close_all_fd(1);
 	exit(g_status_code);
 }
 
@@ -195,40 +177,6 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 	}
 }
 
-int	make_redir(t_shell *shell, t_command *cmd)
-{
-	int			tm_i;
-	int			tm_ou;
-	int			red_st;
-	t_command	*tmp;
-
-	tmp = cmd;
-	while (tmp)
-	{
-		tm_i = tmp->in;
-		tm_ou = tmp->out;
-		if (set_pip(tmp, tmp->pip) == ERROR)
-			return (ERROR);
-		red_st = open_redir(tmp, shell);
-		if (red_st == ERROR || red_st == -2)
-		{
-			g_status_code = 1;  
-			tmp->fd_change = -1;
-			if (red_st == -2)
-				return (ERROR);
-		}
-		else
-		{
-			if (tmp->in != tm_i && tmp->fd_change == 0)
-				tmp->fd_change++;
-			if (tm_ou != tmp->out)
-				tmp->fd_change += 2;
-		}
-		tmp = tmp->next;
-	}
-	return (SUCCESS);
-}
-
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
 	dup2(cmd->in, 0);
@@ -242,10 +190,10 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 
 int	execute_cmd(t_shell *shell)
 {
-	t_command *cmd;
-	int status;
-	int tm_in;
-	int tm_out;
+	t_command	*cmd;
+	int			status;
+	int			tm_in;
+	int			tm_out;
 
 	cmd = (*shell->cmd_info);
 	tm_in = dup(0);
@@ -257,7 +205,6 @@ int	execute_cmd(t_shell *shell)
 	}
 	if (make_redir(shell, cmd) == -2)
 		g_status_code = 0;
-	//print_shell_info(shell);
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
