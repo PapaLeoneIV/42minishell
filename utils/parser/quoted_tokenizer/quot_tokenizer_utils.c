@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quot_tokenizer_utils.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/02 10:57:52 by fgori             #+#    #+#             */
+/*   Updated: 2024/07/02 10:58:20 by fgori            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
@@ -40,11 +51,6 @@ void	join_tokens_values_when_no_space_between(t_parser *pars)
 	t_token	*prev;
 	t_token	*ptr;
 
-	/**qui devo aggiungere una logica per cui se il primo dei token che 
-		* viene joinato e' un token di tipo heredoc_quotes devo mantenere questo datatype
-		* e non convertirlo nel type del token successivo 
-		* 
-	*/
 	ptr = pars->head;
 	while (ptr != NULL)
 	{
@@ -80,6 +86,7 @@ char	*join_quoted_token_expansion(t_token *head)
 	}
 	return (out);
 }
+
 void	unpack_quoted_tokens(t_token **head, t_shell *shell)
 {
 	t_token		*ptr;
@@ -110,7 +117,6 @@ void	unpack_quoted_tokens(t_token **head, t_shell *shell)
 						ptr->prev->next = ptr->next;
 						ptr->next->prev = ptr->prev;
 					}
-					
 				}
 				free(ptr->value);
 				free(ptr);

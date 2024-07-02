@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/26 14:42:03 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:30:50 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,17 @@ enum CharType
 	NEWLINE_CHAR,
 };
 
+typedef struct s_parser_redirection
+{
+	t_command *cmd_node;
+	t_token *tmp_list;
+	t_token *node;
+	t_token *ptr;
+	int check;
+	int i;
+
+} t_parser_red;
+
 /*TOKEN CREATION METHODS*/
 void		set_token_values(t_token *token, t_token_info *info);
 t_token		*token_new(char *data);
@@ -175,6 +186,9 @@ void		expand_env_var(t_token **token, char **token_value,t_shell *shell);
 /*SYNTAX ANALIZER*/
 int 		syntax_error_handler(t_token **head);
 void 		change_non_special_tokens_to_word_tokens(t_token *head);
+int			check_for_non_valid_char_list(t_token *ptr, char *non_valid_char);
+void		change_non_special_tokens_to_word_tokens(t_token *head);
+void		remove_whitespaces(t_token **head);
 
 /*SYNTAX ANALIZER*/
 int			handle_pipe_synt_error_tokens(t_token *ptr);

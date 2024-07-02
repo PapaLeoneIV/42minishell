@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer_helpers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:13:30 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 17:35:57 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:34:13 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	handle_redirout_synt_error_tokens(t_token *ptr)
 	}
 	else if (tmp->prev && tmp->prev->type == WORD_TOKEN
 		&& ft_isnumber(tmp->prev->value))
-		{
-			write(2, "Syntax error near unexpected token '>'\n", 40);
-			return (ERROR);
-		}
+	{
+		write(2, "Syntax error near unexpected token '>'\n", 40);
+		return (ERROR);
+	}
 	else if (tmp->next->type == WORD_TOKEN)
 		return (SUCCESS);
 	write(2, "Syntax error near unexpected token '>'\n", 40);

@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/28 16:39:36 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:29:26 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/**Una volta aver tokenizzato ed espanso le variabili all interno delle
- * double quotes, posso rendere tutte i vari token dei WORD_TOKEN generici
- * per il momento.
-*/
 int	check_for_non_valid_char_list(t_token *ptr, char *non_valid_char)
 {
 	int	i;
@@ -54,9 +50,6 @@ void	change_non_special_tokens_to_word_tokens(t_token *head)
 	}
 }
 
-/**Ugly lo so, ma mi serve per rimuovere i whitespace dalla
- * lista di token*/
-
 void	remove_whitespaces(t_token **head)
 {
 	t_token	*ptr;
@@ -67,23 +60,22 @@ void	remove_whitespaces(t_token **head)
 	while (ptr)
 	{
 		if (ptr->type == WHITESPACE_TOKEN)
-		{	
+		{
 			tmp = ptr->next;
-			if(ptr->prev == NULL)
+			if (ptr->prev == NULL)
 			{
 				(*head) = ptr->next;
 				ptr->next->prev = NULL;
 			}
 			else
 			{
-				if(ptr->next == NULL)
+				if (ptr->next == NULL)
 					ptr->prev->next = NULL;
 				else
 				{
 					ptr->next->prev = ptr->prev;
-					ptr->prev->next = ptr->next;	
+					ptr->prev->next = ptr->next;
 				}
-				
 			}
 			free(ptr->value);
 			free(ptr);
@@ -93,52 +85,4 @@ void	remove_whitespaces(t_token **head)
 		else
 			ptr = ptr->next;
 	}
-}
-
-static int refinement_list(t_token *ptr, t_token **head)
-{
-	if (check_for_non_valid_char_list(ptr, "{}();\\&") == 1)
-	{
-		write(2, "Invalid character found!\n", 26);
-		return (ERROR);
-	}
-	change_non_special_tokens_to_word_tokens(*head);
-	remove_whitespaces(head);
-	return (SUCCESS);
-}
-
-static int syn_err_core_logic(t_token	*ptr)
-{
-	while (ptr)
-	{
-		if (ptr->type == PIPE_TOKEN && !handle_pipe_synt_error_tokens(ptr))
-			return (ERROR);
-		else if (ptr->type == GREATER_TOKEN
-			&& !handle_greater_synt_error_tokens(ptr))	
-				return (ERROR);
-		else if (ptr->type == LESSER_TOKEN
-			&& !handle_lesser_synt_error_tokens(ptr))
-			return (ERROR);
-		else if (ptr->type == HEREDOC_TOKEN
-			&& !headle_heredoc_syntax_error_tokens(ptr))
-			return (ERROR);
-		else if (ptr->type == REDIR_OUT_TOKEN
-			&& !handle_redirout_synt_error_tokens(ptr))
-			return (ERROR);
-		ptr = ptr->next;
-	}
-	return (SUCCESS);
-}
-
-int	syntax_error_handler(t_token **head)
-{
-	t_token	*ptr;
-
-	ptr = *head;
-	if (refinement_list(ptr, head) == ERROR)
-		return (ERROR);
-	ptr = *head;
-	if(syn_err_core_logic(ptr) == ERROR)
-		return (ERROR);	
-	return (SUCCESS);
 }

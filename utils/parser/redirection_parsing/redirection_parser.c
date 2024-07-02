@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:23:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/28 09:41:42 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:08:27 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,35 +59,19 @@ int	redirector(t_command **cmd_node, t_token **tmp_list, t_token **node,
 	return (SUCCESS);
 }
 
-
-typedef struct s_parser_redirection
-{
-	t_command *cmd_node;
-	t_token *tmp_list;
-	t_token *node;
-	t_token *ptr;
-	int check;
-	int i;
-
-} t_parser_red;
-
-
-void init_parser(t_parser_red *pars)
+void	init_parser(t_parser_red *pars)
 {
 	pars->check = 0;
 	pars->check = 0;
-	pars->tmp_list = NULL; 
+	pars->tmp_list = NULL;
 	pars->node = NULL;
 	pars->ptr = NULL;
 	pars->i = 0;
 }
 
-
-
-
 int	parse_redirections(t_token *head, t_shell *shell)
 {
-	t_parser_red *pars;
+	t_parser_red	*pars;
 
 	pars = ft_calloc(1, sizeof(t_parser_red));
 	init_parser(pars);
@@ -101,7 +85,8 @@ int	parse_redirections(t_token *head, t_shell *shell)
 		pars->node = pars->tmp_list;
 		while (pars->node != NULL && pars->node->type != PIPE_TOKEN)
 		{
-			if (redirector(&pars->cmd_node, &pars->tmp_list, &pars->node, &pars->check) == ERROR)
+			if (redirector(&pars->cmd_node, &pars->tmp_list,
+					&pars->node, &pars->check) == ERROR)
 			{
 				pars->tmp_list = NULL;
 				pars->node = NULL;

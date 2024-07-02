@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:14:31 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/27 17:15:39 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:27:53 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,6 @@ int	count_pipes(t_token *head)
 	return (counter);
 }
 
-/**La lista di token viene splittata in base alle pipeline per un
- * piu facile parsing delle redirection
-*/
-
 t_token	*split_command_based_on_pipes(t_token **ptr)
 {
 	t_token	*newlist;
@@ -70,6 +66,14 @@ t_token	*split_command_based_on_pipes(t_token **ptr)
 		(*ptr) = (*ptr)->next;
 	return (newlist);
 }
+//provo a plittarti la seguente
+
+static void	redir_all(t_token **redir)
+{
+	(*redir) = (*redir)->prev;
+	(*redir)->next = (*redir)->next->next->next;
+	(*redir)->next->prev = (*redir);
+}
 
 int	remove_redir(t_token **redir)
 {
@@ -80,9 +84,7 @@ int	remove_redir(t_token **redir)
 	tmp = (*redir);
 	if ((*redir)->prev && (*redir)->next->next)
 	{
-		(*redir) = (*redir)->prev;
-		(*redir)->next = (*redir)->next->next->next;
-		(*redir)->next->prev = (*redir);
+		redir_all(redir);
 		i++;
 	}
 	else if (!(*redir)->prev && (*redir)->next->next)
