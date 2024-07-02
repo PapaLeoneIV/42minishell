@@ -96,6 +96,20 @@ void print_shell_info(t_shell *shell)
         printf("Shell Status: %d\n", *(shell->status));
     }
 }*/
+int	cat_check(t_command *cmd)
+{
+	char	*line;
+
+	if (cmd->cmd_id == 0 && cmd->fd_change == 2
+		&& ft_strncmp(cmd->cmd[0], "cat", 4) )
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+			write(cmd->out, "\n", 2);
+		return (0);
+	}
+	return (1);
+}
 
 void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {
@@ -115,7 +129,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		clean_all(shell, 1);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (execve(supp, tmp_cmd, tmp_env) < 0)
+		if (execve(supp, tmp_cmd, tmp_env) < 0 &&)
 		{
 			g_status_code = 126;
 			return (multi_freeall(tmp_env, tmp_cmd, NULL));
