@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 10:50:59 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 14:32:24 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void	read_from_stdin(t_shell *shell, char **envp)
 		input = readline("(MINISHELL)$ ");
 		if (!input)
 			handle_ctrl_d(shell, input);
+		add_history(input);
 		if (tokenizer(shell, input, &head) == ERROR)
 			continue ;
-		add_history(input);
 		free(input);
 		if (lexer(&head, shell) == ERROR)
 			continue ;

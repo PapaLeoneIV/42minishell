@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/06 09:52:47 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 14:49:03 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ int	valid_regchar(char *str, t_parser *pars)
 
 	i = 0;
 	valid_char = "_";
+	len = ft_strlen(valid_char);
+	while (i < len)
+	{
+		if (ft_charchar(str[pars->count], valid_char[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	valid_regchar_heredoc(char *str, t_parser *pars)
+{
+	char	*valid_char;
+	int		len;
+	int		i;
+
+	i = 0;
+	valid_char = "_\"\'{}[]<>:;!@#^%%&*()-_|~`,./*=+-";
 	len = ft_strlen(valid_char);
 	while (i < len)
 	{

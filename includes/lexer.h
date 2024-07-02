@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 12:13:14 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 14:49:37 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int			create_token_list(char *stringa, t_shell *shell, t_parser *pars);
 /*TOKENIZER HELPERS*/
 int			look_for_another_redirect(char *stringa, t_parser *pars);
 int			valid_regchar(char *str, t_parser *pars);
+int			valid_regchar_heredoc(char *str, t_parser *pars);
 int			get_char_type(char *str, t_parser *pars, int count);
 
 /*TOKENIZER HELPERS(SLICE METHODS)*/

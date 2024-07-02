@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:46:48 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 10:55:45 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 14:51:44 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	get_char_type_heredoc(char *str, t_parser *pars, int count)
 		return (QUESTION_MARK_CHAR);
 	else if (str[count] == '\n')
 		return (NEWLINE_CHAR);
-	else if (ft_isalpha(str[count]) || valid_regchar(str, pars))
+	else if (ft_isalpha(str[count]) || valid_regchar_heredoc(str, pars))
 		return (REG_CHAR);
 	else if (ft_isdigit(str[count]))
 		return (DIGIT_CHAR);
