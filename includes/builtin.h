@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:42:51 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/06 09:32:57 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:59:29 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@
 # include "../libft/libft.h"
 # include "./minishell.h"
 
-typedef struct s_env t_env;
-typedef struct s_command t_command;
-typedef struct s_shell t_shell;
-typedef struct s_redir t_redir;
+typedef struct s_env		t_env;
+typedef struct s_command	t_command;
+typedef struct s_shell		t_shell;
+typedef struct s_redir		t_redir;
 
 void	add_node_to_env_struct(t_env **lst, t_env *new);
 char	*get_directory_path(void);
@@ -46,8 +46,8 @@ int		env_path(t_env	**env);
 int		export_path(t_env **lst, char **mtx);
 t_env	*lst_new_env(char *str, char **en);
 t_env	*find_node(t_env **lst, char *str);
-void    clean_env_lst(t_env **lst);
-void    clean_env_node(t_env **lst);
+void	clean_env_lst(t_env **lst);
+void	clean_env_node(t_env **lst);
 int		unset_path(t_env **lst, char **mtx);
 void	clean_redir(t_redir **redir);
 void	clean_cmd_node(t_command **cmd);

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_slice_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/25 12:25:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:53:09 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-/*Funzione che serve per tagliare i vari token speciali composti da un solo carattere*/
 
 char	*expand_tilde(t_shell *shell)
 {
@@ -48,8 +46,6 @@ void	slice_single_char_token(char *stringa, t_parser *pars, t_shell *shell)
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
 }
-
-/**Caso limite dove il carattere "$" isolato viene gestito come una qualsiasi stringa*/
 
 void	slice_token_string_doll_spec_case(char *stringa, t_parser *pars)
 {

@@ -3,25 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:23 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/21 12:44:47 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 12:09:12 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef SIGNALS_H
 # define SIGNALS_H
 
-#include "./minishell.h"
+# include "./minishell.h"
 
-extern struct sigaction signal_g;
-typedef struct s_shell t_shell;
+extern struct sigaction	signal_g;
+typedef struct s_shell	t_shell;
 
 void	set_signal_handler(struct sigaction *signal_g, int flag);
 void	handle_signal(int signum);
 void	handle_ctrl_d(t_shell *shell, char *input);
-
 
 #endif

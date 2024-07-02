@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:02:26 by rileone           #+#    #+#             */
-/*   Updated: 2024/06/24 18:30:38 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:53:31 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	token_print(t_token *head)
 
 void	redirection_clear(t_token **head)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = *head;
 	free(temp->value);

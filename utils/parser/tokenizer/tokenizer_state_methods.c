@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 11:39:35 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/02 11:57:58 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	quoted_state_handler(char *stringa, t_parser *pars)
 			pars->start + 1, pars->count};
 	else
 		pars->info = (t_token_info){(int[2]){DOUBLE_QUOTES_TOKEN, SING_QUOTES_TOKEN}
-			[pars->char_type == SQUOTES_CHAR], stringa, pars->start + 1, pars->count};
+		[pars->char_type == SQUOTES_CHAR],
+			stringa, pars->start + 1, pars->count};
 	set_token_values(pars->token, &pars->info);
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
@@ -73,9 +74,9 @@ void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 	char	*status;
 
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR
-			&& stringa[pars->count - 1] == '$') ||
-		(pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
-				&& stringa[pars->count - 1] == '$'))
+			&& stringa[pars->count - 1] == '$')
+		|| (pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
+			&& stringa[pars->count - 1] == '$'))
 	{
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
