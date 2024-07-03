@@ -184,6 +184,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
 	int	cat;
 
+	cat = 0;
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0
