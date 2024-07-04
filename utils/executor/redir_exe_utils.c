@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 10:50:09 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:52:10 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,20 @@ int	open_redir(t_command *cmd, t_shell *shell)
 	return (1);
 }
 
-static int	set_change(t_command *tmp, int red_st, int tm_out, int tm_in)
+static int	set_change(t_command *tmp, int red_st, int *arr, t_shell *shell)
 {
 	if (red_st == ERROR || red_st == -2)
 	{
-		g_status_code = 1;
+		shell->status = 1;
 		tmp->fd_change = -1;
 		if (red_st == -2)
 			return (ERROR);
 	}
 	else
 	{
-		if (tmp->in != tm_in && tmp->fd_change == 0)
+		if (tmp->in != arr[1] && tmp->fd_change == 0)
 			tmp->fd_change++;
-		if (tm_out != tmp->out)
+		if (arr[0] != tmp->out)
 			tmp->fd_change += 2;
 		return (SUCCESS);
 	}
@@ -122,7 +122,7 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		if (set_pip(tmp, tmp->pip) == ERROR)
 			return (ERROR);
 		red_st = open_redir(tmp, shell);
-		if (set_change(tmp, red_st, tm_ou, tm_i) == ERROR)
+		if (set_change(tmp, red_st, (int[2]){tm_ou, tm_i}, shell) == ERROR)
 			return (ERROR);
 		tmp = tmp->next;
 	}

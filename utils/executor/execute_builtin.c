@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 11:00:13 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:52:10 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,28 @@
 
 int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 {
-	int		i;
+	int		exit_status;
 	char	**tmp;
 
-	i = -1;
+	exit_status = -1;
 	tmp = cmd->cmd;
 	if (ft_strncmp(tmp[0], "cd", 3) == 0)
-		i = cd_path(tmp, lst);
+		exit_status = cd_path(tmp, lst);
 	else if (ft_strncmp(tmp[0], "pwd", 4) == 0)
-		i = pwd_path();
+		exit_status = pwd_path();
 	else if (ft_strncmp(tmp[0], "echo", 5) == 0)
-		i = echo_path(tmp);
+		exit_status = echo_path(tmp);
 	else if (ft_strncmp(tmp[0], "env", 4) == 0)
-		i = env_path(lst);
+		exit_status = env_path(lst);
 	else if (ft_strncmp(tmp[0], "export", 7) == 0)
-		i = export_path(lst, tmp);
+		exit_status = export_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "unset", 6) == 0)
-		i = unset_path(lst, tmp);
+		exit_status = unset_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "exit", 5) == 0)
-		i = exit_path(cmd, shell, 1);
-	if (g_status_code > -1)
-		g_status_code = i;
-	return (i);
+		exit_status = exit_path(cmd, shell, 1);
+	if (exit_status > -1)
+		shell->status = exit_status;
+	return (exit_status);
 }
 
 int	is_a_biltin(char **tmp)
@@ -71,7 +71,7 @@ char	*ft_access(char **open_path, char *cmd)
 	return (NULL);
 }
 
-char	*take_path(t_env *path, char **tmp_cmd, t_command *cmd)
+char	*take_path(t_env *path, char **tmp_cmd, t_command *cmd, t_shell *shell)
 {
 	char	*supp;
 	char	**open_path;
@@ -82,7 +82,7 @@ char	*take_path(t_env *path, char **tmp_cmd, t_command *cmd)
 		supp = ft_access(open_path, tmp_cmd[0]);
 		if (!supp)
 		{
-			g_status_code = 127;
+			shell->status = 127;
 			freeall(open_path);
 			perror("ERROR\nunfinded path");
 			return (NULL);

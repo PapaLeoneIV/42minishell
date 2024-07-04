@@ -24,7 +24,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 	{
 		tmp_cmd = mtx_dup(mtx, mtx_count_rows(mtx));
 		tmp_env = mtx_dup((*env)->env_mtx, mtx_count_rows((*env)->env_mtx));
-		supp = take_path(path, tmp_cmd, cmd);
+		supp = take_path(path, tmp_cmd, cmd, shell);
 		if (supp == NULL)
 			return (multi_freeall(tmp_env, tmp_cmd, shell));
 		clean_all(shell, 1);
@@ -32,7 +32,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
-			g_status_code = 126;
+			shell->status = 126;
 			return (multi_freeall(tmp_env, tmp_cmd, NULL));
 		}
 		free(supp);
@@ -66,7 +66,7 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	else
 		clean_all(shell, 1);
 	close_all_fd(1);
-	exit(g_status_code);
+	exit(shell->status);
 }
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
@@ -129,7 +129,7 @@ int	execute_cmd(t_shell *shell)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
 	if (make_redir(shell, cmd) == -2)
-		g_status_code = 0;
+		shell->status = 0;
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
@@ -138,6 +138,6 @@ int	execute_cmd(t_shell *shell)
 	}
 	while (waitpid(-1, &status, 0) > 0)
 		if (WIFEXITED(status))
-			g_status_code = WEXITSTATUS(status);
+			shell->status = WEXITSTATUS(status);
 	return (tm_close(tm_in, tm_out, 1), SUCCESS);
 }

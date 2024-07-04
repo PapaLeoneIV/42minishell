@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 17:12:02 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:41:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	unset_path(t_env **lst, char **mtx)
 		if (ft_isdigit(mtx[arg][0]))
 		{
 			write(2, "bash: unset: not a valid identifier\n", 37);
-			g_status_code = 1;
 			return (1);
 		}
 		tmp = find_node(lst, mtx[arg]);

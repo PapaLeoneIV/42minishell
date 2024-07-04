@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 19:07:02 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/01 19:11:07 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:40:30 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	cd_rows(int mtx_rows, char **mtx, t_env **env)
 	if (result == -1)
 	{
 		write_exit("bash: ", mtx[1], ": No such file or directory\n");
-		g_status_code = 1;
 		return (1);
 	}
 	return (0);

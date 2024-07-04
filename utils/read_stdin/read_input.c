@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 14:32:24 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:54:15 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	lexer(t_token **head, t_shell *shell)
 	if (syntax_error_handler(head) == ERROR)
 	{
 		free_tokens(*head);
-		g_status_code = 2;
+		shell->status = 2;
 		return (ERROR);
 	}
 	if (parse_redirections(*head, shell) == ERROR)

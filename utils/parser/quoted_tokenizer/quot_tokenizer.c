@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:59:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 11:14:42 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:53:40 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	set_values(char *stringa, t_parser *pars, int type)
 	set_token_values(pars->token, &pars->info);
 }
 
-void	dollar_state_handler_quoted_if_clause(char *stringa, t_parser *pars)
+void	dollar_state_handler_quoted_if_clause(char *stringa, t_parser *pars, t_shell *shell)
 {
 	char	*status;
 
@@ -131,7 +131,7 @@ void	dollar_state_handler_quoted_if_clause(char *stringa, t_parser *pars)
 		}
 		else if (strcmp(pars->token->value, "$?") == 0)
 		{
-			status = ft_itoa(g_status_code);
+			status = ft_itoa(shell->status);
 			free(pars->token->value);
 			pars->token->value = ft_strdup(status);
 			free(status);
@@ -146,7 +146,7 @@ void	dollar_state_handler_quoted_if_clause(char *stringa, t_parser *pars)
 void	dollar_state_handler_quoted(char *stringa, t_parser *pars,
 		t_shell *shell)
 {
-	dollar_state_handler_quoted_if_clause(stringa, pars);
+	dollar_state_handler_quoted_if_clause(stringa, pars, shell);
 	if (pars->count > pars->start)
 	{
 		pars->token = token_new(NULL);

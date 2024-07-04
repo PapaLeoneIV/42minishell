@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 13:31:02 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:54:03 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	fnfnfn(t_parser *pars, t_shell *shell, int type, char *stringa)
 	pars->count--;
 }
 
-void	handle_special_case(t_parser *pars)
+void	handle_special_case(t_parser *pars, t_shell *shell)
 {
 	char	*status;
 
@@ -100,7 +100,7 @@ void	handle_special_case(t_parser *pars)
 	}
 	else if (strcmp(pars->token->value, "$?") == 0)
 	{
-		status = ft_itoa(g_status_code);
+		status = ft_itoa(shell->status);
 		free(pars->token->value);
 		pars->token->value = ft_strdup(status);
 		free(status);
@@ -122,7 +122,7 @@ void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
 			pars->count + 1};
 		set_token_values(pars->token, &pars->info);
-		handle_special_case(pars);
+		handle_special_case(pars, shell);
 	}
 	if (pars->count > pars->start)
 		fnfnfn(pars, shell, DOLLAR_TOKEN, stringa);

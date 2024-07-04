@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 12:08:06 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:51:48 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_shell
 	int			shell_pip[2];
 	t_command	**cmd_info;
 	t_env		**env;
-	int			*status;
+	int			status;
 }	t_shell;
 
 /**READ FUNCTION*/
