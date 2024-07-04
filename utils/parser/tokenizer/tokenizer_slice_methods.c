@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_slice_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 11:53:09 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:22:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	slice_token_string(char *stringa, t_parser *pars)
  * la macchina si trova in quel momento.
 */
 
-int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
+int	set_token_info(t_token_info *info, t_parser *pars, char *stringa)
 {
 	if (stringa[pars->count] == '\0')
 		return (0);
@@ -82,11 +82,31 @@ int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	else if (pars->state == STATE_SQUOTE)
 		return (perror("Error: unclosed single quotes\n"), ERROR);
 	else if (pars->state == STATE_DOLLAR)
-		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
-			pars->count + 1};
+		*info = (t_token_info){DOLLAR_TOKEN, stringa,
+			pars->start, pars->count + 1};
 	else
-		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start,
-			pars->count + 1};
+		*info = (t_token_info){WORD_TOKEN, stringa,
+			pars->start, pars->count + 1};
+	return (SUCCESS);
+}
+
+void	fnfn(t_parser *pars, t_shell *shell)
+{
+	expand_env_var(&pars->token, &pars->token->value, shell);
+	if (pars->token && pars->token->value)
+		token_add_back(&pars->head, pars->token);
+	else
+	{
+		if (pars->token)
+			free(pars->token->value);
+		free(pars->token);
+	}
+}
+
+int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
+{
+	if (set_token_info(&pars->info, pars, stringa) == ERROR)
+		return (ERROR);
 	pars->token = token_new(NULL);
 	set_token_values(pars->token, &pars->info);
 	if (pars->token->value && !ft_strncmp(pars->token->value, "~",
@@ -97,32 +117,14 @@ int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 	}
 	if (pars->token->type == WORD_TOKEN && !ft_strncmp(pars->token->value, "",
 			ft_strlen(pars->token->value)))
-	{
-		free(pars->token->value);
-		free(pars->token);
-		return (SUCCESS);
-	}
+		return (free(pars->token->value), free(pars->token), SUCCESS);
 	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$",
 			ft_strlen(pars->token->value)))
-	{
-		expand_env_var(&pars->token, &pars->token->value, shell);
-		if (pars->token && pars->token->value)
-			token_add_back(&pars->head, pars->token);
-		else
-		{
-			if (pars->token)
-				free(pars->token->value);
-			free(pars->token);
-		}
-	}
+		fnfn(pars, shell);
 	else
 		token_add_back(&pars->head, pars->token);
 	return (SUCCESS);
 }
-
-/**Caso limite dove controllo il carattere corrente e quello successivo per vedere
- * se si tratte di una singola o doppia redirection.
-*/
 
 void	slice_redirect_token(char *stringa, t_parser *pars)
 {

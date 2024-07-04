@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quot_tokenizer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:59:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 11:01:51 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 11:14:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@ int	get_char_type_quoted(char c)
 	return (DOLLAR_SPECIAL_CHAR);
 }
 
+void	init_parser_quot(t_parser *parser)
+{
+	parser->state = STATE_GENERAL;
+	parser->start = 0;
+	parser->count = 0;
+	parser->head = NULL;
+}
+
 t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
 {
 	t_parser	*parser;
@@ -52,10 +60,7 @@ t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
 	if (node && !(node->value))
 		return (NULL);
 	parser = ft_calloc(1, sizeof(t_parser));
-	parser->state = STATE_GENERAL;
-	parser->start = 0;
-	parser->count = 0;
-	parser->head = NULL;
+	init_parser_quot(parser);
 	while (node->value[parser->count])
 	{
 		parser->char_type = get_char_type_quoted(node->value[parser->count]);
@@ -67,22 +72,13 @@ t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
 				|| (parser->char_type == DIGIT_CHAR
 					&& node->value[parser->count - 1] == '$')))
 			dollar_state_handler_quoted(node->value, parser, shell);
-		if (node->value[parser->count + 1] == '\0')
-		{
-			if (!slice_end_token(node->value, parser, shell))
-			{
-				free_tokens(parser->head);
-				free(parser);
-				return (NULL);
-			}
-		}
+		if (node->value[parser->count + 1] == '\0'
+			&& !slice_end_token(node->value, parser, shell))
+			return (free(parser), free_tokens(parser->head), NULL);
 		parser->count++;
 	}
 	if (parser->head == NULL)
-	{
-		free(parser);
-		return (NULL);
-	}
+		return (free(parser), NULL);
 	return (parser);
 }
 
@@ -110,8 +106,15 @@ void	general_state_handler_quoted(char *stringa, t_parser *pars,
 	}
 }
 
-void	dollar_state_handler_quoted(char *stringa, t_parser *pars,
-		t_shell *shell)
+void	set_values(char *stringa, t_parser *pars, int type)
+{
+	pars->token = token_new(NULL);
+	pars->info = (t_token_info){type, stringa, pars->start,
+		pars->count + 1};
+	set_token_values(pars->token, &pars->info);
+}
+
+void	dollar_state_handler_quoted_if_clause(char *stringa, t_parser *pars)
 {
 	char	*status;
 
@@ -120,10 +123,7 @@ void	dollar_state_handler_quoted(char *stringa, t_parser *pars,
 		|| (pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
 			&& stringa[pars->count - 1] == '$'))
 	{
-		pars->token = token_new(NULL);
-		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
-			pars->count + 1};
-		set_token_values(pars->token, &pars->info);
+		set_values(stringa, pars, DOLLAR_TOKEN);
 		if (strcmp(pars->token->value, "$0") == 0)
 		{
 			free(pars->token->value);
@@ -141,6 +141,12 @@ void	dollar_state_handler_quoted(char *stringa, t_parser *pars,
 		token_add_back(&pars->head, pars->token);
 		pars->start = pars->count + 1;
 	}
+}
+
+void	dollar_state_handler_quoted(char *stringa, t_parser *pars,
+		t_shell *shell)
+{
+	dollar_state_handler_quoted_if_clause(stringa, pars);
 	if (pars->count > pars->start)
 	{
 		pars->token = token_new(NULL);

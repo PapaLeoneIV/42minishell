@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:23 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 12:09:12 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 10:39:05 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 
 # include "./minishell.h"
 
-extern struct sigaction	signal_g;
 typedef struct s_shell	t_shell;
 
-void	set_signal_handler(struct sigaction *signal_g, int flag);
 void	handle_signal(int signum);
 void	handle_ctrl_d(t_shell *shell, char *input);
 

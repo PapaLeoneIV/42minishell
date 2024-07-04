@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:26:41 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 11:29:26 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 12:10:08 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,28 @@ void	change_non_special_tokens_to_word_tokens(t_token *head)
 	}
 }
 
+void	handle_remotion_logic(	t_token	**ptr, t_token **head)
+{
+	if (((*ptr))->prev == NULL)
+	{
+		(*head) = ((*ptr))->next;
+		((*ptr))->next->prev = NULL;
+	}
+	else
+	{
+		if (((*ptr))->next == NULL)
+			((*ptr))->prev->next = NULL;
+		else
+		{
+			((*ptr))->next->prev = ((*ptr))->prev;
+			((*ptr))->prev->next = ((*ptr))->next;
+		}
+	}
+	free(((*ptr))->value);
+	free(((*ptr)));
+	(*ptr) = NULL;
+}
+
 void	remove_whitespaces(t_token **head)
 {
 	t_token	*ptr;
@@ -62,24 +84,7 @@ void	remove_whitespaces(t_token **head)
 		if (ptr->type == WHITESPACE_TOKEN)
 		{
 			tmp = ptr->next;
-			if (ptr->prev == NULL)
-			{
-				(*head) = ptr->next;
-				ptr->next->prev = NULL;
-			}
-			else
-			{
-				if (ptr->next == NULL)
-					ptr->prev->next = NULL;
-				else
-				{
-					ptr->next->prev = ptr->prev;
-					ptr->prev->next = ptr->next;
-				}
-			}
-			free(ptr->value);
-			free(ptr);
-			ptr = NULL;
+			handle_remotion_logic(&ptr, head);
 			ptr = tmp;
 		}
 		else

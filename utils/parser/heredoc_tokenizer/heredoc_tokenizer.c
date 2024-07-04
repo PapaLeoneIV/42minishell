@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_tokenizer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:46:48 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 14:51:44 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:06:31 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ static int	get_char_type_heredoc(char *str, t_parser *pars, int count)
 }
 
 static void	general_state_handler_heredoc(char *input,
-											t_parser *pars,
-											t_shell *shell)
+	t_parser *pars, t_shell *shell)
 {
 	char	next;
 
@@ -56,28 +55,31 @@ static void	general_state_handler_heredoc(char *input,
 	}
 }
 
-static int	slice_end_token_heredoc(char *stringa,
-									t_parser *pars,
-									t_shell *shell)
+int	set_token_info_here(t_token_info *info, t_parser *pars, char *stringa)
 {
 	if (stringa[pars->count] == '\0')
-		return (0);
+		return (ERROR);
 	else if (pars->state == STATE_DOLLAR)
-		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
+		*info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
 			pars->count + 1};
 	else
-		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->start,
+		*info = (t_token_info){WORD_TOKEN, stringa, pars->start,
 			pars->count + 1};
+	return (SUCCESS);
+}
+
+static int	slice_end_token_heredoc(char *stringa,
+	t_parser *pars, t_shell *shell)
+{
+	if (set_token_info_here(&pars->info, pars, stringa) == ERROR)
+		return (ERROR);
 	pars->token = token_new(NULL);
 	set_token_values(pars->token, &pars->info);
 	if (pars->token->type == WORD_TOKEN && !ft_strncmp(pars->token->value, "",
 			ft_strlen(pars->token->value)))
-	{
-		free(pars->token->value);
-		free(pars->token);
-		return (SUCCESS);
-	}
-	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$",
+		return (free(pars->token->value), free(pars->token), SUCCESS);
+	if (pars->token->type == DOLLAR_TOKEN
+		&& ft_strncmp(pars->token->value, "$",
 			ft_strlen(pars->token->value)))
 	{
 		expand_env_var(&pars->token, &pars->token->value, shell);

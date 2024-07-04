@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 10:18:17 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 11:51:14 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,19 @@ typedef struct s_command
 	struct s_command	*prev;
 }			t_command;
 
-enum bool
+enum e_bool
 {
 	false,
 	true,
 };
 
-enum error_handling
+enum e_error_handling
 {
 	ERROR,
 	SUCCESS,
 };
 
-enum State
+enum e_State
 {
 	STATE_GENERAL,
 	STATE_DQUOTE,
@@ -92,7 +92,7 @@ enum State
 	STATE_DOLLAR,
 };
 
-enum TokenType
+enum e_TokenType
 {
 	WORD_TOKEN,
 	PIPE_TOKEN,
@@ -107,7 +107,7 @@ enum TokenType
 	HERDOC_FILENAME_WITHQUOTES,
 };
 
-enum CharType
+enum e_CharType
 {
 	WHITESPACE_CHAR,
 	PIPELINE_CHAR,
