@@ -12,90 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-/*void print_fd(int fd)
-{
-    printf("\033[1;34m%d\033[0m", fd); // Colore blu per i file descriptors
-}
-
-// Funzione per stampare le informazioni di t_redir
-void print_redir_info(t_redir *redir)
-{
-    while (redir != NULL)
-    {
-        printf("Redirection In: ");
-        print_fd(redir->in);
-        printf("\nRedirection Out: ");
-        print_fd(redir->out);
-        printf("\nType of Redirection: %d\n", redir->type_of_redirection);
-        printf("Heredoc Expansion: %d\n", redir->heredoc_expansion);
-        printf("Filename: %s\n", redir->filename ? redir->filename : "NULL");
-        redir = redir->next;
-    }
-}
-
-// Funzione per stampare le informazioni di t_command
-void print_command_info(t_command *cmd)
-{
-    while (cmd != NULL)
-    {
-        printf("Command ID: %d\n", cmd->cmd_id);
-        printf("Fork ID: %d\n", cmd->fork_id);
-        printf("Command: ");
-        if (cmd->cmd != NULL)
-        {
-            for (int i = 0; cmd->cmd[i] != NULL; i++)
-            {
-                printf("%s ", cmd->cmd[i]);
-            }
-        }
-        else
-        {
-            printf("NULL");
-        }
-        printf("\nPipe: ");
-        print_fd(cmd->pip[0]);
-        printf(" ");
-        print_fd(cmd->pip[1]);
-        printf("\nInput FD: ");
-        print_fd(cmd->in);
-        printf("\nOutput FD: ");
-        print_fd(cmd->out);
-        printf("\nFD Change: %d\n", cmd->fd_change);\
-		printf("CAT is: %d\n", cmd->cat);
-        printf("Here: %s\n", cmd->here ? cmd->here : "NULL");
-
-        if (cmd->redirection_info != NULL && *cmd->redirection_info != NULL)
-        {
-            printf("Redirection Info:\n");
-            print_redir_info(*cmd->redirection_info);
-        }
-
-        cmd = cmd->next;
-    }
-}
-
-// Funzione per stampare le informazioni di t_shell
-void print_shell_info(t_shell *shell)
-{
-    printf("\n\nShell Line: %s\n", shell->line);
-    printf("Shell Pipe: ");
-    print_fd(shell->shell_pip[0]);
-    printf(" ");
-    print_fd(shell->shell_pip[1]);
-    printf("\n");
-
-    if (shell->cmd_info != NULL && *shell->cmd_info != NULL)
-    {
-        printf("Command Info:\n");
-        print_command_info(*shell->cmd_info);
-    }
-
-    if (shell->status != NULL)
-    {
-        printf("Shell Status: %d\n", *(shell->status));
-    }
-}*/
-
 void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {
 	char	*supp;
@@ -129,10 +45,9 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	t_env	*tmp;
 
 	if (cmd->fd_change == 1 || cmd->fd_change == 3)
-	{
 		dup2(cmd->in, 0);
+	if (cmd->fd_change == 1 || cmd->fd_change == 3)
 		close(cmd->in);
-	}
 	if (cmd->fd_change == 2 || cmd->fd_change == 3)
 	{
 		dup2(cmd->out, 1);
@@ -140,7 +55,10 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	}
 	tmp = find_node(shell->env, "PATH");
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
-		write_exit("bash: ", "cmd->cmd[0]: ", ": No such file or directory\n");
+	{
+		write_exit("bash: ", cmd->cmd[0], ": No such file or directory\n");
+		clean_all(shell, 1);
+	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 0)
 		make_things(cmd, tmp, shell->env, shell);
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
