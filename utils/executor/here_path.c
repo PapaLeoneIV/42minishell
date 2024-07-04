@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/01 19:12:27 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 12:03:17 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	prompt_here(int fd, t_redir **redir, t_shell *shell)
 		free(input_here);
 		return (-1);
 	}
-	if (ft_strncmp(input_here, (*redir)->filename, ft_strlen(input_here)) == 0)
+	if (ft_strncmp(input_here, (*redir)->filename,
+			ft_strlen((*redir)->filename)) == 0)
 	{
 		free(input_here);
 		return (0);

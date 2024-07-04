@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/01 19:10:57 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 10:59:53 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	exit_path(t_command *cmd, t_shell *shell, int flag)
 	argsc = mtx_count_rows(cmd->cmd);
 	counter = 0;
 	check_args(cmd);
+	close_all_fd(flag);
 	if (argsc == 1)
 		g_status_code = 0;
 	else if (argsc == 2)
@@ -55,7 +56,6 @@ int	exit_path(t_command *cmd, t_shell *shell, int flag)
 	}
 	else
 		return (handle_exit_wrong_args(), 1);
-	close_all_fd(flag);
 	clean_all(shell, 1);
 	exit(g_status_code);
 }
