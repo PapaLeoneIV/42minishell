@@ -12,9 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-// Funzione per stampare i file descriptors con colori
-// Funzione per stampare i file descriptors con colori
-void print_fd(int fd)
+/*void print_fd(int fd)
 {
     printf("\033[1;34m%d\033[0m", fd); // Colore blu per i file descriptors
 }
@@ -96,7 +94,7 @@ void print_shell_info(t_shell *shell)
     {
         printf("Shell Status: %d\n", *(shell->status));
     }
-}
+}*/
 
 void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 {

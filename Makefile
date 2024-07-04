@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: fgori <fgori@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/21 14:02:36 by rileone           #+#    #+#              #
-#    Updated: 2024/07/02 23:04:40 by codespace        ###   ########.fr        #
+#    Updated: 2024/07/04 10:16:12 by fgori            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ ARCHIVE = ar rcs
 SRC =   $(addprefix $(UTILS_ENV)/, env_helpers.c env_manipulating.c export_path.c) \
                 $(addprefix $(READ_SDTIN)/, read_input.c ) \
                 $(addprefix $(TOKENIZER)/, tokenizer_state_methods.c tokenizer.c tokenizer_utils.c tokenizer_helpers.c tokenizer_slice_methods.c) \
-                $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c ) \
+                $(addprefix $(QUOT_TOKENIZER)/,quot_tokenizer.c quot_tokenizer_utils.c unpack_quoted_tokens.c) \
                 $(addprefix $(SYNTAX_HANDLER)/, syntax_analizer.c syntax_analizer_helpers.c syntax_extra_utils.c) \
                 $(addprefix $(VAR_EXPANS)/, var_expansion_helpers.c)  \
 				$(addprefix $(EXECUTOR)/, execution_maker.c redir_exe_utils.c exe_utils.c execute_builtin.c here_path.c cat_exeption.c) \

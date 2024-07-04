@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 22:35:06 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/04 10:18:17 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,9 +178,11 @@ void		dollar_state_handler_quoted(char *stringa, t_parser *pars,
 
 /*QUOTED TOKENIZER HELPERS*/
 t_token		*check_prev(t_token *token);
-void		join_tokens(t_token **node, t_token **prev);
 void		join_tokens_values_when_no_space_between(t_parser *pars);
 void		unpack_quoted_tokens(t_token **head, t_shell *shell);
+t_token		*check_prev(t_token *token);
+void		join_tokens(t_token **node, t_token **prev);
+char		*join_quoted_token_expansion(t_token *head);
 
 /**EXPANSION HELPERS*/
 char		*get_key_envp(char *envp_string);
