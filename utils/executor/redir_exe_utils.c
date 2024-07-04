@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 13:52:10 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:21:25 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		if (set_pip(tmp, tmp->pip) == ERROR)
 			return (ERROR);
 		red_st = open_redir(tmp, shell);
-		if (set_change(tmp, red_st, (int[2]){tm_ou, tm_i}, shell) == ERROR)
+		if (set_change(tmp, red_st, (int [2]){tm_ou, tm_i}, shell) == ERROR)
 			return (ERROR);
 		tmp = tmp->next;
 	}

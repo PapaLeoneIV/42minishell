@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quot_tokenizer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:59:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 13:53:40 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/04 14:18:51 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ void	set_values(char *stringa, t_parser *pars, int type)
 	set_token_values(pars->token, &pars->info);
 }
 
-void	dollar_state_handler_quoted_if_clause(char *stringa, t_parser *pars, t_shell *shell)
+void	dollar_state_handler_quoted_if_clause(char *stringa,
+		t_parser *pars, t_shell *shell)
 {
 	char	*status;
 
