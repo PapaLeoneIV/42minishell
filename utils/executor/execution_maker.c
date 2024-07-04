@@ -59,7 +59,7 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 		write_exit("bash: ", cmd->cmd[0], ": No such file or directory\n");
 		clean_all(shell, 1);
 	}
-	else if (cmd->fd_change >= 0 && cmd->cat == 0)
+	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || cat <= 1))
 		make_things(cmd, tmp, shell->env, shell);
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(cat, shell);
@@ -89,6 +89,8 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 		{
 			unlink(cmd->here);
 		}
+		if (cmd->next)
+			close(cmd->pip[1]);
 		if (cmd->in != 0 && cmd->in != -1)
 			close(cmd->in);
 		if (cmd->out != 1 && cmd->out != -1)
