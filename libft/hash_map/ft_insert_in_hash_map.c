@@ -15,7 +15,7 @@
 
 void	ft_insert_in_hash_map(t_hash_map *map, int key)
 {
-	int		riga_t_hash_map ;
+	int		riga_t_hash_map;
 	t_item	*nodo;
 	t_item	*new_item;
 

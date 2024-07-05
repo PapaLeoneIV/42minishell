@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:23:54 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 14:01:10 by fgori            ###   ########.fr       */
+/*   Updated: 2024/06/22 16:06:17 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_env	*ft_lstlast_(t_env *lst)
 {
-	while (lst && lst-> next != NULL)
+	while (lst && lst->next != NULL)
 		lst = lst->next;
 	return (lst);
 }
@@ -39,26 +39,23 @@ void	add_node_to_env_struct(t_env **env_list, t_env *new)
 t_env	*lst_new_env(char *envp_line, char **en)
 {
 	t_env	*new;
-	int 	envp_equal_idx;
+	int		int_split;
 
+	if (!envp_line)
+		return (NULL);
 	new = ft_calloc(1, sizeof(t_env));
 	if (!new)
 		return (NULL);
-	envp_equal_idx = ft_strchri(envp_line, '=');
-	if (!envp_line)
+	int_split = ft_strchri(envp_line, '=');
+	if (int_split != -1)
 	{
-		new->head = NULL;
-		new->body = NULL;
-	}
-	if (envp_equal_idx != -1)
-	{
-		new->head = ft_substr(envp_line, 0, envp_equal_idx);
-		new->body = ft_substr(envp_line, envp_equal_idx + 1, ft_strlen(envp_line));
+		new->head = ft_substr(envp_line, 0, int_split);
+		new->body = ft_substr(envp_line, int_split + 1, ft_strlen(envp_line));
 		new->esistence = 0;
 		if (ft_strncmp(new->head, "_", ft_strlen(new->head)) == 0)
 			new->esistence = -1;
 	}
-	else 
+	else
 	{
 		new->head = ft_strdup(envp_line);
 		new->esistence = 1;
@@ -79,7 +76,11 @@ t_env	**get_env_info(char *envp_mtx[])
 	while (envp_mtx[counter])
 	{
 		node = lst_new_env(envp_mtx[counter], envp_mtx);
-		/**qui sei viene ritornato null bisogna gestirlo */
+		if (node == NULL)
+		{
+			clean_env_lst(env_struct);
+			exit(-1);
+		}
 		add_node_to_env_struct(env_struct, node);
 		counter++;
 	}

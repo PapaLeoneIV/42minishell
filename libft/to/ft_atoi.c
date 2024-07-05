@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 13:42:22 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:58:16 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ int	ft_atoi(char *nptr)
 	}
 	res = res * isnegative;
 	if (res > 2147483647 || res < -2147483648)
-		error_fn(INVALID_INPUT);
+		return (INVALID_INPUT);
 	return (res);
 }

@@ -14,7 +14,7 @@
 
 int	ft_strlen_gnl(char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (str && str[i] != '\0')
@@ -73,9 +73,9 @@ char	*ft_substr_gnl(char *s, unsigned int start, int len)
 		return (NULL);
 	slen = ft_strlen_gnl(s);
 	if (len < slen)
-		p = (char *) ft_calloc_gnl(sizeof(char), (len + 1));
+		p = (char *)ft_calloc_gnl(sizeof(char), (len + 1));
 	else
-		p = (char *) ft_calloc_gnl(sizeof(char), ((slen - start) + 1));
+		p = (char *)ft_calloc_gnl(sizeof(char), ((slen - start) + 1));
 	if (!p)
 		return (0);
 	i = 0;

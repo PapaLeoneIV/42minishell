@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoinchar.c                                   :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/01 19:17:53 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/01 19:18:09 by rileone          ###   ########.fr       */
+/*   Created: 2024/06/01 11:37:23 by rileone           #+#    #+#             */
+/*   Updated: 2024/07/05 10:31:50 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-char	*ft_strjoinchar(char *str, char c)
-{
-	int		len;
-	char	*out;
-	int		i;
+# include "./minishell.h"
 
-	i = 0;
-	len = ft_strlen(str);
-	out = ft_calloc(len + 2, sizeof(char));
-	while (i < len)
-	{
-		out[i] = str[i];
-		i++;
-	}
-	out[i++] = c;
-	free(str);
-	return (out);
-}
+typedef struct s_shell	t_shell;
+
+void	handle_signal(int signum);
+void	handle_ctrl_d(t_shell *shell, char *input);
+void	handle_signal_block(int signum);
+
+#endif

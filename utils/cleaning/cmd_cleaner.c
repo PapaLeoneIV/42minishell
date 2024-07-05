@@ -6,12 +6,12 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 12:29:32 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/01 19:11:28 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "lexer.h"
+#include "minishell.h"
 
 void	clean_redir(t_redir **redir)
 {
@@ -29,11 +29,15 @@ void	clean_redir(t_redir **redir)
 
 void	clean_cmd_node(t_command **cmd)
 {
-	t_command *tmp;
+	t_command	*tmp;
 
 	while ((*cmd))
 	{
 		tmp = (*cmd);
+		if (tmp->in != -1)
+			close(tmp->in);
+		if (tmp->out != -1)
+			close(tmp->out);
 		freeall((*cmd)->cmd);
 		if ((*cmd)->redirection_info)
 			clean_redir((*cmd)->redirection_info);
@@ -41,12 +45,15 @@ void	clean_cmd_node(t_command **cmd)
 		free(tmp);
 	}
 	free(cmd);
-	
 }
 
-void	clean_all(t_shell *shell)
+void	clean_all(t_shell *shell, int flag)
 {
-	clean_env_lst(shell->env);
+	if (flag)
+	{
+		clean_env_lst(shell->env);
+		rl_cleanup_after_signal();
+	}
 	if (shell->line)
 		free(shell->line);
 	if (shell->cmd_info)

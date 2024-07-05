@@ -3,32 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_helpers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:50:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/14 14:37:06 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/02 11:54:34 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/lexer.h"
 
-char *get_key_envp(char *envp_string)
+char	*set_token_value_post_expansion(char *envp_string)
 {
-	char *key;
-	int end;
+	char	*out;
+	int		end;
+	int		start;
 
-	end = ft_strchri_gnl(envp_string, '=');;
-	key = ft_substr(envp_string, 0, end);
-	return (key);
-}
-
-
-char *set_token_value_post_expansion(char *envp_string)
-{
-	char *out;
-	int end;
-	int start;
-	
 	end = ft_strlen(envp_string);
 	start = ft_strchri_gnl(envp_string, '=');
 	out = ft_substr(envp_string, start + 1, end);
@@ -36,31 +25,27 @@ char *set_token_value_post_expansion(char *envp_string)
 		return (NULL);
 	return (out);
 }
-void expand_env_var(char **token_value, t_shell *shell)
+
+void	expand_env_var(t_token **token, char **token_value, t_shell *shell)
 {
-	int envp_len;
-	int i;
-	char *pathKey;
-	char *tmp;
-	
-	i = 0;
-	envp_len = mtx_count_rows(shell->env[0]->env_mtx);
-	while(i < envp_len)
+	char	*tmp;
+	t_env	*ptr;
+
+	ptr = shell->env[0];
+	while (ptr)
 	{
-		pathKey = get_key_envp(shell->env[0]->env_mtx[i]);
-		if (!strcmp(*token_value + 1, pathKey))
+		if (!strncmp(ptr->head, (*token_value + 1), ft_strlen(ptr->head)))
 		{
-			free(pathKey);
-			pathKey = NULL;
-			tmp = *token_value;		
-			*token_value = set_token_value_post_expansion(shell->env[0]->env_mtx[i]);
+			tmp = *token_value;
+			*token_value = ft_strdup(ptr->body);
 			free(tmp);
-			return ; 
+			return ;
 		}
-		free(pathKey);
-		i++;
+		ptr = ptr->next;
 	}
-    free(*token_value);
-    *token_value = NULL;
+	free(*token_value);
+	*token_value = NULL;
+	free(*token);
+	*token = NULL;
 	return ;
 }

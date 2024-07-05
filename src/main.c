@@ -3,38 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:02:41 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/24 11:09:36 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 14:01:09 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-/***per il momento:
- * - se un token e' di tipo double quotes, ma e' preceduto da unn HEREDOC viene marchiato come HEREDOC_FILENAME_WITHQUOTES
- * - ho deciso di non mantenere le doppie virgolette, in quanto se seguito da qualcosa quando viene joinato si creano dei problemi
- * 			si crea qualcosa di tipo es: << "here"doc ====> diventa un token->value "here"doc e non heredoc invece
- * - se HEREDOC_FILENAME_WITHQUOTES deve essere joinato con altre cose perche non c'e' spazio tra i token 
- * 			mantiene comquneue il suo tokenTYPE HEREDOC_FILENAME_WITHQUOTES
- * 
- * 
-*/
+int	g_status_code;
 
-int main(int argc, char **argv , char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-    t_shell shell;
-    
-    shell = (t_shell){0}; 
-    (void)argv;
-    if(argc != 1)
-        perror("Wrong number of arguments my boi!");
-    shell.env = get_env_info(envp);
-    read_from_stdin(&shell);
-/*     set_env(&shell, envp); */
-    return (0);
-}
+	t_shell	shell;
 
-/* aggiunto -I./include al main, aggiunto prev a typedef struct s_command e aggiornato e relativo new_cmd
- */
+	g_status_code = 0;
+	shell = (t_shell){0};
+	(void)argv;
+	if (argc != 1)
+	{
+		write(2, "You need to run the program as : ./minishell\n", 47);
+		exit(EXIT_SUCCESS);
+	}
+	read_from_stdin(&shell, envp);
+	return (EXIT_SUCCESS);
+}

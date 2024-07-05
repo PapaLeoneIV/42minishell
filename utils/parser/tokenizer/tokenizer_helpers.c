@@ -6,42 +6,49 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/05/21 20:06:28 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:57:09 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
-/**I caratteri contenuti nella variabile valid_char 
- * sono gli unici caratteri oltre alle lettere dell alfabeto
- * che possono essere parte di token WORD_TOKEN ( piu semplicemente 
- * file, nomi di variabili, env ...)
-*/
-
-int valid_regchar(char *str, t_parser *pars)
+int	valid_regchar(char *str, t_parser *pars)
 {
-	char *valid_char;
-	int len;
-	int i;
+	char	*valid_char;
+	int		len;
+	int		i;
 
 	i = 0;
 	valid_char = "_";
 	len = ft_strlen(valid_char);
-	while(i < len)
+	while (i < len)
 	{
-		if(ft_charchar(str[pars->count], valid_char[i]))
+		if (ft_charchar(str[pars->count], valid_char[i]))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-/**Una volta trovato un carattere che puo essere una redirection controllo
- * il carattere successivo per vedere se si tratta di una doppia redirection
- * 
-*/
+int	valid_regchar_heredoc(char *str, t_parser *pars)
+{
+	char	*valid_char;
+	int		len;
+	int		i;
 
-int look_for_another_redirect(char *stringa, t_parser *pars)
+	i = 0;
+	valid_char = "_\"\'{}[]<>:;!@#^%%&*()-_|~`,./*=+-";
+	len = ft_strlen(valid_char);
+	while (i < len)
+	{
+		if (ft_charchar(str[pars->count], valid_char[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	look_for_another_redirect(char *stringa, t_parser *pars)
 {
 	if (stringa[pars->count + 1] == '>')
 		return (REDIR_OUTPUT_CHAR);
@@ -51,12 +58,7 @@ int look_for_another_redirect(char *stringa, t_parser *pars)
 		return (-1);
 }
 
-/**Ogni carattere della stringa viene associato ad un carattere specifico, 
- * ovviamente i caratteri speciali hanno il loro CHAR, mentre lettere e 
- * numeri sono inseriti in un char piu generico 
-*/
-
-int get_char_type(char *str, t_parser *pars, int count)
+int	get_char_type(char *str, t_parser *pars, int count)
 {
 	if (str[count] == ' ')
 		return (WHITESPACE_CHAR);
@@ -74,17 +76,16 @@ int get_char_type(char *str, t_parser *pars, int count)
 		return (DOLLAR_CHAR);
 	else if (str[count] == '?')
 		return (QUESTION_MARK_CHAR);
+	else if (str[count] == '~')
+		return (TILDE_CHAR);
 	else if (ft_isalpha(str[count]) || valid_regchar(str, pars))
 		return (REG_CHAR);
 	else if (ft_isdigit(str[count]))
 		return (DIGIT_CHAR);
 	return (DOLLAR_SPECIAL_CHAR);
 }
-/**Funzione inserita all interno del funzione che gestisce il 
- * lo state generale. Serve per cambiare lo STATE della machine.
-*/
 
-void check_and_change_status(int *state, int c, t_parser *pars)
+void	check_and_change_status(int *state, int c, t_parser *pars)
 {
 	if (c == SQUOTES_CHAR)
 		*state = STATE_SQUOTE;
@@ -92,6 +93,5 @@ void check_and_change_status(int *state, int c, t_parser *pars)
 		*state = STATE_DQUOTE;
 	else if (c == DOLLAR_CHAR)
 		*state = STATE_DOLLAR;
-	
-	pars->start = pars->count; 
+	pars->start = pars->count;
 }

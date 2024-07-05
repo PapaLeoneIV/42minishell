@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/31 14:16:42 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/04 13:41:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,61 +26,50 @@ t_env	*find_node(t_env **lst, char *str)
 	return (NULL);
 }
 
-int	export_path(t_env **lst, char **mtx)
+void	write_exit(char *str, char *cmd, char *finish)
 {
-	t_env	*tmp;
-	int i;
-
-	i = 1;
-	if (mtx_count_rows(mtx) == 1)
-	{
-		tmp = (*lst);
-		while (tmp)
-		{
-			if (tmp->esistence > -1)
-				printf("declare -x %s=%s\n", tmp->head, tmp->body);
-			tmp = tmp->next;
-		}
-		return (1);
-	}
-	while (mtx[i])
-	{
-		if (ft_strnstr(mtx[i], "+=", ft_strlen(mtx[i])))
-		{
-			tmp = find_node(lst, ft_substr(mtx[i], 0, ft_strchri(mtx[i], '+')));
-			if (!tmp)
-				add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
-			tmp->body = ft_strjoin(tmp->body, ft_substr(mtx[i], ft_strchri(mtx[i], '=') + 1 , ft_strlen(mtx[i])));
-			if (tmp->esistence == 1)
-				tmp->esistence = 0;
-		}
-		else
-		{
-			add_node_to_env_struct(lst, lst_new_env(mtx[i], (*lst)->env_mtx));
-			//free(str);
-		}
-		i++;
-		return (1);
-	}
-	return (-1);
+	write(2, str, ft_strlen(str));
+	write(2, cmd, ft_strlen(cmd));
+	write(2, finish, ft_strlen(finish));
 }
 
-int	unset_path(t_env **lst, char **mtx)
+int	check_head(char *str)
 {
-	t_env	*tmp;
+	int	i;
 
-	if (!mtx[0])
+	i = 1;
+	if (ft_strchri(str, '=') == 0)
 	{
-		perror("ERROR\n");
-		return (-1);
+		write_exit("bash: export: `", str, ": No such file or directory\n");
+		return (0);
 	}
-	tmp = find_node(lst, mtx[0]);
-	if (!tmp)
+	if (ft_isdigit(str[0]))
 	{
-		perror("ERROR\n");
-		return (-1);
+		write_exit("bash: export: `", str, ": No such file or directory\n");
+		return (0);
 	}
-	if (!tmp->next)
+	while (str[i] != '\0' && str[i] != '=' && !(str[i] == '+' && str[i
+				+ 1] == '='))
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+		{
+			write_exit("bash: export: `", str, ": No such file or directory\n");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+void	correct_and_clean(t_env *tmp, t_env **lst)
+{
+	if (!tmp->prev)
+	{
+		tmp->next->prev = NULL;
+		(*lst) = tmp->next;
+		clean_env_node(&tmp);
+	}
+	else if (!tmp->next)
 	{
 		tmp->prev->next = NULL;
 		clean_env_node(&tmp);
@@ -91,5 +80,31 @@ int	unset_path(t_env **lst, char **mtx)
 		tmp->next->prev = tmp->prev;
 		clean_env_node(&tmp);
 	}
-	return (1);
+}
+
+int	unset_path(t_env **lst, char **mtx)
+{
+	t_env	*tmp;
+	int		arg;
+
+	arg = 1;
+	if (!mtx[1])
+		return (0);
+	while (mtx[arg])
+	{
+		if (ft_isdigit(mtx[arg][0]))
+		{
+			write(2, "bash: unset: not a valid identifier\n", 37);
+			return (1);
+		}
+		tmp = find_node(lst, mtx[arg]);
+		if (!tmp)
+		{
+			arg++;
+			continue ;
+		}
+		correct_and_clean(tmp, lst);
+		arg++;
+	}
+	return (0);
 }

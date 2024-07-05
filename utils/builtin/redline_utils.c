@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redline_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:16:15 by fgori             #+#    #+#             */
-/*   Updated: 2024/05/25 10:34:41 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/05 10:55:58 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*get_directory_path(void)
 
 	path = getcwd(NULL, 0);
 	trimmed_path = trim_current_path(path);
-	if(!trimmed_path)
+	if (!trimmed_path)
 		trimmed_path = ft_strdup(path);
 	free(path);
 	tmp = ft_strjoin(trimmed_path, " ");
@@ -71,5 +71,3 @@ char	*get_directory_path(void)
 	free(tmp);
 	return (path);
 }
-
-//finish readline line funtion //

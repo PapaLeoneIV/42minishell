@@ -110,9 +110,6 @@ t_dll_list	*ft_build_lis_lis(t_dll_list *list, t_dll_list *len_list,
 	return (res);
 }
 
-
-
-
 t_dll_list	*ft_lis_algo_list(int *lis_len, t_dll_list *a)
 {
 	t_dll_list	*len_list;
