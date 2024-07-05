@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 14:00:16 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 14:34:09 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,22 @@ static void	plus_n_equal(t_env **lst, char *str)
 {
 	t_env	*tmp;
 	char	*sup;
+	char	*tmp_two;
+	char	*body;
 
 	sup = ft_substr(str, 0, ft_strchri(str, '+'));
 	tmp = find_node(lst, sup);
 	free(sup);
 	if (!tmp)
 		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
-	tmp->body = ft_strjoin(tmp->body, ft_substr(str, ft_strchri(str, '=') + 1,
-				ft_strlen(str)));
+	else
+	{
+		body = ft_substr(str, ft_strchri(str, '=') + 1, ft_strlen(str));
+		tmp_two = ft_strjoin(tmp->body, body);
+		free(body);
+		free(tmp->body);
+		tmp->body = tmp_two;
+	}
 	if (tmp->esistence == 1)
 		tmp->esistence = 0;
 }

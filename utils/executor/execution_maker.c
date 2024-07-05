@@ -32,8 +32,14 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
-			shell->status = 126;
-			write_exit("bash :", supp, "permessio denied\n");
+			if (g_status_code == 130)
+				shell->status = 130;
+			else
+			{
+				shell->status = 126;
+				write_exit("bash :", supp, "permession denied\n");
+
+			}
 			return (multi_freeall(tmp_env, tmp_cmd, NULL, supp));
 		}
 		free(supp);
@@ -67,6 +73,8 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	else
 		clean_all(shell, 1);
 	close_all_fd(1);
+	if (g_status_code == 130)
+				shell->status = 130;
 	exit(shell->status);
 }
 
@@ -130,8 +138,8 @@ int	execute_cmd(t_shell *shell)
 		if (exit_path(cmd, shell, 1) == 1)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
-	if (make_redir(shell, cmd) == -2)
-		shell->status = 0;
+	if (make_redir(shell, cmd) == 2)
+		shell->status = 1;
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)

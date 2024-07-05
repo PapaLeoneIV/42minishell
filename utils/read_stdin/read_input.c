@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:30:41 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 14:38:45 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,18 @@ void	read_from_stdin(t_shell *shell, char **envp)
 			handle_ctrl_d(shell, input);
 		add_history(input);
 		if (tokenizer(shell, input, &head) == ERROR)
+		{
+			if (g_status_code == 130)
+				shell->status = 130;
 			continue ;
+		}
 		free(input);
 		if (lexer(&head, shell) == ERROR)
+		{
+			if (g_status_code == 130)
+				shell->status = 130;
 			continue ;
+		}
 		free_tokens(head);
 		execute_cmd(shell);
 		close_all_fd(2);

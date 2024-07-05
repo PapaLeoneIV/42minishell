@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_build.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 13:41:40 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 13:03:52 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	exit_path(t_command *cmd, t_shell *shell, int flag)
 	argsc = mtx_count_rows(cmd->cmd);
 	counter = 0;
 	check_args(cmd);
-	close_all_fd(flag);
 	if (argsc == 1)
 		shell->status = 0;
 	else if (argsc == 2)
@@ -56,6 +55,7 @@ int	exit_path(t_command *cmd, t_shell *shell, int flag)
 	}
 	else
 		return (handle_exit_wrong_args(shell), 1);
+	close_all_fd(flag);
 	clean_all(shell, 1);
 	exit(shell->status);
 }
