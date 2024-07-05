@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analizer_helpers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:13:30 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 11:34:13 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 10:57:21 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,6 @@ int	handle_pipe_synt_error_tokens(t_token *ptr)
 	}
 	return (SUCCESS);
 }
-
-/**Se all interno della stringa che ci 
- * viene passata e' presente uno dei caratteri
- * all interno della variabile non_valid_char posso ritornare un errore
-*/
 
 int	headle_heredoc_syntax_error_tokens(t_token *ptr)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 12:03:17 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 10:03:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	prompt_here(int fd, t_redir **redir, t_shell *shell)
 {
 	char	*input_here;
 
-	signal(SIGINT, handle_signal);
 	input_here = readline(">");
 	if (input_here == NULL || g_status_code == 130)
 	{

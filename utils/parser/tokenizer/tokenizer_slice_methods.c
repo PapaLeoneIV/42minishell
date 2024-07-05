@@ -6,18 +6,11 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 13:22:42 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:12:02 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-char	*expand_tilde(t_shell *shell)
-{
-	while (ft_strncmp(shell->env[0]->head, "HOME", 4))
-		shell->env[0] = shell->env[0]->next;
-	return (ft_strdup(shell->env[0]->body));
-}
 
 void	slice_single_char_token(char *stringa, t_parser *pars, t_shell *shell)
 {
@@ -57,8 +50,6 @@ void	slice_token_string_doll_spec_case(char *stringa, t_parser *pars)
 	pars->start = pars->count + 1;
 }
 
-/**Funzione per tagliare i token nel GENERAL STATE*/
-
 void	slice_token_string(char *stringa, t_parser *pars)
 {
 	pars->token = token_new(NULL);
@@ -66,41 +57,6 @@ void	slice_token_string(char *stringa, t_parser *pars)
 	set_token_values(pars->token, &pars->info);
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
-}
-
-/**Funzione per gestire la EOL,
-	il token->type viene affidato in base allo STATE in cui 
- * la macchina si trova in quel momento.
-*/
-
-int	set_token_info(t_token_info *info, t_parser *pars, char *stringa)
-{
-	if (stringa[pars->count] == '\0')
-		return (0);
-	if (pars->state == STATE_DQUOTE)
-		return (perror("Error: unclosed double quotes\n"), ERROR);
-	else if (pars->state == STATE_SQUOTE)
-		return (perror("Error: unclosed single quotes\n"), ERROR);
-	else if (pars->state == STATE_DOLLAR)
-		*info = (t_token_info){DOLLAR_TOKEN, stringa,
-			pars->start, pars->count + 1};
-	else
-		*info = (t_token_info){WORD_TOKEN, stringa,
-			pars->start, pars->count + 1};
-	return (SUCCESS);
-}
-
-void	fnfn(t_parser *pars, t_shell *shell)
-{
-	expand_env_var(&pars->token, &pars->token->value, shell);
-	if (pars->token && pars->token->value)
-		token_add_back(&pars->head, pars->token);
-	else
-	{
-		if (pars->token)
-			free(pars->token->value);
-		free(pars->token);
-	}
 }
 
 int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
@@ -120,7 +76,7 @@ int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 		return (free(pars->token->value), free(pars->token), SUCCESS);
 	if (pars->token->type == DOLLAR_TOKEN && ft_strncmp(pars->token->value, "$",
 			ft_strlen(pars->token->value)))
-		fnfn(pars, shell);
+		add_helper(pars, shell);
 	else
 		token_add_back(&pars->head, pars->token);
 	return (SUCCESS);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_cleaner.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:51:30 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 10:43:07 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 10:50:55 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	clean_env_lst(t_env **lst)
 	free(lst);
 }
 
-void	multi_freeall(char **tmp_env, char **tmp_cmd, t_shell *shell)
+void	multi_freeall(char **tmp_env, char **tmp_cmd, t_shell *shell, char *str)
 {
 	if (tmp_env)
 		freeall(tmp_env);
@@ -42,4 +42,6 @@ void	multi_freeall(char **tmp_env, char **tmp_cmd, t_shell *shell)
 		freeall(tmp_cmd);
 	if (shell)
 		clean_all(shell, 1);
+	if (str)
+		free(str);
 }

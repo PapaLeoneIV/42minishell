@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:16:15 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/27 17:10:13 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:55:58 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,3 @@ char	*get_directory_path(void)
 	free(tmp);
 	return (path);
 }
-
-//finish readline line funtion //

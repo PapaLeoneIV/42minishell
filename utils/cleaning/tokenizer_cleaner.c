@@ -6,16 +6,11 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 10:40:19 by fgori             #+#    #+#             */
-/*   Updated: 2024/06/21 11:36:59 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:50:07 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**Se l espansione di una variabile non e' stata trovata, 
- * il token->value viene settato a NULL. Questa funzione 
- * serve una volta individuati a rimuoverli dalla lista
-*/
 
 void	remove_null_tokens(t_parser *pars)
 {

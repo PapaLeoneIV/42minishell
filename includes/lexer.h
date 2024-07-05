@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 11:51:14 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:32:22 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_token
 	struct s_token	*prev;
 }				t_token;
 
-typedef struct parser
+typedef struct s_parser
 {
 	int				state;
 	int				char_type;
@@ -160,12 +160,26 @@ void		slice_token_string(char *stringa, t_parser *pars);
 int			slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
 void		slice_token_string_doll_spec_case(char *stringa, t_parser *pars);
 
+/*TOKENIZER SLICE METHODS(HELPERS)*/
+char		*expand_tilde(t_shell *shell);
+int			set_token_info(t_token_info *info, t_parser *pars, char *stringa);
+void		add_helper(t_parser *pars, t_shell *shell);
+
 /*TOKENIZER HELPERS(STATE HANDLERS)*/
 void		general_state_handler(char *stringa, t_parser *pars,
 				t_shell *shell);
 void		dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell);
 void		quoted_state_handler(char *stringa, t_parser *pars);
 void		check_and_change_status(int *state, int c, t_parser *pars);
+/*TOKENIZER HELPERS(HELPERS)*/
+void		handle_special_case(t_parser *pars, t_shell *shell);
+int			check_token(t_parser *pars);
+int			check_single_tokens(t_parser *pars);
+int			check_redir_tokens( char *stringa, t_parser *pars);
+int			check_special_case_tilde(t_parser *pars, char prev, char next);
+int			traverse_list_backword_for_heredoc(t_token *last_node);
+int			look_behind_for_heredoc(t_token *head);
+t_token		*get_last_token(t_token *ptr);
 
 /*QUOTED TOKENIZER HELPERS*/
 int			valid_regchar_quoted(char c);
@@ -183,6 +197,8 @@ void		unpack_quoted_tokens(t_token **head, t_shell *shell);
 t_token		*check_prev(t_token *token);
 void		join_tokens(t_token **node, t_token **prev);
 char		*join_quoted_token_expansion(t_token *head);
+void		init_parser_quot(t_parser *parser);
+void		set_values(char *stringa, t_parser *pars, int type);
 
 /**EXPANSION HELPERS*/
 char		*get_key_envp(char *envp_string);

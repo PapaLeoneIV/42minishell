@@ -6,17 +6,11 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:16:34 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 10:10:43 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:57:09 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-/**I caratteri contenuti nella variabile valid_char 
- * sono gli unici caratteri oltre alle lettere dell alfabeto
- * che possono essere parte di token WORD_TOKEN ( piu semplicemente 
- * file, nomi di variabili, env ...)
-*/
 
 int	valid_regchar(char *str, t_parser *pars)
 {
@@ -54,11 +48,6 @@ int	valid_regchar_heredoc(char *str, t_parser *pars)
 	return (0);
 }
 
-/**Una volta trovato un carattere che puo essere una redirection controllo
- * il carattere successivo per vedere se si tratta di una doppia redirection
- * 
-*/
-
 int	look_for_another_redirect(char *stringa, t_parser *pars)
 {
 	if (stringa[pars->count + 1] == '>')
@@ -68,11 +57,6 @@ int	look_for_another_redirect(char *stringa, t_parser *pars)
 	else
 		return (-1);
 }
-
-/**Ogni carattere della stringa viene associato ad un carattere specifico, 
- * ovviamente i caratteri speciali hanno il loro CHAR, mentre lettere e 
- * numeri sono inseriti in un char piu generico 
-*/
 
 int	get_char_type(char *str, t_parser *pars, int count)
 {
@@ -100,9 +84,6 @@ int	get_char_type(char *str, t_parser *pars, int count)
 		return (DIGIT_CHAR);
 	return (DOLLAR_SPECIAL_CHAR);
 }
-/**Funzione inserita all interno del funzione che gestisce il 
- * lo state generale. Serve per cambiare lo STATE della machine.
-*/
 
 void	check_and_change_status(int *state, int c, t_parser *pars)
 {

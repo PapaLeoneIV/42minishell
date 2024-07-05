@@ -3,55 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quot_tokenizer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:59:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 14:18:51 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 10:17:12 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-int	valid_regchar_quoted(char c)
-{
-	char	*valid_char;
-	int		len;
-	int		i;
-
-	i = 0;
-	valid_char = "_";
-	len = ft_strlen(valid_char);
-	while (i < len)
-	{
-		if (ft_charchar(c, valid_char[i]))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	get_char_type_quoted(char c)
-{
-	if (c == ' ')
-		return (WHITESPACE_CHAR);
-	else if (c == '$')
-		return (DOLLAR_CHAR);
-	else if (c == '?')
-		return (QUESTION_MARK_CHAR);
-	else if (ft_isalpha(c) || valid_regchar_quoted(c))
-		return (REG_CHAR);
-	else if (ft_isdigit(c))
-		return (DIGIT_CHAR);
-	return (DOLLAR_SPECIAL_CHAR);
-}
-
-void	init_parser_quot(t_parser *parser)
-{
-	parser->state = STATE_GENERAL;
-	parser->start = 0;
-	parser->count = 0;
-	parser->head = NULL;
-}
 
 t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
 {
@@ -104,14 +63,6 @@ void	general_state_handler_quoted(char *stringa, t_parser *pars,
 		if (pars->char_type == DOLLAR_CHAR)
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}
-}
-
-void	set_values(char *stringa, t_parser *pars, int type)
-{
-	pars->token = token_new(NULL);
-	pars->info = (t_token_info){type, stringa, pars->start,
-		pars->count + 1};
-	set_token_values(pars->token, &pars->info);
 }
 
 void	dollar_state_handler_quoted_if_clause(char *stringa,

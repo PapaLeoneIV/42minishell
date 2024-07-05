@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 13:54:03 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:28:01 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,6 @@ t_token	*get_last_token(t_token *ptr)
 		ptr = ptr->next;
 	}
 	return (ptr);
-}
-
-int	traverse_list_backword_for_heredoc(t_token *last_node)
-{
-	if (last_node->prev == NULL)
-		return (false);
-	while (last_node->type == WHITESPACE_TOKEN && last_node != NULL)
-		last_node = last_node->prev;
-	if (last_node->type == HEREDOC_TOKEN)
-		return (true);
-	else
-		return (false);
-}
-
-int	look_behind_for_heredoc(t_token *head)
-{
-	t_token	*last;
-	t_token	*ptr;
-
-	ptr = head;
-	last = get_last_token(ptr);
-	if (!last)
-		return (false);
-	if (traverse_list_backword_for_heredoc(last))
-		return (true);
-	return (false);
 }
 
 void	quoted_state_handler(char *stringa, t_parser *pars)
@@ -89,28 +63,6 @@ void	fnfnfn(t_parser *pars, t_shell *shell, int type, char *stringa)
 	pars->count--;
 }
 
-void	handle_special_case(t_parser *pars, t_shell *shell)
-{
-	char	*status;
-
-	if (strcmp(pars->token->value, "$0") == 0)
-	{
-		free(pars->token->value);
-		pars->token->value = ft_strdup("minishell");
-	}
-	else if (strcmp(pars->token->value, "$?") == 0)
-	{
-		status = ft_itoa(shell->status);
-		free(pars->token->value);
-		pars->token->value = ft_strdup(status);
-		free(status);
-	}
-	else
-		pars->token->value = NULL;
-	token_add_back(&pars->head, pars->token);
-	pars->start = pars->count + 1;
-}
-
 void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
 	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR
@@ -129,46 +81,6 @@ void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 	pars->state = STATE_GENERAL;
 }
 
-int	check_token(t_parser *pars)
-{
-	if (pars->char_type == WHITESPACE_CHAR || pars->char_type == PIPELINE_CHAR
-		|| pars->char_type == REDIR_INPUT_CHAR
-		|| pars->char_type == REDIR_OUTPUT_CHAR
-		|| pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR
-		|| pars->char_type == DOLLAR_CHAR || pars->char_type == TILDE_CHAR
-	)
-		return (SUCCESS);
-	return (ERROR);
-}
-
-int	check_single_tokens(t_parser *pars)
-{
-	if ((pars->char_type == REDIR_OUTPUT_CHAR
-			|| pars->char_type == REDIR_INPUT_CHAR
-			|| pars->char_type == PIPELINE_CHAR
-			|| pars->char_type == WHITESPACE_CHAR))
-		return (SUCCESS);
-	return (ERROR);
-}
-
-int	check_redir_tokens( char *stringa, t_parser *pars)
-{
-	if ((pars->char_type == REDIR_OUTPUT_CHAR
-			&& look_for_another_redirect(stringa, pars) == REDIR_OUTPUT_CHAR)
-		|| (pars->char_type == REDIR_INPUT_CHAR
-			&& look_for_another_redirect(stringa, pars) == REDIR_INPUT_CHAR))
-		return (SUCCESS);
-	return (ERROR);
-}
-
-int	fn(t_parser *pars, char prev, char next)
-{
-	if (pars->char_type == TILDE_CHAR && (prev == WHITESPACE_CHAR || !prev)
-		&& next == WHITESPACE_CHAR)
-		return (SUCCESS);
-	return (ERROR);
-}
-
 void	general_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
 	char	next;
@@ -184,7 +96,7 @@ void	general_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 			return (slice_token_string_doll_spec_case(stringa, pars));
 		if (pars->count > 0 && stringa[pars->count - 1])
 			prev = get_char_type(stringa, pars, pars->count - 1);
-		if (fn(pars, prev, next) == SUCCESS)
+		if (check_special_case_tilde(pars, prev, next) == SUCCESS)
 			return (slice_single_char_token(stringa, pars, shell));
 		if (pars->count > pars->start && pars->char_type != TILDE_CHAR)
 			slice_token_string(stringa, pars);

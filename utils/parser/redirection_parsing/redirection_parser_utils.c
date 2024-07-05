@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parser_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:14:31 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 11:27:53 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 10:56:14 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ t_token	*split_command_based_on_pipes(t_token **ptr)
 		(*ptr) = (*ptr)->next;
 	return (newlist);
 }
-//provo a plittarti la seguente
 
 static void	redir_all(t_token **redir)
 {

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/04 13:54:15 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:30:41 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ void	read_from_stdin(t_shell *shell, char **envp)
 	char	*input;
 
 	head = NULL;
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, SIG_IGN);
 	shell->env = get_env_info(envp);
 	while (true)
 	{
+		signal(SIGINT, handle_signal);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("(MINISHELL)$ ");
 		if (!input)
 			handle_ctrl_d(shell, input);

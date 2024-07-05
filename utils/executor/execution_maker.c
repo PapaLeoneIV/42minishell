@@ -26,14 +26,15 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		tmp_env = mtx_dup((*env)->env_mtx, mtx_count_rows((*env)->env_mtx));
 		supp = take_path(path, tmp_cmd, cmd, shell);
 		if (supp == NULL)
-			return (multi_freeall(tmp_env, tmp_cmd, shell));
+			return (multi_freeall(tmp_env, tmp_cmd, shell, NULL));
 		clean_all(shell, 1);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
 			shell->status = 126;
-			return (multi_freeall(tmp_env, tmp_cmd, NULL));
+			write_exit("bash :", supp, "permessio denied\n");
+			return (multi_freeall(tmp_env, tmp_cmd, NULL, supp));
 		}
 		free(supp);
 	}
@@ -105,6 +106,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	cat = 0;
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
+	signal(SIGINT, handle_signal_block);
 	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0
 		&& cmd->fd_change >= 0)
 		return (ft_biltin(cmd, env, shell));
