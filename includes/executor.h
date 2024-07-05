@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:53:43 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 15:12:12 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,7 @@ void	write_exit(char *str, char *cmd, char *finish);
 void	close_all_fd(int flag);
 void	write_line(int cat, t_shell *shell);
 int		cat_check(t_command *cmd);
+void	exev_error(t_shell *shell, char *supp);
+void	write_clean(char *cmd, t_shell *shell);
 
 #endif
