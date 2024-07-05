@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 13:52:10 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 15:02:15 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,15 @@ char	*take_path(t_env *path, char **tmp_cmd, t_command *cmd, t_shell *shell)
 	}
 	else
 		return (ft_strdup(cmd->cmd[0]));
+}
+
+void	exev_error(t_shell *shell, char *supp)
+{
+	if (g_status_code == 130)
+		shell->status = 130;
+	else
+	{
+		shell->status = 126;
+		write_exit("bash :", supp, "permession denied\n");
+	}
 }

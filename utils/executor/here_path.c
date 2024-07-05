@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/05 10:03:42 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/05 15:11:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,10 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 		fd = 0;
 	}
 	return (fd);
+}
+
+void	write_clean(char *cmd, t_shell *shell)
+{
+	write_exit("bash: ", cmd, ": No such file or directory\n");
+	clean_all(shell, 1);
 }

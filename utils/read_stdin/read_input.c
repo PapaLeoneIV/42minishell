@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 14:38:45 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/05 15:06:19 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ static int	tokenizer(t_shell *shell, char *input, t_token **head)
 {
 	*head = tokenize_input(input, shell);
 	if (*head == NULL)
+	{
+		if (g_status_code == 130)
+			shell->status = 130;
 		return (ERROR);
+	}
 	return (SUCCESS);
 }
 
@@ -26,6 +30,8 @@ static int	lexer(t_token **head, t_shell *shell)
 	{
 		free_tokens(*head);
 		shell->status = 2;
+		if (g_status_code == 130)
+			shell->status = 130;
 		return (ERROR);
 	}
 	if (parse_redirections(*head, shell) == ERROR)
@@ -68,18 +74,10 @@ void	read_from_stdin(t_shell *shell, char **envp)
 			handle_ctrl_d(shell, input);
 		add_history(input);
 		if (tokenizer(shell, input, &head) == ERROR)
-		{
-			if (g_status_code == 130)
-				shell->status = 130;
 			continue ;
-		}
 		free(input);
 		if (lexer(&head, shell) == ERROR)
-		{
-			if (g_status_code == 130)
-				shell->status = 130;
 			continue ;
-		}
 		free_tokens(head);
 		execute_cmd(shell);
 		close_all_fd(2);
