@@ -32,8 +32,8 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
-			exev_error(shell, supp);
-			return (multi_freeall(tmp_env, tmp_cmd, NULL, supp));
+			exev_error(shell, supp);  
+			return (multi_freeall(tmp_env, tmp_cmd, NULL, supp)); 
 		}
 		free(supp);
 	}
@@ -57,14 +57,15 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 		write_clean(cmd->cmd[0], shell);
 	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || cat <= 1))
+	{
 		make_things(cmd, tmp, shell->env, shell);
+		shell->status = (int [2]){130, 126}[g_status_code == 126];
+	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(cat, shell);
 	else
 		clean_all(shell, 1);
 	close_all_fd(1);
-	if (g_status_code == 130)
-		shell->status = 130;
 	exit(shell->status);
 }
 
