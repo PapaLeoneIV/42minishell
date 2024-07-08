@@ -32,8 +32,8 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 		signal(SIGQUIT, SIG_DFL);
 		if (execve(supp, tmp_cmd, tmp_env) < 0)
 		{
-			exev_error(shell, supp);  
-			return (multi_freeall(tmp_env, tmp_cmd, NULL, supp)); 
+			exev_error(shell, supp);
+			return (multi_freeall(tmp_env, tmp_cmd, NULL, supp));
 		}
 		free(supp);
 	}
