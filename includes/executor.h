@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 15:12:12 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/09 10:29:34 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,6 @@ void	write_line(int cat, t_shell *shell);
 int		cat_check(t_command *cmd);
 void	exev_error(t_shell *shell, char *supp);
 void	write_clean(char *cmd, t_shell *shell);
+void	take_last_pid(t_shell *shell);
 
 #endif

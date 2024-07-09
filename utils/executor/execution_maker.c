@@ -57,14 +57,16 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 		write_clean(cmd->cmd[0], shell);
 	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || cat <= 1))
+	{
 		make_things(cmd, tmp, shell->env, shell);
+		if (g_status_code == 126 || g_status_code == 130)
+			shell->status = (int [2]){130, 126}[g_status_code == 126];
+	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(cat, shell);
 	else
 		clean_all(shell, 1);
 	close_all_fd(1);
-	if (g_status_code == 130)
-		shell->status = 130;
 	exit(shell->status);
 }
 
@@ -116,7 +118,6 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 int	execute_cmd(t_shell *shell)
 {
 	t_command	*cmd;
-	int			status;
 	int			tm_in;
 	int			tm_out;
 
@@ -136,8 +137,6 @@ int	execute_cmd(t_shell *shell)
 			return (tm_close(tm_in, tm_out, 1), ERROR);
 		cmd = cmd->next;
 	}
-	while (waitpid(-1, &status, 0) > 0)
-		if (WIFEXITED(status))
-			shell->status = WEXITSTATUS(status);
+	take_last_pid(shell);
 	return (tm_close(tm_in, tm_out, 1), SUCCESS);
 }
