@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/05 15:11:57 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/09 13:25:28 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 				write_exit("minishell:", "warning: ",
 					"here-document delimited by end-of-file\n");
 			if (ex == -1 || g_status_code == 130)
+			{
 				return (close(fd), -2);
+			}
 		}
 		close(fd);
 		(*redir)->type_of_redirection = LESSER_TOKEN;

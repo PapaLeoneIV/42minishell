@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/09 11:00:00 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/09 13:00:06 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	take_last_pid(t_shell *shell)
 
 	pid = 10;
 	tmp = 0;
+	status = 0;
 	while (pid > 0)
 	{
 		pid = waitpid(-1, &status, 0);
@@ -63,6 +64,13 @@ void	take_last_pid(t_shell *shell)
 		{
 			if (WIFEXITED(status))
 				shell->status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+			{
+				if (g_status_code == 130)
+					shell->status = 130;
+				else
+					shell->status = 131;
+			}
 			tmp = pid;
 		}
 	}

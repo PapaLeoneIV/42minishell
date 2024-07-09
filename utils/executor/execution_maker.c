@@ -105,6 +105,7 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 	cat = 0;
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
+	g_status_code = 0;
 	signal(SIGINT, handle_signal_block);
 	if (cmd->cmd && is_a_biltin(cmd->cmd) && !cmd->next && cmd->cmd_id == 0
 		&& cmd->fd_change >= 0)
@@ -129,7 +130,10 @@ int	execute_cmd(t_shell *shell)
 			return (tm_close(tm_in, tm_out, 0), ERROR);
 	}
 	if (make_redir(shell, cmd) == 2)
-		shell->status = 1;
+	{
+		shell->status = 130;
+		return (tm_close(tm_in, tm_out, 1), ERROR);
+	}
 	while (cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
