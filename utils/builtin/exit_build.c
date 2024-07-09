@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/05 13:03:52 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/09 15:18:17 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static void	handle_exit_wrong_args(t_shell *shell)
 
 int	exit_path(t_command *cmd, t_shell *shell, int flag)
 {
-	int	counter;
-	int	argsc;
+	int			counter;
+	int			argsc;
 
 	argsc = mtx_count_rows(cmd->cmd);
 	counter = 0;

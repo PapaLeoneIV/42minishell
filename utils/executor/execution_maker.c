@@ -65,7 +65,6 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 		write_line(cat, shell);
 	else
 		clean_all(shell, 1);
-	close_all_fd(1);
 	exit(shell->status);
 }
 
@@ -134,12 +133,12 @@ int	execute_cmd(t_shell *shell)
 		shell->status = 130;
 		return (tm_close(tm_in, tm_out, 1), ERROR);
 	}
-	while (cmd)
+	while (cmd && cmd->cmd)
 	{
 		if (execution(cmd, shell->env, shell) == ERROR)
 			return (tm_close(tm_in, tm_out, 1), ERROR);
 		cmd = cmd->next;
+		take_last_pid(shell);
 	}
-	take_last_pid(shell);
 	return (tm_close(tm_in, tm_out, 1), SUCCESS);
 }
