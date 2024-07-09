@@ -59,8 +59,7 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || cat <= 1))
 	{
 		make_things(cmd, tmp, shell->env, shell);
-		if (g_status_code == 126 || g_status_code == 130)
-			shell->status = (int [2]){130, 126}[g_status_code == 126];
+		shell->status = (int [2]){130, 126}[g_status_code == 126];
 	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(cat, shell);
