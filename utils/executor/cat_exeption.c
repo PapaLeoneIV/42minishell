@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/09 10:29:48 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/09 11:00:00 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ int	cat_check(t_command *cmd)
 			tmp = tmp->next;
 		}
 	}
-	return (i);
+	if (tmp && ft_strncmp(tmp->cmd[0], "cat", 4) != 0)
+		return (i);
+	else
+		return (0);
 }
 
 void	take_last_pid(t_shell *shell)

@@ -49,17 +49,17 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	if (cmd->fd_change == 1 || cmd->fd_change == 3)
 		close(cmd->in);
 	if (cmd->fd_change == 2 || cmd->fd_change == 3)
-	{
 		dup2(cmd->out, 1);
+	if (cmd->fd_change == 2 || cmd->fd_change == 3)
 		close(cmd->out);
-	}
 	tmp = find_node(shell->env, "PATH");
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 		write_clean(cmd->cmd[0], shell);
 	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || cat <= 1))
 	{
 		make_things(cmd, tmp, shell->env, shell);
-		shell->status = (int [2]){130, 126}[g_status_code == 126];
+		if (g_status_code == 126 || g_status_code == 130)
+			shell->status = (int [2]){130, 126}[g_status_code == 126];
 	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(cat, shell);
