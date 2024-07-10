@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 10:41:49 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/10 11:20:14 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,25 @@ int	pwd_path(void)
 	return (0);
 }
 
+static void	check_n_flag(char *str, short *n_flag, int *pos)
+{
+	int	i;
+
+	i = 3;
+	while (str[i] != '\0')
+	{
+		if (str[i] != 'n')
+		{
+			*pos = 1;
+			return ;
+		}
+		i++;
+	}
+	*n_flag = false;
+	*pos = 2;
+	return ;
+}
+
 int	echo_path(char **str)
 {
 	int		i;
@@ -33,11 +52,8 @@ int	echo_path(char **str)
 		return (2);
 	if (mtx_count_rows(str) > 1)
 	{
-		if (ft_strncmp(str[1], "-n", 3) == 0)
-		{
-			i++;
-			n_flag = false;
-		}
+		if (ft_strncmp(str[1], "-n", 2) == 0)
+			check_n_flag(str[1], &n_flag, &i);
 		while (str[i])
 		{
 			ft_printf("%s", str[i]);

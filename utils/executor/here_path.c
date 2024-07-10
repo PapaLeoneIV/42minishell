@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/09 13:25:28 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/10 11:53:29 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ void	here_expansion(t_redir **redir, t_shell *shell, char *input, int fd)
 	}
 }
 
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	if (!s1 || !s2)
+		return (1);
+	while (*s1 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)(*s1) - (unsigned char)(*s2));
+}
+
 int	prompt_here(int fd, t_redir **redir, t_shell *shell)
 {
 	char	*input_here;
@@ -43,8 +55,7 @@ int	prompt_here(int fd, t_redir **redir, t_shell *shell)
 		free(input_here);
 		return (-1);
 	}
-	if (ft_strncmp(input_here, (*redir)->filename,
-			ft_strlen((*redir)->filename)) == 0)
+	if (ft_strcmp(input_here, (*redir)->filename) == 0)
 	{
 		free(input_here);
 		return (0);

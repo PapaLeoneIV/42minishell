@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/01 19:11:52 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/10 13:04:09 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	freeall(char **mat)
 	free(mat);
 }
 
-void	tm_close(int tm_in, int tm_out, int flag)
+int	tm_close(int tm_in, int tm_out, int flag)
 {
 	if (flag)
 	{
@@ -76,6 +76,7 @@ void	tm_close(int tm_in, int tm_out, int flag)
 	}
 	close(tm_in);
 	close(tm_out);
+	return (1);
 }
 
 int	set_pip(t_command *cmd, int *pip)
@@ -85,7 +86,9 @@ int	set_pip(t_command *cmd, int *pip)
 			return (perror("ERROR while opening the pipe\n"), ERROR);
 	if (cmd->next)
 	{
+		close(cmd->out);
 		cmd->out = pip[1];
+		close(cmd->next->in);
 		cmd->next->in = pip[0];
 		cmd->next->fd_change++;
 	}

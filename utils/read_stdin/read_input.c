@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/09 12:20:23 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/10 11:55:01 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,6 @@ static int	lexer(t_token **head, t_shell *shell)
 	return (SUCCESS);
 }
 
-void	close_all_fd(int flag)
-{
-	int			i;
-	struct stat	statbuf;
-
-	i = 0;
-	if (flag == 2)
-		i = 3;
-	if (flag)
-	{
-		while (i <= 1026)
-		{
-			if (fstat(i, &statbuf) != -1)
-				close(i);
-			i++;
-		}
-	}
-}
-
 void	read_from_stdin(t_shell *shell, char **envp)
 {
 	t_token	*head;
@@ -80,8 +61,6 @@ void	read_from_stdin(t_shell *shell, char **envp)
 			continue ;
 		free_tokens(head);
 		execute_cmd(shell);
-		close_all_fd(2);
 		clean_all(shell, 0);
 	}
-	close_all_fd(1);
 }

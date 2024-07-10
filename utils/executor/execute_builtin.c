@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/08 19:14:53 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/10 11:58:00 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 	else if (ft_strncmp(tmp[0], "unset", 6) == 0)
 		built_exit_status = unset_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "exit", 5) == 0)
-		built_exit_status = exit_path(cmd, shell, 1);
+		built_exit_status = exit_path(cmd, shell);
 	if (built_exit_status > -1)
 		shell->status = built_exit_status;
 	return (built_exit_status);

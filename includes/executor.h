@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/09 10:29:34 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/10 12:29:37 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,15 @@ int		make_redir(t_shell *shell, t_command *cmd);
 int		heardoc_path(t_redir **redir, t_shell *shell);
 int		set_pip(t_command *cmd, int *pip);
 int		open_redir(t_command *cmd, t_shell *shell);
-int		exit_path(t_command *cmd, t_shell *shell, int flag);
+int		exit_path(t_command *cmd, t_shell *shell);
 int		ft_biltin(t_command *cmd, t_env **lst, t_shell *shell);
 int		is_a_biltin(char **tmp);
 void	freeall(char **mat);
 void	multi_freeall(char **tmp_env, char **tmp_cmd,
 			t_shell *shell, char *str);
 char	*ft_access(char **open_path, char *cmd);
-void	tm_close(int tm_in, int tm_out, int flag);
+int		tm_close(int tm_in, int tm_out, int flag);
 void	write_exit(char *str, char *cmd, char *finish);
-void	close_all_fd(int flag);
 void	write_line(int cat, t_shell *shell);
 int		cat_check(t_command *cmd);
 void	exev_error(t_shell *shell, char *supp);

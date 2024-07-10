@@ -70,8 +70,6 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 
 void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 {
-	if (cmd && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
-		waitpid(-1, NULL, 0);
 	if (cmd->cmd)
 		cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
@@ -85,9 +83,7 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 	else
 	{
 		if (cmd->here)
-		{
 			unlink(cmd->here);
-		}
 		if (cmd->next)
 			close(cmd->pip[1]);
 		if (cmd->in != 0 && cmd->in != -1)
@@ -125,17 +121,17 @@ int	execute_cmd(t_shell *shell)
 	tm_out = dup(1);
 	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 	{
-		if (exit_path(cmd, shell, 1) == 1)
-			return (tm_close(tm_in, tm_out, 0), ERROR);
+		if (tm_close(tm_in, tm_out, 0) && exit_path(cmd, shell) == 1)
+			return (ERROR);
 	}
 	if (make_redir(shell, cmd) == 2)
 	{
 		shell->status = 130;
 		return (tm_close(tm_in, tm_out, 1), ERROR);
 	}
-	while (cmd && cmd->cmd)
+	while (cmd)
 	{
-		if (execution(cmd, shell->env, shell) == ERROR)
+		if (cmd->cmd && execution(cmd, shell->env, shell) == ERROR)
 			return (tm_close(tm_in, tm_out, 1), ERROR);
 		cmd = cmd->next;
 		take_last_pid(shell);
