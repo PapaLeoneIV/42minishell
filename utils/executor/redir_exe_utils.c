@@ -6,18 +6,17 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/09 15:06:02 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 12:02:39 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	list_of_out(t_redir **dir)
+static int	list_of_out(t_redir **dir, t_command *cmd)
 {
 	int	fd;
-	int	redir;
 
-	redir = (*dir)->type_of_redirection;
+	close(cmd->out);
 	while ((*dir) && ((*dir)->type_of_redirection == GREATER_TOKEN
 			|| (*dir)->type_of_redirection == REDIR_OUT_TOKEN))
 	{
@@ -30,17 +29,19 @@ int	list_of_out(t_redir **dir)
 			write(2, " Permission denied\n", 20);
 			return (-1);
 		}
-		if ((*dir)->next && (*dir)->next->type_of_redirection == redir)
+		if ((*dir)->next && ((*dir)->next->type_of_redirection == GREATER_TOKEN
+				|| (*dir)->next->type_of_redirection == REDIR_OUT_TOKEN))
 			close(fd);
 		(*dir) = (*dir)->next;
 	}
 	return (fd);
 }
 
-int	list_of_in(t_redir **dir)
+static int	list_of_in(t_redir **dir, t_command *cmd)
 {
 	int	fd;
 
+	close (cmd->in);
 	while ((*dir) && (*dir)->type_of_redirection == LESSER_TOKEN)
 	{
 		fd = open((*dir)->filename, O_RDONLY, 0777);
@@ -69,9 +70,9 @@ int	open_redir(t_command *cmd, t_shell *shell)
 	{
 		if (tmp->type_of_redirection == GREATER_TOKEN
 			|| tmp->type_of_redirection == REDIR_OUT_TOKEN)
-			cmd->out = list_of_out(&tmp);
+			cmd->out = list_of_out(&tmp, cmd);
 		else if (tmp->type_of_redirection == LESSER_TOKEN)
-			cmd->in = list_of_in(&tmp);
+			cmd->in = list_of_in(&tmp, cmd);
 		else if (tmp->type_of_redirection == HEREDOC_TOKEN)
 		{
 			if (cmd->here)

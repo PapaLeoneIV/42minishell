@@ -83,7 +83,10 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 	else
 	{
 		if (cmd->here)
+		{
+			free(cmd->here);
 			unlink(cmd->here);
+		}
 		if (cmd->next)
 			close(cmd->pip[1]);
 		if (cmd->in != 0 && cmd->in != -1)
@@ -133,8 +136,10 @@ int	execute_cmd(t_shell *shell)
 	{
 		if (cmd->cmd && execution(cmd, shell->env, shell) == ERROR)
 			return (tm_close(tm_in, tm_out, 1), ERROR);
+		if (cmd->here)
+			unlink(cmd->here);
 		cmd = cmd->next;
-		take_last_pid(shell);
 	}
+	take_last_pid(shell);
 	return (tm_close(tm_in, tm_out, 1), SUCCESS);
 }

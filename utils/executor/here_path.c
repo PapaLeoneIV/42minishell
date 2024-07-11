@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/10 11:53:29 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 11:59:03 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 		}
 		close(fd);
 		(*redir)->type_of_redirection = LESSER_TOKEN;
-		fd = 0;
 	}
 	return (fd);
 }

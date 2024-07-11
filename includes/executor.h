@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/10 12:29:37 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 11:10:10 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int		execute_cmd(t_shell *shell);
 int		execution(t_command *cmd, t_env **env, t_shell *shell);
 int		gnl2(char **line);
 int		check_head(char *str);
-int		list_of_out(t_redir **dir);
-int		list_of_in(t_redir **dir);
 int		make_redir(t_shell *shell, t_command *cmd);
 int		heardoc_path(t_redir **redir, t_shell *shell);
 int		set_pip(t_command *cmd, int *pip);
