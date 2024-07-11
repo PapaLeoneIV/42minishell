@@ -83,10 +83,7 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 	else
 	{
 		if (cmd->here)
-		{
-			free(cmd->here);
 			unlink(cmd->here);
-		}
 		if (cmd->next)
 			close(cmd->pip[1]);
 		if (cmd->in != 0 && cmd->in != -1)
@@ -128,10 +125,7 @@ int	execute_cmd(t_shell *shell)
 			return (ERROR);
 	}
 	if (make_redir(shell, cmd) == 2)
-	{
-		shell->status = 130;
 		return (tm_close(tm_in, tm_out, 1), ERROR);
-	}
 	while (cmd)
 	{
 		if (cmd->cmd && execution(cmd, shell->env, shell) == ERROR)

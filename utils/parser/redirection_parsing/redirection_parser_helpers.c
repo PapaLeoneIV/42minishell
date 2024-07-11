@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 22:27:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/10 12:43:37 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 14:20:59 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ t_redir	*new_redir_node(int type, char *value, int flag)
 	t_redir	*redir_node;
 
 	redir_node = ft_calloc(1, sizeof(t_redir));
-	redir_node->filename = ft_strdup(value);
+	if (type != HEREDOC_TOKEN)
+		redir_node->filename = ft_strdup(value);
+	else
+		redir_node->filename = ft_strjoin(value, "_h");
 	redir_node->type_of_redirection = type;
 	if (!flag)
 		redir_node->heredoc_expansion = 0;

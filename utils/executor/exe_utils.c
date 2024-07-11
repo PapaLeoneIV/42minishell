@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/11 11:34:59 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 13:34:25 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	tm_close(int tm_in, int tm_out, int flag)
 int	set_pip(t_command *cmd, int *pip)
 {
 	if ((cmd->cmd_id == 0 && cmd->next != NULL)
-		|| (cmd->cmd_id != 0 && cmd->next != NULL))
+		|| (cmd->cmd_id != 0))
 		if (pipe(pip) < 0)
 			return (perror("ERROR while opening the pipe\n"), ERROR);
 	if (cmd->next)

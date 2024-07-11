@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/11 12:02:39 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 13:53:35 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		red_st = open_redir(tmp, shell);
 		if (red_st == -2)
 		{
+			shell->status = 130;
 			return (2);
 		}
 		set_change(tmp, red_st, (int [2]){tm_ou, tm_i}, shell);
