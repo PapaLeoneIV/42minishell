@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/10 11:58:00 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/11 14:43:43 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*take_path(t_env *path, char **tmp_cmd, t_command *cmd, t_shell *shell)
 		{
 			shell->status = 127;
 			freeall(open_path);
-			perror("ERROR\nunfinded path");
+			write_exit(NULL, tmp_cmd[0], ": command not found\n");
 			return (NULL);
 		}
 		freeall(open_path);
@@ -101,6 +101,6 @@ void	exev_error(t_shell *shell, char *supp)
 	else
 	{
 		shell->status = 126;
-		write_exit("bash :", supp, "permession denied\n");
+		write_exit("mini :", supp, " permession denied\n");
 	}
 }

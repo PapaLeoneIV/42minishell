@@ -130,6 +130,8 @@ int	execute_cmd(t_shell *shell)
 	{
 		if (cmd->cmd && execution(cmd, shell->env, shell) == ERROR)
 			return (tm_close(tm_in, tm_out, 1), ERROR);
+		else
+			close(cmd->pip[1]);
 		if (cmd->here)
 			unlink(cmd->here);
 		cmd = cmd->next;
