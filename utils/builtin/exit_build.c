@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_build.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/10 11:56:40 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/12 08:45:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,9 @@ static int	exit_atoi(char *str)
 
 int	exit_path(t_command *cmd, t_shell *shell)
 {
-	int			counter;
 	int			argsc;
 
 	argsc = mtx_count_rows(cmd->cmd);
-	counter = 0;
 	check_args(cmd);
 	if (argsc == 1)
 		shell->status = 0;

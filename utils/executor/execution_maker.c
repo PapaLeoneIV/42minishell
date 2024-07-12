@@ -40,7 +40,7 @@ void	make_things(t_command *cmd, t_env *path, t_env **env, t_shell *shell)
 	return (clean_all(shell, 1));
 }
 
-void	child_process(t_shell *shell, t_command *cmd, int cat)
+void	child_process(t_shell *shell, t_command *cmd, int n_cat)
 {
 	t_env	*tmp;
 
@@ -55,20 +55,20 @@ void	child_process(t_shell *shell, t_command *cmd, int cat)
 	tmp = find_node(shell->env, "PATH");
 	if (tmp == NULL && access(cmd->cmd[0], F_OK) != 0 && !is_a_biltin(cmd->cmd))
 		write_clean(cmd->cmd[0], shell);
-	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || cat <= 1))
+	else if (cmd->fd_change >= 0 && (cmd->cat == 0 || n_cat < 1))
 	{
 		make_things(cmd, tmp, shell->env, shell);
 		if (g_status_code == 126 || g_status_code == 130)
 			shell->status = (int [2]){130, 126}[g_status_code == 126];
 	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
-		write_line(cat, shell);
+		write_line(n_cat, shell);
 	else
 		clean_all(shell, 1);
 	exit(shell->status);
 }
 
-void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
+void	fork_and_ecseve(t_shell *shell, t_command *cmd, int n_cat)
 {
 	if (cmd->cmd)
 		cmd->fork_id = fork();
@@ -78,7 +78,7 @@ void	fork_and_ecseve(t_shell *shell, t_command *cmd, int cat)
 			close(cmd->pip[0]);
 		if (cmd->prev)
 			close(cmd->pip[1]);
-		child_process(shell, cmd, cat);
+		child_process(shell, cmd, n_cat);
 	}
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/11 14:24:37 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/12 08:52:40 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	prompt_here(int fd, t_redir **redir, t_shell *shell)
 		free(input_here);
 		return (-1);
 	}
-	if (ft_strncmp(input_here, (*redir)->filename,
+	if (ft_strlen(input_here) == ft_strlen((*redir)->filename) - 2 &&
+			ft_strncmp(input_here, (*redir)->filename,
 			ft_strlen((*redir)->filename) - 2) == 0)
 	{
 		free(input_here);
