@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 10:04:32 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:09:45 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:38:40 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	get_char_type_heredoc(char *str, t_parser *pars, int count)
 }
 
 void	general_state_handler_heredoc(char *input,
-	t_parser *pars, t_shell *shell)
+	t_parser *pars)
 {
 	char	next;
 
@@ -48,7 +48,7 @@ void	general_state_handler_heredoc(char *input,
 		if (pars->count > pars->start)
 			slice_token_string(input, pars);
 		if (pars->char_type == WHITESPACE_CHAR)
-			slice_single_char_token(input, pars, shell);
+			slice_single_char_token(input, pars);
 		if (pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR
 			|| pars->char_type == DOLLAR_CHAR)
 			check_and_change_status(&pars->state, pars->char_type, pars);

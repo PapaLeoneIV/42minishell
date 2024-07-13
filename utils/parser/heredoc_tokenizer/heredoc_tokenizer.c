@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:46:48 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/05 10:04:49 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:39:47 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*heredoc_tokenizer(char *input, t_shell *shell)
 	{
 		pars.char_type = get_char_type_heredoc(input, &pars, pars.count);
 		if (pars.state == STATE_GENERAL)
-			general_state_handler_heredoc(input, &pars, shell);
+			general_state_handler_heredoc(input, &pars);
 		else if (pars.state == STATE_DOLLAR && ((pars.char_type != REG_CHAR
 					&& pars.char_type != DIGIT_CHAR)
 				|| (pars.char_type == DIGIT_CHAR && input[pars.count

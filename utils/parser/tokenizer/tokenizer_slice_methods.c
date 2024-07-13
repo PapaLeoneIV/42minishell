@@ -6,13 +6,13 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:12:02 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:37:50 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
-void	slice_single_char_token(char *stringa, t_parser *pars, t_shell *shell)
+void	slice_single_char_token(char *stringa, t_parser *pars/* , t_shell *shell */)
 {
 	pars->token = token_new(NULL);
 	if (pars->char_type == PIPELINE_CHAR)
@@ -31,11 +31,6 @@ void	slice_single_char_token(char *stringa, t_parser *pars, t_shell *shell)
 		pars->info = (t_token_info){WORD_TOKEN, stringa, pars->count,
 			pars->count + 1};
 	set_token_values(pars->token, &pars->info);
-	if (!ft_strncmp(pars->token->value, "~", 1))
-	{
-		free(pars->token->value);
-		pars->token->value = expand_tilde(shell);
-	}
 	token_add_back(&pars->head, pars->token);
 	pars->start = pars->count + 1;
 }
@@ -65,12 +60,6 @@ int	slice_end_token(char *stringa, t_parser *pars, t_shell *shell)
 		return (ERROR);
 	pars->token = token_new(NULL);
 	set_token_values(pars->token, &pars->info);
-	if (pars->token->value && !ft_strncmp(pars->token->value, "~",
-			ft_strlen(pars->token->value)))
-	{
-		free(pars->token->value);
-		pars->token->value = expand_tilde(shell);
-	}
 	if (pars->token->type == WORD_TOKEN && !ft_strncmp(pars->token->value, "",
 			ft_strlen(pars->token->value)))
 		return (free(pars->token->value), free(pars->token), SUCCESS);

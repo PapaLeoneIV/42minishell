@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:28:01 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:38:50 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,8 @@ void	fnfnfn(t_parser *pars, t_shell *shell, int type, char *stringa)
 
 void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
-	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR
+	if (pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
 			&& stringa[pars->count - 1] == '$')
-		|| (pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
-			&& stringa[pars->count - 1] == '$'))
 	{
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,
@@ -81,7 +79,7 @@ void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 	pars->state = STATE_GENERAL;
 }
 
-void	general_state_handler(char *stringa, t_parser *pars, t_shell *shell)
+void	general_state_handler(char *stringa, t_parser *pars)
 {
 	char	next;
 	char	prev;
@@ -97,13 +95,13 @@ void	general_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 		if (pars->count > 0 && stringa[pars->count - 1])
 			prev = get_char_type(stringa, pars, pars->count - 1);
 		if (check_special_case_tilde(pars, prev, next) == SUCCESS)
-			return (slice_single_char_token(stringa, pars, shell));
+			return (slice_single_char_token(stringa, pars));
 		if (pars->count > pars->start && pars->char_type != TILDE_CHAR)
 			slice_token_string(stringa, pars);
 		if (check_redir_tokens(stringa, pars) == SUCCESS)
 			return (slice_redirect_token(stringa, pars));
 		if (check_single_tokens(pars) == SUCCESS)
-			slice_single_char_token(stringa, pars, shell);
+			slice_single_char_token(stringa, pars);
 		if (pars->char_type == SQUOTES_CHAR || pars->char_type == DQUOTES_CHAR
 			|| pars->char_type == DOLLAR_CHAR)
 			check_and_change_status(&pars->state, pars->char_type, pars);

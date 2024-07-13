@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:46:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:32:22 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:41:24 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,21 +153,18 @@ int			valid_regchar_heredoc(char *str, t_parser *pars);
 int			get_char_type(char *str, t_parser *pars, int count);
 
 /*TOKENIZER HELPERS(SLICE METHODS)*/
-void		slice_single_char_token(char *stringa, t_parser *pars,
-				t_shell *shell);
+void		slice_single_char_token(char *stringa, t_parser *pars);
 void		slice_redirect_token(char *stringa, t_parser *pars);
 void		slice_token_string(char *stringa, t_parser *pars);
 int			slice_end_token(char *stringa, t_parser *pars, t_shell *shell);
 void		slice_token_string_doll_spec_case(char *stringa, t_parser *pars);
 
 /*TOKENIZER SLICE METHODS(HELPERS)*/
-char		*expand_tilde(t_shell *shell);
 int			set_token_info(t_token_info *info, t_parser *pars, char *stringa);
 void		add_helper(t_parser *pars, t_shell *shell);
 
 /*TOKENIZER HELPERS(STATE HANDLERS)*/
-void		general_state_handler(char *stringa, t_parser *pars,
-				t_shell *shell);
+void		general_state_handler(char *stringa, t_parser *pars);
 void		dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell);
 void		quoted_state_handler(char *stringa, t_parser *pars);
 void		check_and_change_status(int *state, int c, t_parser *pars);
@@ -185,8 +182,7 @@ t_token		*get_last_token(t_token *ptr);
 int			valid_regchar_quoted(char c);
 int			get_char_type_quoted(char c);
 t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell);
-void		general_state_handler_quoted(char *stringa, t_parser *pars,
-				t_shell *shell);
+void		general_state_handler_quoted(char *stringa, t_parser *pars);
 void		dollar_state_handler_quoted(char *stringa, t_parser *pars,
 				t_shell *shell);
 

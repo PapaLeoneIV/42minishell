@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:59:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/05 10:17:12 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:39:39 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
 	{
 		parser->char_type = get_char_type_quoted(node->value[parser->count]);
 		if (parser->state == STATE_GENERAL)
-			general_state_handler_quoted(node->value, parser, shell);
+			general_state_handler_quoted(node->value, parser);
 		else if (parser->state == STATE_DOLLAR
 			&& ((parser->char_type != REG_CHAR
 					&& parser->char_type != DIGIT_CHAR)
@@ -41,8 +41,7 @@ t_parser	*tokenize_quoted_values(t_token *node, t_shell *shell)
 	return (parser);
 }
 
-void	general_state_handler_quoted(char *stringa, t_parser *pars,
-		t_shell *shell)
+void	general_state_handler_quoted(char *stringa, t_parser *pars)
 {
 	char	next;
 
@@ -59,7 +58,7 @@ void	general_state_handler_quoted(char *stringa, t_parser *pars,
 		if (pars->count > pars->start)
 			slice_token_string(stringa, pars);
 		if (pars->char_type == WHITESPACE_CHAR)
-			slice_single_char_token(stringa, pars, shell);
+			slice_single_char_token(stringa, pars);
 		if (pars->char_type == DOLLAR_CHAR)
 			check_and_change_status(&pars->state, pars->char_type, pars);
 	}
@@ -70,18 +69,11 @@ void	dollar_state_handler_quoted_if_clause(char *stringa,
 {
 	char	*status;
 
-	if ((pars->count > pars->start && pars->char_type == DIGIT_CHAR
-			&& stringa[pars->count - 1] == '$')
-		|| (pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
+	if ((pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
 			&& stringa[pars->count - 1] == '$'))
 	{
 		set_values(stringa, pars, DOLLAR_TOKEN);
-		if (strcmp(pars->token->value, "$0") == 0)
-		{
-			free(pars->token->value);
-			pars->token->value = ft_strdup("minishell");
-		}
-		else if (strcmp(pars->token->value, "$?") == 0)
+		if (strcmp(pars->token->value, "$?") == 0)
 		{
 			status = ft_itoa(shell->status);
 			free(pars->token->value);

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/13 09:37:58 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 09:43:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**mtx_dup(char **mtx, int len);
 char	*heredoc_tokenizer(char *input, t_shell *shell);
 int		get_char_type_heredoc(char *str, t_parser *pars, int count);
 void	general_state_handler_heredoc(char *input,
-			t_parser *pars, t_shell *shell);
+			t_parser *pars);
 int		set_token_info_here(t_token_info *info, t_parser *pars, char *stringa);
 char	*join_token_values(t_token *list);
 int		slice_end_token_heredoc(char *stringa,

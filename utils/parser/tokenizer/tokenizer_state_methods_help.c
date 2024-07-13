@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 10:22:32 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:30:29 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 09:51:42 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,8 @@ void	handle_special_case(t_parser *pars, t_shell *shell)
 {
 	char	*status;
 
-	if (strcmp(pars->token->value, "$0") == 0)
-	{
-		free(pars->token->value);
-		pars->token->value = ft_strdup("minishell");
-	}
-	else if (strcmp(pars->token->value, "$?") == 0)
+
+	if (strcmp(pars->token->value, "$?") == 0)
 	{
 		status = ft_itoa(shell->status);
 		free(pars->token->value);
