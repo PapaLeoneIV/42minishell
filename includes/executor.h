@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/13 12:09:04 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 13:10:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		cat_check(t_command *cmd);
 void	exev_error(t_shell *shell, char *supp);
 void	write_clean(char *cmd, t_shell *shell);
 int		take_last_pid(t_shell *shell);
-int		error_fd_managemnt(t_command *cmd, t_shell *shell, t_redir *tmp);
+int		error_fd_managemnt(t_command *cmd, t_shell *shell, t_redir *tmp, int flag);
 void	ft_unlink(t_command *cmd);
 
 #endif
