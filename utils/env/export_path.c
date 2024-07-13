@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 09:24:47 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 09:48:18 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static char	*plus_remove(char *str)
 	final = ft_strjoin(head, body);
 	free(head);
 	free(body);
-	free(str);
 	return (final);
 }
 
@@ -76,12 +75,11 @@ static void	plus_n_equal(t_env **lst, char *str)
 	sup = ft_substr(str, 0, ft_strchri(str, '+'));
 	tmp = find_node(lst, sup);
 	free(sup);
-	write(1, "qui\n", 4);
 	if (!tmp)
 	{
-		str = plus_remove(str);
-		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
-		return ;
+		sup = plus_remove(str);
+		add_node_to_env_struct(lst, lst_new_env(sup, (*lst)->env_mtx));
+		return (free(sup));
 	}
 	else
 	{

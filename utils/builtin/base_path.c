@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 09:08:17 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 09:54:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	check_n_flag(char *str, short *n_flag, int *pos)
 {
 	int	i;
 
-	i = 3;
+	i = 1;
 	while (str[i] != '\0')
 	{
 		if (str[i] != 'n')
@@ -52,7 +52,7 @@ int	echo_path(char **str)
 		return (2);
 	if (mtx_count_rows(str) > 1)
 	{
-		if (ft_strncmp(str[1], "-n", 2) == 0 && ft_strlen(str[1]) > 2)
+		if (ft_strncmp(str[1], "-n", 2) == 0)
 			check_n_flag(str[1], &n_flag, &i);
 		while (str[i])
 		{
