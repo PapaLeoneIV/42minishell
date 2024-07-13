@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:42:51 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/02 11:59:29 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 22:02:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		pwd_path(void);
 char	*trimming(char *big, char *removed);
 int		echo_path(char **str);
 t_env	**get_env_info(char *en[]);
-int		env_path(t_env	**env);
+int		env_path(t_env	**env, t_command *cmd);
 int		export_path(t_env **lst, char **mtx);
 t_env	*lst_new_env(char *str, char **en);
 t_env	*find_node(t_env **lst, char *str);

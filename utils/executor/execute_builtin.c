@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/11 14:43:43 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 22:01:09 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_biltin(t_command *cmd, t_env **lst, t_shell *shell)
 	else if (ft_strncmp(tmp[0], "echo", 5) == 0)
 		built_exit_status = echo_path(tmp);
 	else if (ft_strncmp(tmp[0], "env", 4) == 0)
-		built_exit_status = env_path(lst);
+		built_exit_status = env_path(lst, cmd);
 	else if (ft_strncmp(tmp[0], "export", 7) == 0)
 		built_exit_status = export_path(lst, tmp);
 	else if (ft_strncmp(tmp[0], "unset", 6) == 0)
