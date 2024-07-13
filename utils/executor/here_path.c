@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 12:09:28 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 13:11:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,22 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 	return (fd);
 }
 
-int	error_fd_managemnt(t_command *cmd, t_shell *shell, t_redir *tmp)
+int	error_fd_managemnt(t_command *cmd, t_shell *shell, t_redir *tmp, int flag)
 {
-	if (cmd->out == -1 || cmd->in == -1 )
+	if (cmd->out == -1 || cmd->in == -1)
 	{
-		if (tmp->next)
+		if (tmp && tmp->next)
 			open_redir(cmd, shell, &tmp->next, ERROR);
-		write_exit(tmp->filename, " : No such file or directory\n", NULL);
+		if (g_status_code != 130 && flag)
+			write_exit(tmp->filename, " : No such file or directory\n", NULL);
+		else
+			return (-2);
 		return (ERROR);
 	}
 	else if (cmd->in == -2)
+	{
+		cmd->in = -1;
 		return (-2);
+	}
 	return (SUCCESS);
 }

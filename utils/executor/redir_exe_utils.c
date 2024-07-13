@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 12:08:03 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 13:12:12 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	open_redir(t_command *cmd, t_shell *shell, t_redir **redir, int flag)
 		else if (!flag)
 			tmp = tmp->next;
 		if (cmd->out == -1 || cmd->in == -1 || cmd->in == -2)
-			return (error_fd_managemnt(cmd, shell, tmp));
+			return (error_fd_managemnt(cmd, shell, tmp, flag));
 	}
 	return (1);
 }
