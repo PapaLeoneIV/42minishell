@@ -6,18 +6,11 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 10:10:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/05 10:14:21 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/13 10:41:21 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-char	*expand_tilde(t_shell *shell)
-{
-	while (ft_strncmp(shell->env[0]->head, "HOME", 4))
-		shell->env[0] = shell->env[0]->next;
-	return (ft_strdup(shell->env[0]->body));
-}
 
 void	add_helper(t_parser *pars, t_shell *shell)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:36:02 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/02 11:52:07 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 10:40:04 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	create_token_list(char *str, t_shell *shell, t_parser *pars)
 	{
 		pars->char_type = get_char_type(str, pars, pars->count);
 		if (pars->state == STATE_GENERAL)
-			general_state_handler(str, pars, shell);
+			general_state_handler(str, pars);
 		else if ((pars->state == STATE_SQUOTE
 				&& pars->char_type == SQUOTES_CHAR)
 			|| (pars->state == STATE_DQUOTE
