@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/13 09:43:53 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 12:09:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_token_info	t_token_info;
 typedef struct s_token		t_token;
 
 char	**mtx_dup(char **mtx, int len);
+int		open_redir(t_command *cmd, t_shell *shell, t_redir **redir, int flag);
 char	*heredoc_tokenizer(char *input, t_shell *shell);
 int		get_char_type_heredoc(char *str, t_parser *pars, int count);
 void	general_state_handler_heredoc(char *input,
@@ -39,7 +40,6 @@ int		check_head(char *str);
 int		make_redir(t_shell *shell, t_command *cmd);
 int		heardoc_path(t_redir **redir, t_shell *shell);
 int		set_pip(t_command *cmd, int *pip);
-int		open_redir(t_command *cmd, t_shell *shell);
 int		exit_path(t_command *cmd, t_shell *shell);
 int		ft_biltin(t_command *cmd, t_env **lst, t_shell *shell);
 int		is_a_biltin(char **tmp);
@@ -54,6 +54,7 @@ int		cat_check(t_command *cmd);
 void	exev_error(t_shell *shell, char *supp);
 void	write_clean(char *cmd, t_shell *shell);
 int		take_last_pid(t_shell *shell);
+int		error_fd_managemnt(t_command *cmd, t_shell *shell, t_redir *tmp);
 void	ft_unlink(t_command *cmd);
 
 #endif

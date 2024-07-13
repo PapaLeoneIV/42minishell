@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:12:07 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/10 11:55:01 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 11:00:44 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	read_from_stdin(t_shell *shell, char **envp)
 		if (lexer(&head, shell) == ERROR)
 			continue ;
 		free_tokens(head);
+		g_status_code = 0;
 		execute_cmd(shell);
 		clean_all(shell, 0);
 	}

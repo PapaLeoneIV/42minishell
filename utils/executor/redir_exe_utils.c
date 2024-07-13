@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/11 15:05:43 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 12:08:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,6 @@ static int	list_of_in(t_redir **dir, t_command *cmd)
 		fd = open((*dir)->filename, O_RDONLY, 0777);
 		if (fd < 0)
 		{
-			write(2, (*dir)->filename, ft_strlen((*dir)->filename));
-			write(2, " : No such file or directory\n", 30);
-			(*dir) = (*dir)->next;
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == LESSER_TOKEN)
@@ -58,19 +55,19 @@ static int	list_of_in(t_redir **dir, t_command *cmd)
 	return (fd);
 }
 
-int	open_redir(t_command *cmd, t_shell *shell)
+int	open_redir(t_command *cmd, t_shell *shell, t_redir **redir, int flag)
 {
 	t_redir	*tmp;
 
 	if (!cmd->redirection_info)
 		return (1);
-	tmp = (*cmd->redirection_info);
+	tmp = (*redir);
 	while (tmp)
 	{
-		if (tmp->type_of_redirection == GREATER_TOKEN
-			|| tmp->type_of_redirection == REDIR_OUT_TOKEN)
+		if ((tmp->type_of_redirection == GREATER_TOKEN
+			|| tmp->type_of_redirection == REDIR_OUT_TOKEN) && flag)
 			cmd->out = list_of_out(&tmp);
-		else if (tmp->type_of_redirection == LESSER_TOKEN)
+		else if (tmp->type_of_redirection == LESSER_TOKEN && flag)
 			cmd->in = list_of_in(&tmp, cmd);
 		else if (tmp->type_of_redirection == HEREDOC_TOKEN)
 		{
@@ -79,10 +76,10 @@ int	open_redir(t_command *cmd, t_shell *shell)
 			cmd->here = tmp->filename;
 			cmd->in = heardoc_path(&tmp, shell);
 		}
-		if (cmd->out == -1 || cmd->in == -1)
-			return (ERROR);
-		else if (cmd->in == -2)
-			return (-2);
+		else if (!flag)
+			tmp = tmp->next;
+		if (cmd->out == -1 || cmd->in == -1 || cmd->in == -2)
+			return (error_fd_managemnt(cmd, shell, tmp));
 	}
 	return (1);
 }
@@ -121,7 +118,7 @@ int	make_redir(t_shell *shell, t_command *cmd)
 		tm_ou = tmp->out;
 		if (set_pip(tmp, tmp->pip) == ERROR)
 			return (ERROR);
-		red_st = open_redir(tmp, shell);
+		red_st = open_redir(tmp, shell, tmp->redirection_info, SUCCESS);
 		if (red_st == -2)
 		{
 			shell->status = 130;

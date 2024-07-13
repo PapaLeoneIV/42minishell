@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/12 08:52:40 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 12:09:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 					"here-document delimited by end-of-file\n");
 			if (ex == -1 || g_status_code == 130)
 			{
+				unlink((*redir)->filename);
 				return (close(fd), -2);
 			}
 		}
@@ -94,8 +95,16 @@ int	heardoc_path(t_redir **redir, t_shell *shell)
 	return (fd);
 }
 
-void	write_clean(char *cmd, t_shell *shell)
+int	error_fd_managemnt(t_command *cmd, t_shell *shell, t_redir *tmp)
 {
-	write_exit("bash: ", cmd, ": No such file or directory\n");
-	clean_all(shell, 1);
+	if (cmd->out == -1 || cmd->in == -1 )
+	{
+		if (tmp->next)
+			open_redir(cmd, shell, &tmp->next, ERROR);
+		write_exit(tmp->filename, " : No such file or directory\n", NULL);
+		return (ERROR);
+	}
+	else if (cmd->in == -2)
+		return (-2);
+	return (SUCCESS);
 }

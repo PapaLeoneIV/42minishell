@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/13 09:39:05 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/13 09:58:43 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,10 @@ int	take_last_pid(t_shell *shell)
 		}
 	}
 	return (1);
+}
+
+void	write_clean(char *cmd, t_shell *shell)
+{
+	write_exit("bash: ", cmd, ": No such file or directory\n");
+	clean_all(shell, 1);
 }
