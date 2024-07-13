@@ -136,6 +136,5 @@ int	execute_cmd(t_shell *shell)
 			unlink(cmd->here);
 		cmd = cmd->next;
 	}
-	take_last_pid(shell);
-	return (tm_close(tm_in, tm_out, 1), SUCCESS);
+	return (take_last_pid(shell), tm_close(tm_in, tm_out, 1), SUCCESS);
 }

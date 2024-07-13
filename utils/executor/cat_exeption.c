@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cat_exeption.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/11 13:54:12 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 09:39:05 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	cat_check(t_command *cmd)
 		return (0);
 }
 
-void	take_last_pid(t_shell *shell)
+int	take_last_pid(t_shell *shell)
 {
 	int	pid;
 	int	tmp;
@@ -74,4 +74,5 @@ void	take_last_pid(t_shell *shell)
 			tmp = pid;
 		}
 	}
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/08 19:05:46 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/13 09:24:47 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,21 @@ static void	normal_equal(t_env **lst, char *str)
 	free(sup);
 }
 
+static char	*plus_remove(char *str)
+{
+	char	*head;
+	char	*body;
+	char	*final;
+
+	head = ft_substr(str, 0, ft_strchri(str, '+'));
+	body = ft_substr(str, ft_strchri(str, '+') + 1, ft_strlen(str));
+	final = ft_strjoin(head, body);
+	free(head);
+	free(body);
+	free(str);
+	return (final);
+}
+
 static void	plus_n_equal(t_env **lst, char *str)
 {
 	t_env	*tmp;
@@ -61,8 +76,13 @@ static void	plus_n_equal(t_env **lst, char *str)
 	sup = ft_substr(str, 0, ft_strchri(str, '+'));
 	tmp = find_node(lst, sup);
 	free(sup);
+	write(1, "qui\n", 4);
 	if (!tmp)
+	{
+		str = plus_remove(str);
 		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
+		return ;
+	}
 	else
 	{
 		body = ft_substr(str, ft_strchri(str, '=') + 1, ft_strlen(str));
