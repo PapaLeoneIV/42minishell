@@ -87,7 +87,8 @@ int	slice_end_token_heredoc(char *stringa,
 			token_add_back(&pars->head, pars->token);
 		else
 		{
-			free(pars->token->value);
+			if (pars->token)
+				free(pars->token->value);
 			free(pars->token);
 		}
 	}

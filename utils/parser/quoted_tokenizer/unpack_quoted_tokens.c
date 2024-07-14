@@ -17,7 +17,8 @@ static void	null_token(t_token *ptr, t_token **head, t_token *tmp)
 	if (!ptr->prev)
 	{
 		(*head) = ptr->next;
-		ptr->next->prev = NULL;
+		if (ptr->next)
+			ptr->next->prev = NULL;
 	}
 	else
 	{

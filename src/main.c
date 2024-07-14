@@ -23,7 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc != 1)
 	{
-		write(2, "You need to run the program as : ./minishell\n", 47);
+		write(2, "You need to run the program as : ./minishell\n", 46);
 		exit(EXIT_SUCCESS);
 	}
 	read_from_stdin(&shell, envp);
