@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 13:12:12 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/15 17:53:13 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	open_redir(t_command *cmd, t_shell *shell, t_redir **redir, int flag)
 	while (tmp)
 	{
 		if ((tmp->type_of_redirection == GREATER_TOKEN
-			|| tmp->type_of_redirection == REDIR_OUT_TOKEN) && flag)
+				|| tmp->type_of_redirection == REDIR_OUT_TOKEN) && flag)
 			cmd->out = list_of_out(&tmp);
 		else if (tmp->type_of_redirection == LESSER_TOKEN && flag)
 			cmd->in = list_of_in(&tmp, cmd);

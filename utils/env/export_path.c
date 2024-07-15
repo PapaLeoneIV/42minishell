@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:00:32 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 09:48:18 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/15 18:55:28 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	normal_equal(t_env **lst, char *str)
 	tmp = find_node(lst, sup);
 	if (!tmp)
 		add_node_to_env_struct(lst, lst_new_env(str, (*lst)->env_mtx));
-	else
+	else if (ft_strchri(str, '=') > 0)
 	{
 		free(tmp->body);
 		tmp->body = ft_substr(str, ft_strchri(str, '=') + 1, ft_strlen(str));

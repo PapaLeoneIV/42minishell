@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cat_exeption.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/13 09:58:43 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/15 19:05:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,19 @@ void	write_line(int cat, t_shell *shell)
 {
 	char	*line;
 
+	signal(SIGINT, handle_signal_cat);
+	signal(SIGQUIT, SIG_DFL);
 	while (cat > 0)
 	{
 		gnl2(&line);
+		if (*line == 0)
+		{
+			free(line);
+			break ;
+		}
 		free(line);
+		if (g_status_code == 130)
+			break ;
 		cat--;
 	}
 	clean_all(shell, 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:41:05 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/13 12:48:21 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/15 18:39:08 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ void	handle_signal(int signum)
 		ioctl(0, TIOCSTI, "\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
+	}
+}
+
+void	handle_signal_cat(int signum)
+{
+	if (signum == SIGINT)
+	{
+		g_status_code = 130;
+		ioctl(0, TIOCSTI, "\n");
 	}
 }
 
