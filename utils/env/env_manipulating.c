@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manipulating.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 13:41:52 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/16 09:52:25 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_env	*find_node(t_env **lst, char *str)
 	tmp = (*lst);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->head, str, ft_strlen(str)) == 0)
+		if (ft_strlen(tmp->head) == ft_strlen(str)
+			&& ft_strncmp(tmp->head, str, ft_strlen(tmp->head)) == 0)
 			return (tmp);
 		tmp = tmp->next;
 	}
