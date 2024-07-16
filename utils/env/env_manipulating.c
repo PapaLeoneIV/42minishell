@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 12:12:07 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/16 09:52:25 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/16 12:15:03 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_head(char *str)
 		write_exit("bash: export: `", str, ": No such file or directory\n");
 		return (0);
 	}
-	if (ft_isdigit(str[0]))
+	if (!ft_isalpha(str[0]) && str[0] != '_')
 	{
 		write_exit("bash: export: `", str, ": No such file or directory\n");
 		return (0);

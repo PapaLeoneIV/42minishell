@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_state_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:32:43 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/13 10:38:50 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/16 12:31:42 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	fnfnfn(t_parser *pars, t_shell *shell, int type, char *stringa)
 void	dollar_state_handler(char *stringa, t_parser *pars, t_shell *shell)
 {
 	if (pars->count > pars->start && pars->char_type == QUESTION_MARK_CHAR
-			&& stringa[pars->count - 1] == '$')
+		&& stringa[pars->count - 1] == '$')
 	{
 		pars->token = token_new(NULL);
 		pars->info = (t_token_info){DOLLAR_TOKEN, stringa, pars->start,

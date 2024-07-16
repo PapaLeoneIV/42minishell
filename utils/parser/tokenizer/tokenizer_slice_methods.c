@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_slice_methods.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 19:15:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/13 10:37:50 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/16 12:31:26 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 
-void	slice_single_char_token(char *stringa, t_parser *pars/* , t_shell *shell */)
+void	slice_single_char_token(char *stringa, t_parser *pars)
 {
 	pars->token = token_new(NULL);
 	if (pars->char_type == PIPELINE_CHAR)

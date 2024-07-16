@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_helpers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 14:50:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/14 10:17:48 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/16 12:31:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	expand_env_var(t_token **token, char **token_value, t_shell *shell)
 	ptr = shell->env[0];
 	while (ptr)
 	{
-		if (!strncmp(ptr->head, (*token_value + 1), ft_strlen(*token_value + 1) + 1))
+		if (!strncmp(ptr->head, (*token_value + 1),
+				ft_strlen(*token_value + 1) + 1))
 		{
 			tmp = *token_value;
 			*token_value = ft_strdup(ptr->body);
