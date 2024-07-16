@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 19:07:02 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/04 13:40:30 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/16 13:35:08 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	cd_excanger(char *new, char *path, t_env **env)
 {
 	t_env	*tmp;
+	t_env	*tmp_env;
 	char	*sup;
 	char	*sup_2;
 
@@ -24,8 +25,10 @@ static void	cd_excanger(char *new, char *path, t_env **env)
 		sup = ft_strjoin(path, "=");
 		sup_2 = ft_strjoin(sup, new);
 		free(sup);
-		add_node_to_env_struct(env, lst_new_env(sup_2, tmp->env_mtx));
+		tmp_env = lst_new_env(sup_2, (*env)->env_mtx);
+		add_node_to_env_struct(env, tmp_env);
 		free(sup_2);
+		free(new);
 		return ;
 	}
 	free(tmp->body);
