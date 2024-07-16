@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/15 19:05:57 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/16 11:37:51 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	cat_check(t_command *cmd)
 	i = 0;
 	if (tmp->cmd_id == 0 && ft_strncmp(tmp->cmd[0], "cat", 4) == 0)
 	{
-		while (tmp && ft_strncmp(tmp->cmd[0], "cat", 4) == 0
+		while (tmp && tmp->cmd
+			&& ft_strncmp(tmp->cmd[0], "cat", 4) == 0
 			&& !cmd->cmd[1] && !cmd->redirection_info)
 		{
 			tmp->cat = 1;
@@ -51,7 +52,7 @@ int	cat_check(t_command *cmd)
 			tmp = tmp->next;
 		}
 	}
-	if (tmp && ft_strncmp(tmp->cmd[0], "cat", 4) != 0)
+	if (tmp)
 		return (i);
 	else
 		return (0);
