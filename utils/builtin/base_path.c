@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:21:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/13 22:01:43 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/16 14:37:00 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,44 +22,50 @@ int	pwd_path(void)
 	return (0);
 }
 
-static void	check_n_flag(char *str, short *n_flag, int *pos)
+static int	check_n_flag(char *str, short *n_flag, int *pos, int stop)
 {
-	int	i;
+	int			i;
 
 	i = 1;
-	while (str[i] != '\0')
+	if (ft_strncmp(str, "-n", 2) == 0 && !stop)
 	{
-		if (str[i] != 'n')
+		while (str[i] != '\0')
 		{
-			*pos = 1;
-			return ;
+			if (str[i] != 'n')
+			{
+				return (1);
+			}
+			i++;
 		}
-		i++;
+		*n_flag = false;
+		*pos += 1;
+		return (0);
 	}
-	*n_flag = false;
-	*pos = 2;
-	return ;
+	return (1);
 }
 
 int	echo_path(char **str)
 {
 	int		i;
 	short	n_flag;
+	int		stop;
 
 	i = 1;
+	stop = 0;
 	n_flag = true;
 	if (!str)
 		return (2);
 	if (mtx_count_rows(str) > 1)
 	{
-		if (ft_strncmp(str[1], "-n", 2) == 0)
-			check_n_flag(str[1], &n_flag, &i);
-		while (str[i])
+		while (str[i] != NULL)
 		{
-			ft_printf("%s", str[i]);
-			if (str[i + 1])
-				ft_printf(" ");
-			i++;
+			if (check_n_flag(str[i], &n_flag, &i, stop) == 1 && ++stop)
+			{
+				ft_printf("%s", str[i]);
+				if (str[i + 1])
+					ft_printf(" ");
+				i++;
+			}
 		}
 	}
 	if (n_flag)

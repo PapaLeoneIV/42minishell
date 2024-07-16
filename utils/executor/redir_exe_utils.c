@@ -6,16 +6,17 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/16 12:30:48 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/16 15:17:21 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	list_of_out(t_redir **dir)
+static int	list_of_out(t_redir **dir, t_command *cmd)
 {
 	int	fd;
 
+	close(cmd->out);
 	while ((*dir) && ((*dir)->type_of_redirection == GREATER_TOKEN
 			|| (*dir)->type_of_redirection == REDIR_OUT_TOKEN))
 	{
@@ -66,7 +67,7 @@ int	open_redir(t_command *cmd, t_shell *shell, t_redir **redir, int flag)
 	{
 		if ((tmp->type_of_redirection == GREATER_TOKEN
 				|| tmp->type_of_redirection == REDIR_OUT_TOKEN) && flag)
-			cmd->out = list_of_out(&tmp);
+			cmd->out = list_of_out(&tmp, cmd);
 		else if (tmp->type_of_redirection == LESSER_TOKEN && flag)
 			cmd->in = list_of_in(&tmp, cmd);
 		else if (tmp->type_of_redirection == HEREDOC_TOKEN)

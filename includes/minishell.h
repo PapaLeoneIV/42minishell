@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:05:00 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/09 15:15:26 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/16 15:10:13 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_env
 typedef struct s_shell
 {
 	char		*line;
-	int			shell_pip[2];
+	int			s_pip[2];
 	t_command	**cmd_info;
 	t_env		**env;
 	int			status;

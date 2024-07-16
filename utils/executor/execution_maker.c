@@ -60,6 +60,7 @@ void	child_process(t_shell *shell, t_command *cmd, int n_cat)
 		make_things(cmd, tmp, shell->env, shell);
 		if (g_status_code == 126 || g_status_code == 130)
 			shell->status = (int [2]){130, 126}[g_status_code == 126];
+		tm_close(shell->s_pip[0], shell->s_pip[1], 0);
 	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(n_cat, shell);
@@ -113,28 +114,27 @@ int	execution(t_command *cmd, t_env **env, t_shell *shell)
 int	execute_cmd(t_shell *shell)
 {
 	t_command	*cmd;
-	int			tm_in;
-	int			tm_out;
 
 	cmd = (*shell->cmd_info);
-	tm_in = dup(0);
-	tm_out = dup(1);
+	shell->s_pip[0] = dup(0);
+	shell->s_pip[1] = dup(1);
 	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 	{
-		if (tm_close(tm_in, tm_out, 0) && exit_path(cmd, shell) == 1)
+		if (tm_close(shell->s_pip[0], shell->s_pip[1], 0) && exit_path(cmd, shell) == 1)
 			return (ERROR);
 	}
 	if (make_redir(shell, cmd) == 2)
-		return (tm_close(tm_in, tm_out, 1), ERROR);
+		return (tm_close(shell->s_pip[0], shell->s_pip[1], 1), ERROR);
 	while (cmd)
 	{
 		if (cmd->cmd && execution(cmd, shell->env, shell) == ERROR)
-			return (tm_close(tm_in, tm_out, 1), ERROR);
+			return (tm_close(shell->s_pip[0], shell->s_pip[1], 1), ERROR);
 		else
 			close(cmd->pip[1]);
 		if (cmd->here)
 			unlink(cmd->here);
 		cmd = cmd->next;
 	}
-	return (take_last_pid(shell), tm_close(tm_in, tm_out, 1), SUCCESS);
+	return (take_last_pid(shell), tm_close(shell->s_pip[0],
+		shell->s_pip[1], 1), SUCCESS);
 }

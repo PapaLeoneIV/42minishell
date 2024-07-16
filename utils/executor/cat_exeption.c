@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/16 11:37:51 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/16 13:54:32 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ int	take_last_pid(t_shell *shell)
 				if (g_status_code == 130)
 					shell->status = 130;
 				else
+				{
 					shell->status = 131;
+					write(1, "(Quit)Core Dumped\n", 19);
+				}
 			}
 			tmp = pid;
 		}

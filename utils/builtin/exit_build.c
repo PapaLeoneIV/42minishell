@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_build.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 11:25:20 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/12 08:45:20 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/16 14:41:57 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,6 @@ static void	check_args(t_command *cmd)
 {
 	if (cmd && !cmd->prev && !cmd->next)
 		write(1, "exit\n", 5);
-}
-
-static void	exit_num_error(t_command *cmd, t_shell *shell)
-{
-	shell->status = 2;
-	write_exit("bash: exit: ", cmd->cmd[1], " :numeric argument required\n");
-	clean_all(shell, 1);
-	exit(shell->status);
-}
-
-static void	handle_exit_wrong_args(t_shell *shell)
-{
-	write(2, "bash: exit: too many arguments\n", 32);
-	shell->status = 1;
 }
 
 static int	exit_atoi(char *str)
@@ -60,6 +46,22 @@ static int	exit_atoi(char *str)
 	return (SUCCESS);
 }
 
+static void	exit_num_error(t_command *cmd, t_shell *shell)
+{
+	shell->status = 2;
+	write_exit("bash: exit: ", cmd->cmd[1], " :numeric argument required\n");
+	clean_all(shell, 1);
+	exit(shell->status);
+}
+
+static void	handle_exit_wrong_args(t_shell *shell, t_command *cmd)
+{
+	if (!exit_atoi(cmd->cmd[1]))
+		exit_num_error(cmd, shell);
+	write(2, "bash: exit: too many arguments\n", 32);
+	shell->status = 1;
+}
+
 int	exit_path(t_command *cmd, t_shell *shell)
 {
 	int			argsc;
@@ -75,7 +77,7 @@ int	exit_path(t_command *cmd, t_shell *shell)
 		shell->status = (unsigned char)ft_atoi(cmd->cmd[1]);
 	}
 	else
-		return (handle_exit_wrong_args(shell), 1);
+		return (handle_exit_wrong_args(shell, cmd), 1);
 	clean_all(shell, 1);
 	exit(shell->status);
 }
