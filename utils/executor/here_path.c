@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/16 12:26:31 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:42:47 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,13 @@ int	herdoc_exit(char *filename, int fd)
 	}
 }
 
-int	heardoc_path(t_redir **redir, t_shell *shell)
+int	heardoc_path(t_redir **redir, t_shell *shell, t_command *cmd)
 {
 	int	fd;
 	int	ex;
 
 	ex = 1;
+	close(cmd->in);
 	fd = open((*redir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
 	if (fd < 0)
 		return (perror("ERROR"), ERROR);

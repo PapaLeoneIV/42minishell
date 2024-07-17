@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/15 18:23:14 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:41:55 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		execution(t_command *cmd, t_env **env, t_shell *shell);
 int		gnl2(char **line);
 int		check_head(char *str);
 int		make_redir(t_shell *shell, t_command *cmd);
-int		heardoc_path(t_redir **redir, t_shell *shell);
+int		heardoc_path(t_redir **redir, t_shell *shell, t_command *cmd);
 int		set_pip(t_command *cmd, int *pip);
 int		exit_path(t_command *cmd, t_shell *shell);
 int		ft_biltin(t_command *cmd, t_env **lst, t_shell *shell);
