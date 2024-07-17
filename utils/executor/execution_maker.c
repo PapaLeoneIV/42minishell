@@ -60,12 +60,12 @@ void	child_process(t_shell *shell, t_command *cmd, int n_cat)
 		make_things(cmd, tmp, shell->env, shell);
 		if (g_status_code == 126 || g_status_code == 130)
 			shell->status = (int [2]){130, 126}[g_status_code == 126];
-		tm_close(shell->s_pip[0], shell->s_pip[1], 0);
 	}
 	else if (cmd->fd_change >= 0 && cmd->cat == 1)
 		write_line(n_cat, shell); 
 	else
 		clean_all(shell, 1);
+	tm_close(shell->s_pip[0], shell->s_pip[1], 0);
 	exit(shell->status);
 }
 

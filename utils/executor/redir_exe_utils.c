@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 16:41:43 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/17 18:50:34 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	list_of_out(t_redir **dir, t_command *cmd)
 {
 	int	fd;
 
-	close(cmd->out);
 	while ((*dir) && ((*dir)->type_of_redirection == GREATER_TOKEN
 			|| (*dir)->type_of_redirection == REDIR_OUT_TOKEN))
 	{
@@ -26,6 +25,7 @@ static int	list_of_out(t_redir **dir, t_command *cmd)
 			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
+			close(cmd->out);
 			write(2, " Permission denied\n", 20);
 			return (-1);
 		}
@@ -34,6 +34,7 @@ static int	list_of_out(t_redir **dir, t_command *cmd)
 			close(fd);
 		(*dir) = (*dir)->next;
 	}
+	close(cmd->out);
 	return (fd);
 }
 
@@ -41,18 +42,19 @@ static int	list_of_in(t_redir **dir, t_command *cmd)
 {
 	int	fd;
 
-	close (cmd->in);
 	while ((*dir) && (*dir)->type_of_redirection == LESSER_TOKEN)
 	{
 		fd = open((*dir)->filename, O_RDONLY, 0777);
 		if (fd < 0)
 		{
+			close (cmd->in);
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == LESSER_TOKEN)
 			close(fd);
 		(*dir) = (*dir)->next;
 	}
+	close (cmd->in);
 	return (fd);
 }
 
