@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 18:36:47 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/17 18:00:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,14 @@ int	heardoc_path(t_redir **redir, t_shell *shell, t_command *cmd)
 		{
 			ex = prompt_here(fd, redir, shell);
 			if (ex == -1)
+			{
+				close(cmd->in);
 				return (herdoc_exit((*redir)->filename, fd));
+			}
 		}
 		close(fd);
 		(*redir)->type_of_redirection = LESSER_TOKEN;
 	}
-	close(cmd->in);
 	return (fd);
 }
 

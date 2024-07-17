@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 18:50:34 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/17 18:01:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static int	list_of_out(t_redir **dir, t_command *cmd)
 			close(fd);
 		(*dir) = (*dir)->next;
 	}
-	close(cmd->out);
 	return (fd);
 }
 
@@ -54,7 +53,6 @@ static int	list_of_in(t_redir **dir, t_command *cmd)
 			close(fd);
 		(*dir) = (*dir)->next;
 	}
-	close (cmd->in);
 	return (fd);
 }
 
