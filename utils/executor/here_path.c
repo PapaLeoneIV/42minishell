@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 18:00:42 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 11:03:07 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ int	heardoc_path(t_redir **redir, t_shell *shell, t_command *cmd)
 	int	ex;
 
 	ex = 1;
-	fd = open((*redir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
+	if (access((*redir)->filename, F_OK) == -1)
+		fd = open((*redir)->filename, O_TRUNC | O_CREAT | O_RDWR, 0777);
+	else
+		fd = open(here_rename((*redir)->filename),  O_TRUNC | O_CREAT | O_RDWR, 0777);
 	if (fd < 0)
 		return (perror("ERROR"), ERROR);
 	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)

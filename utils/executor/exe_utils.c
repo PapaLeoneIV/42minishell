@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 18:41:41 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 11:03:45 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,17 @@ char	**mtx_dup(char **mtx, int len)
 	return (out);
 }
 
-void	freeall(char **mat)
+char	*here_rename(char *filename)
 {
-	int	n;
+	int	i;
 
-	n = 0;
-	while (mat && mat[n])
-	{
-		free(mat[n]);
-		mat[n] = NULL;
-		n++;
-	}
-	free(mat);
+	i = ft_strlen(filename) - 1;
+	if ((filename[i] >= 'a' && filename[i] < 'z')
+		|| (filename[i] >= 'A' && filename[i] <= 'Z'))
+		filename[i]++;
+	else if (filename[i] == 'z')
+		filename[i] = 65;
+	return(filename);
 }
 
 int	tm_close(int tm_in, int tm_out, int flag)

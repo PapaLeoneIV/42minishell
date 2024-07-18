@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cat_exeption.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/17 17:21:32 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/18 12:13:56 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	write_line(int cat, t_shell *shell)
+/*void	write_line(int cat, t_shell *shell)
 {
 	char	*line;
 
@@ -57,6 +57,17 @@ int	cat_check(t_command *cmd)
 		return (0);
 	else
 		return (i);
+}*/
+
+static void	put_status(t_shell *shell)
+{
+	if (g_status_code == 130)
+		shell->status = 130;
+	else if (g_status_code == 131)
+	{
+		shell->status = 131;
+		write(1, "(Quit)Core Dumped\n", 19);
+	}
 }
 
 int	take_last_pid(t_shell *shell)
@@ -77,13 +88,7 @@ int	take_last_pid(t_shell *shell)
 				shell->status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				if (g_status_code == 130)
-					shell->status = 130;
-				else if (g_status_code == 131)
-				{
-					shell->status = 131;
-					write(1, "(Quit)Core Dumped\n", 19);
-				}
+				put_status(shell);
 			}
 			tmp = pid;
 		}

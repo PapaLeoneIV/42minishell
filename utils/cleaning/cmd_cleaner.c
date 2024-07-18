@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_cleaner.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 12:03:40 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 17:58:32 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 10:54:52 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,18 @@ void	clean_all(t_shell *shell, int flag)
 		free(shell->line);
 	if (shell->cmd_info)
 		clean_cmd_node(shell->cmd_info);
+}
+
+void	freeall(char **mat)
+{
+	int	n;
+
+	n = 0;
+	while (mat && mat[n])
+	{
+		free(mat[n]);
+		mat[n] = NULL;
+		n++;
+	}
+	free(mat);
 }

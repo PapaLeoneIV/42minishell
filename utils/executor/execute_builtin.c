@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 11:45:16 by rileone          ###   ########.fr       */
+/*   Updated: 2024/07/18 12:14:35 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,18 @@ char	*ft_access(char **open_path, char *cmd)
 	int		i;
 
 	i = 0;
-	if (access(cmd, F_OK) == 0)
-		return (ft_strdup(cmd));
-	while (open_path[i])
+	while (open_path[i] && ft_strncmp(cmd, "./", 2) != 0)
 	{
 		tmp = ft_strjoin(open_path[i], "/");
 		supp = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(supp, F_OK) == 0)
+		if (access(supp, F_OK | X_OK) == 0)
 			return (supp);
 		free(supp);
 		i++;
 	}
+	if (access(cmd, F_OK | X_OK) == 0)
+		return (ft_strdup(cmd));
 	return (NULL);
 }
 
@@ -98,6 +98,8 @@ void	exev_error(t_shell *shell, char *supp)
 {
 	if (g_status_code == 130)
 		shell->status = 130;
+	else if (ft_strncmp(supp, "./", 2) == 0)
+		write_exit(supp, " is a directory\n", NULL);
 	else
 	{
 		shell->status = 126;
