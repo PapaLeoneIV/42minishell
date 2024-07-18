@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cat_exeption.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:02:54 by codespace         #+#    #+#             */
-/*   Updated: 2024/07/18 12:13:56 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 12:28:47 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ int	cat_check(t_command *cmd)
 		return (i);
 }*/
 
-static void	put_status(t_shell *shell)
+static void	put_status(t_shell *shell, int status)
 {
 	if (g_status_code == 130)
 		shell->status = 130;
-	else if (g_status_code == 131)
+	else if (status == 131)
 	{
 		shell->status = 131;
 		write(1, "(Quit)Core Dumped\n", 19);
@@ -88,7 +88,7 @@ int	take_last_pid(t_shell *shell)
 				shell->status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				put_status(shell);
+				put_status(shell, status);
 			}
 			tmp = pid;
 		}
