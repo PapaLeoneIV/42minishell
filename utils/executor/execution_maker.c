@@ -73,6 +73,7 @@ static void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 		cmd->fork_id = fork();
 	if (cmd->fork_id == 0)
 	{
+		tm_close(shell->s_pip[0], shell->s_pip[1], 0);
 		if (cmd->next)
 			close(cmd->pip[0]);
 		if (cmd->prev)
@@ -94,9 +95,6 @@ static void	fork_and_ecseve(t_shell *shell, t_command *cmd)
 
 int	execution(t_command *cmd, t_env **env, t_shell *shell)
 {
-	/*int	cat;
-
-	cat = 0;*/
 	dup2(cmd->in, 0);
 	dup2(cmd->out, 1);
 	g_status_code = 0;

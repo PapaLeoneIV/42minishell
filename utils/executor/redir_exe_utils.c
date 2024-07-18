@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:26:16 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/17 18:01:03 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 13:12:56 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	list_of_out(t_redir **dir, t_command *cmd)
 			fd = open((*dir)->filename, O_APPEND | O_CREAT | O_RDWR, 0777);
 		if (fd < 0)
 		{
-			close(cmd->out);
+			tm_close(cmd->out, cmd->out, 0);
 			write(2, " Permission denied\n", 20);
 			return (-1);
 		}
@@ -46,7 +46,7 @@ static int	list_of_in(t_redir **dir, t_command *cmd)
 		fd = open((*dir)->filename, O_RDONLY, 0777);
 		if (fd < 0)
 		{
-			close (cmd->in);
+			tm_close(cmd->in, cmd->in, 0);
 			return (-1);
 		}
 		if ((*dir)->next && (*dir)->next->type_of_redirection == LESSER_TOKEN)

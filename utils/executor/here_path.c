@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:57:29 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/18 11:03:07 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 13:19:41 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	heardoc_path(t_redir **redir, t_shell *shell, t_command *cmd)
 		fd = open(here_rename((*redir)->filename),  O_TRUNC | O_CREAT | O_RDWR, 0777);
 	if (fd < 0)
 		return (perror("ERROR"), ERROR);
+	tm_close(cmd->in, cmd->in, 0);
 	while ((*redir) && (*redir)->type_of_redirection == HEREDOC_TOKEN)
 	{
 		while (ex)
@@ -89,7 +90,6 @@ int	heardoc_path(t_redir **redir, t_shell *shell, t_command *cmd)
 			ex = prompt_here(fd, redir, shell);
 			if (ex == -1)
 			{
-				close(cmd->in);
 				return (herdoc_exit((*redir)->filename, fd));
 			}
 		}

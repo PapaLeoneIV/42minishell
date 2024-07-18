@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:03:45 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/18 12:14:35 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 12:55:47 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ void	exev_error(t_shell *shell, char *supp)
 	if (g_status_code == 130)
 		shell->status = 130;
 	else if (ft_strncmp(supp, "./", 2) == 0)
+	{
+		
 		write_exit(supp, " is a directory\n", NULL);
+	}
 	else
 	{
 		shell->status = 126;
