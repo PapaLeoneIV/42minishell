@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/18 13:38:29 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 13:49:19 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	**mtx_dup(char **mtx, int len)
 	return (out);
 }
 
-char	*here_rename(char *filename)
+char	*rename(char *filename)
 {
 	int	i;
 
@@ -66,12 +66,13 @@ char	*here_rename(char *filename)
 		else if (filename[i] == 'z')
 			filename[i] = 65;
 	}
-	return(filename);
+	return (filename);
 }
 
 int	tm_close(int tm_in, int tm_out, int flag)
 {
 	struct stat	st;
+
 	if (flag)
 	{
 		dup2(tm_in, 0);

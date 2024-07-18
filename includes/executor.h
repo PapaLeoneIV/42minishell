@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:27:19 by rileone           #+#    #+#             */
-/*   Updated: 2024/07/18 11:03:52 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 13:48:39 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_token		t_token;
 char	**mtx_dup(char **mtx, int len);
 int		open_redir(t_command *cmd, t_shell *shell, t_redir **redir, int flag);
 char	*heredoc_tokenizer(char *input, t_shell *shell);
-char	*here_rename(char *filename);
+char	*rename(char *filename);
 int		get_char_type_heredoc(char *str, t_parser *pars, int count);
 void	general_state_handler_heredoc(char *input,
 			t_parser *pars);

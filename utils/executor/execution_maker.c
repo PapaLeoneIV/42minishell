@@ -115,7 +115,8 @@ int	execute_cmd(t_shell *shell)
 	shell->s_pip[1] = dup(1);
 	if (!(cmd->next) && cmd->cmd && ft_strncmp(cmd->cmd[0], "exit", 5) == 0)
 	{
-		if (tm_close(shell->s_pip[0], shell->s_pip[1], 0) && exit_path(cmd, shell) == 1)
+		if (tm_close(shell->s_pip[0], shell->s_pip[1], 0)
+			&& exit_path(cmd, shell) == 1)
 			return (ERROR);
 	}
 	if (make_redir(shell, cmd) == 2)
@@ -131,5 +132,5 @@ int	execute_cmd(t_shell *shell)
 		cmd = cmd->next;
 	}
 	return (take_last_pid(shell), tm_close(shell->s_pip[0],
-		shell->s_pip[1], 1), SUCCESS);
+			shell->s_pip[1], 1), SUCCESS);
 }
