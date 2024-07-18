@@ -6,7 +6,7 @@
 /*   By: fgori <fgori@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:27:42 by fgori             #+#    #+#             */
-/*   Updated: 2024/07/18 13:08:34 by fgori            ###   ########.fr       */
+/*   Updated: 2024/07/18 13:38:29 by fgori            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ char	*here_rename(char *filename)
 {
 	int	i;
 
-	i = ft_strlen(filename) - 1;
-	if ((filename[i] >= 'a' && filename[i] < 'z')
-		|| (filename[i] >= 'A' && filename[i] <= 'Z'))
-		filename[i]++;
-	else if (filename[i] == 'z')
-		filename[i] = 65;
+	while (access(filename, F_OK) == 0)
+	{
+		i = ft_strlen(filename) - 1;
+		if ((filename[i] >= 'a' && filename[i] < 'z')
+			|| (filename[i] >= 'A' && filename[i] <= 'Z'))
+			filename[i]++;
+		else if (filename[i] == 'z')
+			filename[i] = 65;
+	}
 	return(filename);
 }
 
