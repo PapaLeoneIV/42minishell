@@ -6,13 +6,12 @@ Minishell is a simplified version of a Unix shell, developed as part of the 42 s
 
 ## Table of Contents
 
-<<<<<<< HEAD
 - [Minishell](#minishell)
 	- [Introduction](#introduction)
 	- [Table of Contents](#table-of-contents)
 	- [Features](#features)
 	- [Installation](#installation)
-		- [To compile Minishell, follow these steps:](#to-compile-minishell-follow-these-steps)
+	- [To compile Minishell, follow these steps:](#to-compile-minishell-follow-these-steps)
 	- [Usage](#usage)
 	- [Built-in Commands](#built-in-commands)
 	- [External Commands](#external-commands)
@@ -21,19 +20,6 @@ Minishell is a simplified version of a Unix shell, developed as part of the 42 s
 	- [Testing](#testing)
 	- [Contributing](#contributing)
 	- [License](#license)
-=======
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Built-in Commands](#built-in-commands)
-- [External Commands](#external-commands)
-- [Signal Handling](#signal-handling)
-- [Project Requirements](#project-requirements)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
->>>>>>> 8593652193e94c9b30042d3d2942457ad582d48b
-
 ## Features
 
 - **Command execution with arguments**: Run commands with options (e.g., `ls -la`).
